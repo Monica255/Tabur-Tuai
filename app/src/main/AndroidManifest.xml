@@ -10,7 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaburTuai">
         <activity
-            android:name=".MainActivity"
+            android:name=".KebunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PilihKebunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginSmartFarmingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

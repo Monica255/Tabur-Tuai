@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_start_end">24dp</dimen>
+    <dimen name="margin_start_end_with_ds">20dp</dimen>
+    <dimen name="margin_buttom">40dp</dimen>
+    <dimen name="app_bar_height">140</dimen>
+</resources>
