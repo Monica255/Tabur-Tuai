@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="174dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_item_with_ds"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_controlliing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/kebun_item_bg_unselected">
+
+            <ImageView
+                android:id="@+id/icon_controlling"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/icon_item_controlling"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/icon_pompa" />
+
+            <TextView
+                android:id="@+id/tv_controlling"
+                style="@style/TitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/green"
+                app:layout_constraintTop_toBottomOf="@id/icon_controlling"
+                tools:text="Pompa" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_controlling_state"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/green"
+                app:cardCornerRadius="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_controlling">
+
+                <TextView
+                    android:id="@+id/tv_controlling_state"
+                    style="@style/TitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    tools:text="Mati" />
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

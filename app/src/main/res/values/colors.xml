@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    >
     <color name="green">#0F8161</color>
     <color name="light_green">#118D6A</color>
     <color name="not_so_black">#343333</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="tab_color">#800F8161</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#0F8161</color>
 </resources>

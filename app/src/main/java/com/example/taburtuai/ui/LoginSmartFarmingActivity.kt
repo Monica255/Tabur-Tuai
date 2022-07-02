@@ -1,11 +1,12 @@
-package com.example.taburtuai
+package com.example.taburtuai.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.taburtuai.R
 
-class PilihKebunActivity : AppCompatActivity() {
+class LoginSmartFarmingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pilih_kebun)
+        setContentView(R.layout.activity_login_smart_farming)
     }
 }

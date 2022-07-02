@@ -21,4 +21,38 @@
     <style name="Theme.TaburTuai.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.TaburTuai.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TextStyle" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/not_so_black</item>
+    </style>
+
+    <style name="TitleText" parent="TextStyle">
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="SubHeader" parent="TextStyle">
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="Header" parent="TextStyle">
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="DeskripsiKebun" parent="TitleText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_start_end</item>
+        <item name="android:layout_marginEnd">@dimen/margin_start_end</item>
+        <item name="background">@color/white</item>
+        <item name="boxStrokeColor">@color/mtrl_textinput_default_box_stroke_color</item>
+        <item name="startIconTint">@color/green</item>
+    </style>
 </resources>

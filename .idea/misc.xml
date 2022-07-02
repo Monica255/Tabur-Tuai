@@ -3,11 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/icon_login_person.xml" value="0.12" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/icon_person.xml" value="0.12" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/kebun_item_bg_selected.xml" value="0.1" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/kebun_item_bg_unselected.xml" value="0.1" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/kebun_item_icon_selector.xml" value="0.1" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/login_bg.xml" value="0.12" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/login_btn_bg.xml" value="0.12" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/selector_bg_kebun_item.xml" value="0.1" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/drawable/selector_tes.xml" value="0.1" />
         <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_Login_Smart_Farming.xml" value="0.17552083333333332" />
         <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_content_pilih_kebun.xml" value="0.16666666666666666" />
-        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_kebun.xml" value="0.15989583333333332" />
-        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_login_smart_farming.xml" value="0.175" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_kebun.xml" value="0.16666666666666666" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_login_smart_farming.xml" value="0.16666666666666666" />
         <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/activity_pilih_kebun.xml" value="0.14666666666666667" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/fragment_controlling.xml" value="0.16666666666666666" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/fragment_monitoring.xml" value="0.22" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/item_controlling.xml" value="0.17552083333333332" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/item_kebun.xml" value="0.16666666666666666" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/item_monitoring.xml" value="0.1515625" />
+        <entry key="..\:/BANGKIT/TaburTuai/app/src/main/res/layout/item_pompa.xml" value="0.13072916666666667" />
       </map>
     </option>
   </component>

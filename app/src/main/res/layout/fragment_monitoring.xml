@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.kebun.MonitoringFragment">
+
+    <LinearLayout
+        android:id="@+id/ll_first"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_layout_with_ds"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/margin_layout_with_ds"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_suhu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/kebun_item_bg_unselected">
+
+                <ImageView
+                    android:id="@+id/icon_suhu"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/icon_suhu"
+                    android:src="@drawable/icon_temperatur"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_label_suhu"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/temperatur"
+                    android:textAlignment="center"
+                    android:textColor="@color/green"
+                    app:layout_constraintTop_toBottomOf="@id/icon_suhu" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_suhu"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_suhu">
+
+                    <TextView
+                        android:id="@+id/tv_suhu"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        tools:text="30" />
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/rl_first_boarder"
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_kelembaban"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/kebun_item_bg_unselected">
+
+                <ImageView
+                    android:id="@+id/icon_kelembaban"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/icon_kelembaban"
+                    android:src="@drawable/icon_kelembabantanah"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_label_kelembaban"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/kelembaban_tanah"
+                    android:textAlignment="center"
+                    android:textColor="@color/green"
+                    app:layout_constraintTop_toBottomOf="@id/icon_kelembaban" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_kelembaban"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_kelembaban">
+
+                    <TextView
+                        android:id="@+id/tv_kelembaban"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        tools:text="8 RH" />
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_second"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_layout_with_ds"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/margin_layout_with_ds"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_first">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_ph_tanah"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/kebun_item_bg_unselected">
+
+                <ImageView
+                    android:id="@+id/icon_ph_tanah"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/icon_ph_tanah"
+                    android:src="@drawable/icon_ph_tanah"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_label_ph_tanah"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/ph_tanah"
+                    android:textAlignment="center"
+                    android:textColor="@color/green"
+                    app:layout_constraintTop_toBottomOf="@id/icon_ph_tanah" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_ph_tanah"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_ph_tanah">
+
+                    <TextView
+                        android:id="@+id/tv_ph_tanah"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        tools:text="7.0" />
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/rl_second_boarder"
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_kecepatan_air"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/kebun_item_bg_unselected">
+
+                <ImageView
+                    android:id="@+id/icon_kecepatan_air"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/icon_kecepatan_air"
+                    android:src="@drawable/icon_kecepatan_air"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_label_kecepatan_air"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/kecepatan_air"
+                    android:textAlignment="center"
+                    android:textColor="@color/green"
+                    app:layout_constraintTop_toBottomOf="@id/icon_kecepatan_air" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_kecepatan_air"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_kecepatan_air">
+
+                    <TextView
+                        android:id="@+id/tv_kecepatan_air"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        tools:text="10 m/s" />
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_third"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_layout_with_ds"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/margin_layout_with_ds"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_second">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_arah_angin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/kebun_item_bg_unselected">
+
+                <ImageView
+                    android:id="@+id/icon_arah_angin"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/icon_arah_angin"
+                    android:src="@drawable/icon_arah_angin"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_label_arah_angin"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/arah_angin"
+                    android:textAlignment="center"
+                    android:textColor="@color/green"
+                    app:layout_constraintTop_toBottomOf="@id/icon_arah_angin" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_arah_angin"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_arah_angin">
+
+                    <TextView
+                        android:id="@+id/tv_arah_angin"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        tools:text="7.0" />
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/rl_third_boarder"
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_kecepatan_angin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/kebun_item_bg_unselected">
+
+                <ImageView
+                    android:id="@+id/icon_kecepatan_angin"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/icon_kecepatan_angin"
+                    android:src="@drawable/icon_kecepatan_angin"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_label_kecepatan_angin"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/kecepatan_angin"
+                    android:textAlignment="center"
+                    android:textColor="@color/green"
+                    app:layout_constraintTop_toBottomOf="@id/icon_kecepatan_angin" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_kecepatan_angin"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_kecepatan_angin">
+
+                    <TextView
+                        android:id="@+id/tv_kecepatan_angin"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        tools:text="10 m/s" />
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,15 +8,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TaburTuai">
+        android:theme="@style/Theme.TaburTuai.NoActionBar">
         <activity
-            android:name=".KebunActivity"
-            android:exported="false" />
+            android:name=".ui.kebun.KebunActivity"
+            android:exported="true" />
         <activity
-            android:name=".PilihKebunActivity"
-            android:exported="false" />
+            android:name=".ui.PilihKebunActivity"
+            android:exported="true" />
         <activity
-            android:name=".LoginSmartFarmingActivity"
+            android:name=".ui.LoginSmartFarmingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
