@@ -10,20 +10,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaburTuai.NoActionBar">
         <activity
-            android:name=".ui.kebun.KebunActivity"
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.PilihKebunActivity"
+            android:name=".ui.loginsignup.LoginSignupActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.LoginSmartFarmingActivity"
-            android:exported="true">
+            android:name=".ui.WelcomePageActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.smartfarming.kebun.KebunActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.smartfarming.pilihkebun.PilihKebunActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.smartfarming.loginsmartfarming.LoginSmartFarmingActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -38,6 +39,13 @@ android {
 
 dependencies {
 
+    ext{
+        paging_version = "2.1.2"
+        lottieVersion = "3.4.0"
+        arch_lifecycle_version = '2.4.0'
+        lifecycle_version = "2.4.0"
+    }
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
@@ -64,4 +72,12 @@ dependencies {
     //image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.squareup.picasso:picasso:2.8'
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$arch_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$arch_lifecycle_version"
 }

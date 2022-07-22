@@ -4,8 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        android:layout_margin="@dimen/margin_item_with_ds"
         android:layout_gravity="center"
-        android:layout_width="172dp"
+        android:layout_width="match_parent"
         app:cardCornerRadius="12dp"
         app:cardElevation="5dp"
         android:layout_height="172dp">
@@ -23,7 +24,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/placeholder"
+            android:src="@drawable/placeholder_kebun_square"
             android:contentDescription="@string/gambar_kebun" />
         <TextView
             android:id="@+id/tv_kebun_name"

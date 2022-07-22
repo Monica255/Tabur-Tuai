@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_kelembaban"
+        android:layout_margin="@dimen/margin_item_with_ds"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="5dp"
+        android:layout_height="80dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:id="@+id/icon_controlling"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/icon_kelembabantanah" />
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@string/kelembaban_tanah"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <RelativeLayout
+                android:layout_gravity="center_vertical"
+                android:id="@+id/cv_controlling_state"
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:background="@drawable/monitoring_value_bg"
+                app:cardCornerRadius="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_controlling">
+
+                <TextView
+                    android:id="@+id/tv_kelembaban"
+                    style="@style/TitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/green"
+                    tools:text="0" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

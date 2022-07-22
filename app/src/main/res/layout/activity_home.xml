@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/green"
+    tools:context=".ui.home.HomeActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/home"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <TextView
+            android:id="@+id/tv_halo"
+            style="@style/Header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="@dimen/margin_start_end"
+            android:text="@string/halo"
+            android:textAlignment="textStart"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_des"
+            style="@style/SubSubHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="50dp"
+            android:text="Ayo mulai gunakan Smart Farming bersama Tabur tuai"
+            android:textAlignment="textStart"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tv_halo"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_smart_farming"
+            style="@style/SubSubHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/smart_farming_btn_selector"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/smart_farming"
+            android:textAllCaps="false"
+            android:textColor="@color/green"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_des"
+
+            />
+
+        <ImageView
+            android:id="@+id/img_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitEnd"
+            android:src="@drawable/img_home"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,8 +3,8 @@ package com.example.taburtuai
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.taburtuai.ui.kebun.ControllingFragment
-import com.example.taburtuai.ui.kebun.MonitoringFragment
+import com.example.taburtuai.ui.smartfarming.kebun.ControllingFragment
+import com.example.taburtuai.ui.smartfarming.kebun.MonitoringFragment
 
 class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
 
@@ -20,4 +20,5 @@ class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(a
     override fun getItemCount(): Int {
         return 2
     }
+
 }

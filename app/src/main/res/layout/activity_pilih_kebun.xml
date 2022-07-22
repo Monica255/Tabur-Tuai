@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PilihKebunActivity">
+    tools:context=".ui.smartfarming.pilihkebun.PilihKebunActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -41,6 +41,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -52,7 +53,9 @@
             android:layout_height="match_parent">
 
 
+
             <androidx.appcompat.widget.SearchView
+                android:visibility="gone"
                 android:id="@+id/sv_kebun"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,12 +70,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_kebun"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_layout_with_ds"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_layout_with_ds"
                 android:layout_marginBottom="@dimen/margin_buttom"
-                app:layout_constraintBottom_toBottomOf="parent"
+
                 app:layout_constraintTop_toBottomOf="@id/sv_kebun" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

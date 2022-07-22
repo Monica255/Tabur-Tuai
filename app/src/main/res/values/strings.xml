@@ -2,10 +2,15 @@
     <string name="app_name">Tabur Tuai</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--welcome page-->
+    <string name="slogan" translatable="false">Bertumbuh, \nBerbuah, \nBerlimpah</string>
+    <string name="deskripsi">Platform smart farming berbasis IoT karya anak bangsa</string>
+    <string name="mulai">Mulai</string>
+
     <!--kebun-->
     <string name="monitoring">Monitoring</string>
     <string name="controlling">Controlling</string>
-    <string name="temperatur">Temperatur</string>
+    <string name="temperature">Temperatur</string>
     <string name="kelembaban_tanah">Kelembaban Tanah</string>
     <string name="kecepatan_air">Kecepatan Air</string>
     <string name="arah_angin">Arah Angin</string>
@@ -27,8 +32,62 @@
     <string name="luas">Luas</string>
     <string name="lokasi">Lokasi</string>
     <string name="colon">:</string>
+
+
     <string name="smart_farming">Smart Farming</string>
     <string name="id">ID</string>
+    <string name="email">Email</string>
+    <string name="cpassword">Konfirmasi Password</string>
+    <string name="no_telepon">Nomor telepon</string>
     <string name="password">Password</string>
     <string name="masuk">Masuk</string>
+    <string name="masuk_untuk_melanjutkan">Masuk untuk melanjutkan</string>
+    <string name="logo">logo</string>
+    <string name="masuk_dengan">Masuk dengan</string>
+    <string name="google">Google</string>
+    <string name="belum_punya_akun">Belum punya akun?</string>
+    <string name="daftar">Daftar</string>
+    <string name="daftar_untuk_melanjutkan">Daftar untuk melanjutkan</string>
+    <string name="daftar_dengan">Daftar dengan</string>
+    <string name="sudah_punya_akun">Sudah punya akun?</string>
+    <string name="nama">Nama</string>
+    <string name="telepon">Telepon</string>
+    <string name="home">Home</string>
+    <string name="akun">Akun</string>
+    <string name="halo">Halo %1$s</string>
+
+    <string name="msg_login_successfully">Berhasil masuk</string>
+    <string name="msg_email_pass_might_be_wrong">Email atau password salah</string>
+    <string name="msg_account_registered">Berhasil daftar akun</string>
+    <string name="msg_failed_to_register">Gagal daftar akun</string>
+    <string name="password_not_match">Password tidak sama</string>
+    <string name="email_empty">Email tidak boleh kosong</string>
+    <string name="email_invalid">Email tida valid</string>
+    <string name="name_empty">Nama tidak boleh kosong</string>
+    <string name="phone_empty">Nomor telepon tidak boleh kosong</string>
+    <string name="phone_invalid">Nomor telepon tidak valid</string>
+    <string name="password_empty">Password tidak boleh kosong</string>
+    <string name="password_length_invalid">Panjang password kurang dari 6 karakter</string>
+    <string name="action_profile">Action profile</string>
+    <string name="msg_login_with_google_acc">Berhasil masuk dengan google</string>
+    <string name="default_web_client_id_2">228509552110-7gdr2988lk0s80sk7p2qfssak2hrd4da.apps.googleusercontent.com</string>
+    <string name="id_petani_not_found">ID petani tidak ditemukan</string>
+    <string name="wrong_password">Password salah</string>
+    <string name="kebun_petani">Kebun %1$s</string>
+    <string name="failed_get_data_offline">Offline: gagal mendapatkan data</string>
+    <string name="dipersembahkan_oleh">Dipersembahkan oleh</string>
+    <string name="lihat_password">Lihat password</string>
+    <string name="cari_kebun">Cari kebun</string>
+    <string name="tidak_ada_kebun">Tidak ada kebun</string>
+    <string name="tidak_ada_data_luas_kebun">Tidak ada data luas kebun</string>
+    <string name="tidak_ada_data_lokasi">Tidak ada data lokasi</string>
+    <string name="kebun">Kebun</string>
+    <string name="mati">Mati</string>
+    <string name="nyala">Menyala</string>
+    <string name="unknown">-</string>
+    <string name="tidak_ada_jaringan">Tidak ada jaringan internet</string>
+    <string name="tidak_ada_jaringan_update_terakhir">Tidak ada jaringan internet \nUpdate terakhir: %1$s</string>
+    <string name="error">error</string>
+    <string name="kembali_online">Kembali online</string>
+    <string name="profile">Profile</string>
 </resources>

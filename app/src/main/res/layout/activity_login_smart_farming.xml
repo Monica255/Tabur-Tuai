@@ -1,101 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green"
-    tools:context=".ui.LoginSmartFarmingActivity">
+    android:fillViewport="true"
+    tools:context=".ui.smartfarming.loginsmartfarming.LoginSmartFarmingActivity">
 
-
-    <ImageView
-        android:id="@+id/img_toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:contentDescription="@string/toolbar"
-        android:scaleType="centerCrop"
-        android:src="@drawable/toolbar_img"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/img_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/cv_login"
-        android:text="@string/smart_farming"
-        android:textColor="@color/white"
-        style="@style/Header"
-        />
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_login"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/margin_start_end"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="@dimen/margin_start_end"
-        android:backgroundTint="@android:color/transparent"
-        app:cardElevation="5dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@drawable/toolbar_img"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:buttonGravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/smart_farming"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/cv_login"
+                app:layout_constraintTop_toTopOf="@id/img_toolbar" />
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <androidx.cardview.widget.CardView
+
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/cv_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/login_bg">
-
-            <ImageView
-                android:id="@+id/img_login"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
-                android:layout_marginTop="90dp"
-                android:src="@drawable/img_farm_login"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/gambar_kebun" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_login_id"
-                android:layout_marginTop="62dp"
-                style="@style/TextInputLayoutStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:startIconDrawable="@drawable/icon_person"
-                android:hint="@string/id"
-                app:layout_constraintTop_toBottomOf="@id/img_login">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_login_id"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="125dp"
+            android:layout_marginEnd="@dimen/margin_start_end"
+            android:backgroundTint="@android:color/transparent"
+            app:cardElevation="5dp">
+            <LinearLayout
+                android:background="@drawable/login_bg"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="55dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/il_login_password"
-                style="@style/TextInputLayoutStyle"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:startIconDrawable="@drawable/icon_lock"
-                android:hint="@string/password"
-                app:layout_constraintTop_toBottomOf="@id/il_login_id">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_login_password"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_login"
+                        android:layout_width="105dp"
+                        android:layout_height="105dp"
+                        android:layout_marginTop="90dp"
+                        android:contentDescription="@string/gambar_kebun"
+                        android:src="@drawable/img_farm_login"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/il_sf_id"
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_marginTop="62dp"
+                        android:hint="@string/id"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_login"
+                        app:startIconDrawable="@drawable/icon_person">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_sf_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/il_sf_password"
+                        style="@style/TextInputLayoutStyle"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/password"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/il_sf_id"
+                        app:startIconDrawable="@drawable/icon_lock">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_sf_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <CheckBox
+                        android:id="@+id/cb_show_pass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lihat_password"
+                        app:layout_constraintStart_toStartOf="@id/il_sf_password"
+                        app:layout_constraintTop_toBottomOf="@id/il_sf_password" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="10dp"
+                        android:id="@+id/bt_masuk"
+                        android:layout_marginStart="@dimen/margin_start_end"
+                        android:layout_marginEnd="@dimen/margin_start_end"
+                        style="@style/SubSubHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="70dp"
+                        android:background="@drawable/login_btn_selector"
+                        android:text="@string/masuk"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/il_sf_password" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+                <LinearLayout
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/bt_masuk"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dipersembahkan_oleh"
+                        />
+                    <ImageView
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="185dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                app:layout_constraintTop_toBottomOf="@id/il_login_password"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="@string/masuk"
-                style="@style/SubHeader"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                android:background="@drawable/login_btn_bg"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/logo_vertical"
+                        android:contentDescription="@string/logo" />
+                </LinearLayout>
+            </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

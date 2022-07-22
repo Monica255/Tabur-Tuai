@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.loginsignup.SignupFragment">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_daftar"
+                style="@style/Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="20dp"
+                android:text="@string/daftar"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_daftar_untuk_melanjutkan"
+                style="@style/SubSubHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="10dp"
+                android:text="@string/daftar_untuk_melanjutkan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_daftar" />
+
+            <ImageView
+                android:id="@+id/img_logo"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/logo"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@id/tv_daftar_untuk_melanjutkan" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_daftar_email"
+                style="@style/TextInputLayoutStyle"
+                android:layout_marginTop="20dp"
+                android:hint="@string/email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_logo"
+                app:startIconDrawable="@drawable/icon_email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_daftar_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_daftar_nama"
+                style="@style/TextInputLayoutStyle"
+                android:layout_marginTop="10dp"
+                android:hint="@string/nama"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/il_daftar_email"
+                app:startIconDrawable="@drawable/icon_person">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_daftar_nama"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_daftar_telepon"
+                style="@style/TextInputLayoutStyle"
+                android:layout_marginTop="10dp"
+                android:hint="@string/telepon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/il_daftar_nama"
+                app:startIconDrawable="@drawable/icon_phone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_daftar_telepon"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_daftar_password"
+                style="@style/TextInputLayoutStyle"
+                android:layout_marginTop="10dp"
+                android:hint="@string/password"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/il_daftar_telepon"
+                app:startIconDrawable="@drawable/icon_lock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_daftar_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_daftar_cpassword"
+                style="@style/TextInputLayoutStyle"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/cpassword"
+                app:helperText=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/il_daftar_password"
+                app:startIconDrawable="@drawable/icon_lock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_daftar_cpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/cb_show_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lihat password"
+                app:layout_constraintStart_toStartOf="@id/il_daftar_cpassword"
+                app:layout_constraintTop_toBottomOf="@id/il_daftar_cpassword" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_daftar"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:background="@drawable/login_btn_selector"
+                android:text="@string/daftar"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cb_show_pass" />
+
+            <TextView
+                android:id="@+id/tv_daftar_dengan"
+                style="@style/TitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/daftar_dengan"
+                app:layout_constraintTop_toBottomOf="@id/bt_daftar" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_google"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/google_btn_selector"
+                android:drawableStart="@drawable/icon_google_resize"
+                android:paddingStart="7dp"
+                android:paddingEnd="37dp"
+                android:text="@string/google"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_daftar_dengan" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/ll_posered_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tv_sudah_punya_akun"
+                style="@style/TitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/sudah_punya_akun"
+                app:layout_constraintTop_toBottomOf="@id/bt_daftar" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_sudah_punya_akun"
+                style="@style/TitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/masuk"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
+                app:layout_constraintTop_toBottomOf="@id/bt_daftar" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
