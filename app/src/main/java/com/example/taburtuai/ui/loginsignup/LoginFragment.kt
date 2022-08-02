@@ -1,8 +1,6 @@
 package com.example.taburtuai.ui.loginsignup
 
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -17,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.preference.Preference
 import com.example.taburtuai.R
 import com.example.taburtuai.ViewModelFactory
 import com.example.taburtuai.databinding.FragmentLoginBinding
@@ -32,7 +29,8 @@ import com.google.android.gms.common.api.ApiException
 
 
 class LoginFragment : Fragment() {
-    private lateinit var binding: FragmentLoginBinding
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: LoginSignupViewModel
     private var email=""
     private var pass=""
@@ -80,21 +78,19 @@ class LoginFragment : Fragment() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
         setAction()
-
-
-
-
-
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory.getInstance(requireActivity())
+            ViewModelFactory.getInstance(requireActivity().application)
         )[LoginSignupViewModel::class.java]
 
-
+        var goHome=true
         viewModel.firebaseUser.observe(requireActivity()){
-            if(it!=null&&isAdded){
+
+            if(it!=null&&isAdded&&goHome){
+                goHome=false
                 startActivity(
                     Intent(
                         activity,
@@ -111,6 +107,7 @@ class LoginFragment : Fragment() {
         viewModel.isLoading.observe(requireActivity(),Observer(this::showLoading))
 
     }
+
 
     private fun showLoading(isLoading:Boolean){
         if(isLoading){
@@ -205,10 +202,14 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
+    }
 
 }

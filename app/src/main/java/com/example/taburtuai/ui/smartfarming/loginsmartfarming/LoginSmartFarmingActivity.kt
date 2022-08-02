@@ -2,25 +2,17 @@ package com.example.taburtuai.ui.smartfarming.loginsmartfarming
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.taburtuai.R
 import com.example.taburtuai.ViewModelFactory
 import com.example.taburtuai.databinding.ActivityLoginSmartFarmingBinding
 import com.example.taburtuai.ui.smartfarming.pilihkebun.PilihKebunActivity
-import com.example.taburtuai.util.Event
-import com.example.taburtuai.util.SESI_PETANI_ID
 import com.example.taburtuai.util.LoadingUtils
+import com.example.taburtuai.util.SESI_PETANI_ID
 import com.example.taburtuai.util.ToastUtil
-import com.google.android.material.snackbar.Snackbar
 
 class LoginSmartFarmingActivity : AppCompatActivity() {
     private lateinit var viewModel: LoginSmartFarmingViewModel
@@ -39,17 +31,15 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory.getInstance(this)
+            ViewModelFactory.getInstance(application)
         )[LoginSmartFarmingViewModel::class.java]
+        viewModel.message.value?.second?.getContentIfNotHandled()
 
-
-
-
-        viewModel.idPetani.observe(this) {
+        viewModel.petani.observe(this) {
             if (it != null) {
                 val prefManager =
                     androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
-                prefManager.edit().putString(SESI_PETANI_ID, it).commit()
+                prefManager.edit().putString(SESI_PETANI_ID, it.id_petani).apply()
                 startActivity(
                     Intent(
                         this,
@@ -72,6 +62,7 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
         viewModel.message.observe(this) {
             ToastUtil.makeToast(this, it)
         }
+
         viewModel.isConnected.observe(this) {
             viewModel.isConnected.value?.let {
                 ToastUtil.showInternetSnackbar(
@@ -104,7 +95,7 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
         }
     }
 
-    fun isFieldEmpty(): Boolean {
+    private fun isFieldEmpty(): Boolean {
         id = binding.etSfId.text.toString().trim()
         pass = binding.etSfPassword.text.toString().trim()
         return !(id.isNotEmpty() && pass.isNotEmpty())

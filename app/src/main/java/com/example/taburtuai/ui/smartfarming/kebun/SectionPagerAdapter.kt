@@ -1,10 +1,8 @@
-package com.example.taburtuai
+package com.example.taburtuai.ui.smartfarming.kebun
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.taburtuai.ui.smartfarming.kebun.ControllingFragment
-import com.example.taburtuai.ui.smartfarming.kebun.MonitoringFragment
 
 class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
 

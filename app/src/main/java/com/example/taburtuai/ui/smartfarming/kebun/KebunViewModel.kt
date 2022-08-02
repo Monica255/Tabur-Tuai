@@ -1,8 +1,6 @@
 package com.example.taburtuai.ui.smartfarming.kebun
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.taburtuai.data.Device
 import com.example.taburtuai.data.Repository
 
 class KebunViewModel(private val repository: Repository) :ViewModel() {

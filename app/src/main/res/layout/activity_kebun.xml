@@ -64,7 +64,7 @@
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/placeholder_kebun" />
+                    android:src="@drawable/img_farm_login" />
 
                 <LinearLayout
                     android:id="@+id/ll_label_kebun"
@@ -157,6 +157,7 @@
                     app:layout_constraintTop_toTopOf="@id/img_kebun">
 
                     <TextView
+                        android:fontFamily="sans-serif-light"
                         android:id="@+id/tv_kode_kebun"
                         style="@style/DeskripsiKebun"
                         android:textColor="@color/white"
@@ -166,6 +167,7 @@
                         tools:text="kebun_1" />
 
                     <TextView
+                        android:fontFamily="sans-serif-light"
                         android:id="@+id/tv_lokasi_kebun"
                         style="@style/DeskripsiKebun"
                         android:gravity="center_vertical"
@@ -175,6 +177,7 @@
                         tools:text="Makassar, Sulawesi Selatan" />
 
                     <TextView
+                        android:fontFamily="sans-serif-light"
                         android:id="@+id/tv_luas_kebun"
                         style="@style/DeskripsiKebun"
                         android:gravity="center_vertical"

@@ -5,8 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.taburtuai.R
@@ -19,7 +17,7 @@ class KebunAdapter(private val onClick: ((Kebun) -> Unit)) :
 
     fun submitList(mList:List<Kebun>){
         list=mList
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KebunViewHolder {
@@ -36,7 +34,7 @@ class KebunAdapter(private val onClick: ((Kebun) -> Unit)) :
         private val tvTitle: TextView = itemView.findViewById(R.id.tv_kebun_name)
         private val imgKebun: ImageView = itemView.findViewById(R.id.img_kebun)
 
-        lateinit var getHabit: Kebun
+        private lateinit var getHabit: Kebun
         fun bind(kebun: Kebun) {
             getHabit = kebun
             tvTitle.text = if(kebun.nama_kebun!="") kebun.nama_kebun else kebun.id_kebun
@@ -53,19 +51,7 @@ class KebunAdapter(private val onClick: ((Kebun) -> Unit)) :
 
     }
 
-    companion object {
 
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Kebun>() {
-            override fun areItemsTheSame(oldItem: Kebun, newItem: Kebun): Boolean {
-                return oldItem.id_kebun == newItem.id_kebun
-            }
-
-            override fun areContentsTheSame(oldItem: Kebun, newItem: Kebun): Boolean {
-                return oldItem == newItem
-            }
-        }
-
-    }
 
     override fun onBindViewHolder(holder: KebunViewHolder, position: Int) {
         val kebun=list[position]

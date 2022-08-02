@@ -3,15 +3,13 @@ package com.example.taburtuai.ui.smartfarming.pilihkebun
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.Menu
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.taburtuai.R
@@ -21,14 +19,13 @@ import com.example.taburtuai.databinding.ActivityPilihKebunBinding
 import com.example.taburtuai.ui.smartfarming.kebun.KebunActivity
 import com.example.taburtuai.util.IS_ALWAYS_LOGIN_PETANI
 import com.example.taburtuai.util.KEBUN_ID
-import com.google.android.material.snackbar.Snackbar
+import com.example.taburtuai.util.ToastUtil
 
 class PilihKebunActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPilihKebunBinding
     private lateinit var viewModel: PilihKebunViewModel
-    private var sb: Snackbar? = null
-    private var showSnackbar = false
     private var idPetani: String? = null
+    private lateinit var kebunAdapter:KebunAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPilihKebunBinding.inflate(layoutInflater)
@@ -38,16 +35,33 @@ class PilihKebunActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, 2)
         binding.rvKebun.layoutManager = layoutManager
 
-
         viewModel = ViewModelProvider(
-            this, ViewModelFactory.getInstance(this)
+            this, ViewModelFactory.getInstance(application)
         )[PilihKebunViewModel::class.java]
 
-        viewModel.idPetani.observe(this) {
+        kebunAdapter = KebunAdapter { kebun ->
+            val intent = Intent(this, KebunActivity::class.java)
+            intent.putExtra(KEBUN_ID, kebun.id_kebun)
+            startActivity(intent)
+        }
+        binding.rvKebun.adapter = kebunAdapter
+
+
+        /*viewModel.idPetani.observe(this) {
             if(it!=null){
                 binding.toolbarLayout.title = getString(R.string.kebun_petani, it)
                 idPetani = it
                 viewModel.getAllKebun(idPetani = it)
+            }else{
+                finish()
+            }
+        }*/
+
+        viewModel.petani.observe(this) {
+            if(it!=null){
+                binding.toolbarLayout.title = getString(R.string.kebun_petani, it.nama_petani)
+                idPetani = it.id_petani
+                viewModel.getAllKebun(idPetani = it.id_petani)
             }else{
                 finish()
             }
@@ -58,9 +72,11 @@ class PilihKebunActivity : AppCompatActivity() {
         }
 
         viewModel.isConnected.observe(this) {
-            showInternetSnackbar(it)
+            ToastUtil.showInternetSnackbar(this,binding.root,it)
 
         }
+
+
 
     }
 
@@ -68,6 +84,16 @@ class PilihKebunActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_pilih_kebun, menu)
         val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu.findItem(R.id.item_serach)
+
+        val unwrappedDrawable: Drawable? = searchItem?.icon
+        val wrappedDrawable = unwrappedDrawable?.let { DrawableCompat.wrap(it) }
+        if (wrappedDrawable != null) {
+            DrawableCompat.setTint(
+                wrappedDrawable,
+                getColor(R.color.white)
+            )
+        }
+
         val searchView = searchItem.actionView as SearchView
 
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
@@ -88,59 +114,24 @@ class PilihKebunActivity : AppCompatActivity() {
     }
 
     private fun showRecyclerView(kebun: List<Kebun>) {
-        val kebunAdapter = KebunAdapter { kebun ->
-            val intent = Intent(this, KebunActivity::class.java)
-            intent.putExtra(KEBUN_ID, kebun.id_kebun)
-            startActivity(intent)
-        }
         kebunAdapter.submitList(kebun)
-        binding.rvKebun.adapter = kebunAdapter
+        kebunAdapter.notifyDataSetChanged()
         binding.rvKebun.visibility=if(kebun.isNotEmpty())View.VISIBLE else View.GONE
     }
 
+
+
     override fun onStart() {
         super.onStart()
-        sb = null
-        viewModel.isConnected.value?.let { showInternetSnackbar(it) }
-        //if(viewModel.isConnected.value==false){ showInternetSnackbar(false) }
-    }
-
-    private fun showInternetSnackbar(isConnected: Boolean) {
-        if (!isConnected) {
-            showSnackbar = true
-            Handler(Looper.getMainLooper()).postDelayed({
-                if (showSnackbar) {
-                    sb = Snackbar.make(
-                        binding.root, "Tidak ada jaringan internet",
-                        Snackbar.LENGTH_INDEFINITE
-                    )
-                        .setAction("Action", null)
-                    sb!!.view.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.snackbar_color_no_inet
-                        )
-                    )
-                    sb!!.setTextColor(resources.getColor(R.color.white, theme))
-                    sb!!.show()
-                }
-            }, 1_400)
-        } else {
-            showSnackbar = false
-            if (sb != null) {
-                sb!!.dismiss()
-                sb = null
-                sb = Snackbar.make(
-                    binding.root, "Kembali online",
-                    Snackbar.LENGTH_SHORT
-                )
-                    .setAction("Action", null)
-                sb!!.view.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-                sb!!.setTextColor(resources.getColor(R.color.green, theme))
-                sb!!.show()
-            }
+        viewModel.isConnected.value?.let {
+            ToastUtil.showInternetSnackbar(
+                this,
+                binding.root,
+                it
+            )
         }
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

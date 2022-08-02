@@ -2,29 +2,27 @@ package com.example.taburtuai.ui.home
 
 
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.taburtuai.R
 import com.example.taburtuai.ViewModelFactory
 import com.example.taburtuai.databinding.ActivityHomeBinding
+import com.example.taburtuai.ui.profile.ProfileActivity
 import com.example.taburtuai.ui.smartfarming.loginsmartfarming.LoginSmartFarmingActivity
 import com.example.taburtuai.ui.smartfarming.pilihkebun.PilihKebunActivity
 import com.example.taburtuai.util.BitmapCrop
+import com.example.taburtuai.util.IS_ALWAYS_LOGIN_PETANI
 import com.example.taburtuai.util.SESI_PETANI_ID
 import com.example.taburtuai.util.ToastUtil
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.squareup.picasso.Picasso
@@ -41,14 +39,14 @@ class HomeActivity : AppCompatActivity() {
         setActionBar()
 
         viewModel =
-            ViewModelProvider(this, ViewModelFactory.getInstance(this))[HomeViewModel::class.java]
+            ViewModelProvider(this, ViewModelFactory.getInstance(application))[HomeViewModel::class.java]
 
 
         binding.btSmartFarming.setOnClickListener {
             val prefManager =
                 androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
             val petaniId = prefManager.getString(SESI_PETANI_ID, "")
-            val alwaysLogin = prefManager.getBoolean("always_login_petani", false)
+            val alwaysLogin = prefManager.getBoolean(IS_ALWAYS_LOGIN_PETANI, false)
 
             if (alwaysLogin) {
                 if (petaniId != "" && petaniId != null) {
@@ -84,14 +82,15 @@ class HomeActivity : AppCompatActivity() {
                 it
             )
         }
-
     }
+
+
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         var drawable: Drawable?
         val menuItem = menu?.findItem(R.id.action_profile)
 
-        viewModel.userData.observe(this) {
+        viewModel.userData.observe(this) { it ->
             val profileUpdates = UserProfileChangeRequest.Builder()
                 .setDisplayName(it?.name)
                 .setPhotoUri(Uri.parse(it?.img_profile))
@@ -107,7 +106,7 @@ class HomeActivity : AppCompatActivity() {
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                         drawable = BitmapDrawable(
                             resources,
-                            bitmap?.let { BitmapCrop.getCroppedBitmap(it) })
+                            bitmap?.let {it-> BitmapCrop.getCroppedBitmap(it) })
                         menuItem?.icon = drawable
                     }
 
@@ -131,8 +130,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_profile -> {
-                /*val settingIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(settingIntent)*/
+                val intent = Intent(this, ProfileActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -5,13 +5,13 @@ import com.example.taburtuai.data.Repository
 
 class PilihKebunViewModel(private val repository: Repository) : ViewModel() {
 
-    val idPetani=repository.idPetani
+    //val idPetani=repository.idPetani
 
-    //val petani=repository.petani
+    val petani=repository.petani
 
     //fun getPetani(idPetani:String)=repository.getPetani(idPetani)
 
-    fun getAllKebun(idPetani: String, kebunName:String="")=repository.getAllKebun(idPetani,kebunName)
+    fun getAllKebun(idPetani: String, kebunName:String="")=repository.getAllKebunPetani(idPetani,kebunName)
 
     val kebunPetani=repository.kebunPetani
 

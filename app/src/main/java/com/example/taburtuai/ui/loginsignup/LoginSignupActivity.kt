@@ -1,9 +1,7 @@
 package com.example.taburtuai.ui.loginsignup
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import com.example.taburtuai.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.taburtuai.databinding.ActivityLoginSignupBinding
 
 class LoginSignupActivity : AppCompatActivity() {

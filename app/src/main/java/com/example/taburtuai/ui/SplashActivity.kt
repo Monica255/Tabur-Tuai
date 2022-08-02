@@ -1,24 +1,36 @@
 package com.example.taburtuai.ui
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.example.taburtuai.R
 import com.example.taburtuai.databinding.ActivitySplashBinding
 import com.example.taburtuai.ui.home.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 
 
 class SplashActivity : AppCompatActivity() {
-    private lateinit var binding:ActivitySplashBinding
+    private lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivitySplashBinding.inflate(layoutInflater)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //FirebaseAuth.getInstance().signOut()
+        var versionName: String?=null
+        try {
+            versionName = this.packageManager
+                .getPackageInfo(this.packageName, 0).versionName
+            if (versionName!=null) {
+                binding.tvVersion.visibility = View.VISIBLE
+                binding.tvVersion.text = getString(R.string.versi, versionName)
+            } else binding.tvVersion.visibility = View.GONE
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -26,11 +38,10 @@ class SplashActivity : AppCompatActivity() {
         )
 
         Handler(Looper.getMainLooper()).postDelayed({
-            var intent=Intent()
-            if(FirebaseAuth.getInstance().currentUser!=null){
-                intent = Intent(this, HomeActivity::class.java)
-            }else{
-                intent = Intent(this, WelcomePageActivity::class.java)
+            val intent: Intent = if (FirebaseAuth.getInstance().currentUser != null) {
+                Intent(this, HomeActivity::class.java)
+            } else {
+                Intent(this, WelcomePageActivity::class.java)
             }
             startActivity(intent)
             finish()
@@ -38,8 +49,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
-
-    companion object{
-        const val DELAY_TIME:Long=2_000
+    companion object {
+        const val DELAY_TIME: Long = 2_000
     }
 }

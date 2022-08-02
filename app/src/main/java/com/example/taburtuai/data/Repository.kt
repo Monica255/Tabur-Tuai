@@ -1,26 +1,25 @@
 package com.example.taburtuai.data
 
-import android.content.Context
+import android.app.Application
 import android.content.SharedPreferences
+import android.text.format.DateFormat
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.taburtuai.R
-import com.example.taburtuai.util.Event
-import com.example.taburtuai.util.IS_ALWAYS_LOGIN_PETANI
-import com.example.taburtuai.util.LAST_UPDATE
-import com.example.taburtuai.util.SESI_PETANI_ID
+import com.example.taburtuai.util.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import java.util.*
 
-class Repository(private val context: Context, private var mDb: FirebaseDatabase) {
+class Repository(private val context: Application, private var mDb: FirebaseDatabase) {
 
-    private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
+    //private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
     private var mAuth: FirebaseAuth? = null
     //private var mDb: FirebaseDatabase? = null
 
@@ -29,6 +28,8 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
     private var lastConnectedRef: DatabaseReference
     private var smartFarming: DatabaseReference? = null
     private var prefManager: SharedPreferences
+    private var feedbackRef: DatabaseReference
+    private var userDataRef: DatabaseReference
 
 
     private val _firebaseUser = MutableLiveData<FirebaseUser?>()
@@ -37,14 +38,20 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
     private val _petani = MutableLiveData<Petani?>()
     val petani: MutableLiveData<Petani?> = _petani
 
+    private val _allPetani = MutableLiveData<List<Petani>>()
+    val allPetani: MutableLiveData<List<Petani>> = _allPetani
+
+    private val _allKebun = MutableLiveData<List<Kebun>>()
+    val allKebun: LiveData<List<Kebun>> = _allKebun
+
     private val _message = MutableLiveData<Pair<Boolean, Event<String>>>()
     val message: LiveData<Pair<Boolean, Event<String>>> = _message
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _idPetani = MutableLiveData<String?>()
-    val idPetani: LiveData<String?> = _idPetani
+    // private val _idPetani = MutableLiveData<String?>()
+    //val idPetani: LiveData<String?> = _idPetani
 
     private val _kebunPetani = MutableLiveData<List<Kebun>>()
     val kebunPetani: LiveData<List<Kebun>> = _kebunPetani
@@ -52,8 +59,8 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
     private val _isConnected = MutableLiveData<Boolean>()
     val isConnected: LiveData<Boolean> = _isConnected
 
-    private val _lastConnected = MutableLiveData<String>()
-    val lastConnected: LiveData<String> = _lastConnected
+    //private val _lastConnected = MutableLiveData<String>()
+    //val lastConnected: LiveData<String> = _lastConnected
 
     private val _kebun = MutableLiveData<Kebun?>()
     val kebun: LiveData<Kebun?> = _kebun
@@ -75,23 +82,53 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
         lastConnectedRef = mDb.reference.child("lastConnected")
         connectionRef.keepSynced(true)
         smartFarming = mDb.reference.child("smart_farming")
+        feedbackRef = mDb.reference.child("feedbacks")
+        userDataRef = mDb.reference.child("user_data")
 
         manageConnection()
 
         prefManager =
             androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
-        setPetaniLoginState(false)
+        //setSelaluLoginPetani(false)
         lastPetaniId = prefManager.getString(SESI_PETANI_ID, "") ?: ""
 
-
+/*        prefManager.edit().putInt(FEEDBACK_COUNT,0).apply()
+        prefManager.edit().putString(LAST_DATE_SEND_FEEDBACK,"").apply()*/
     }
 
-    fun setPetaniLoginState(isAlwaysLogin: Boolean) {
+
+    fun isCanSendFeedBack(): Boolean {
+        val canSend: Boolean
+        val lastDate = prefManager.getString(LAST_DATE_SEND_FEEDBACK, "") ?: ""
+        val date = Date()
+        val today = DateFormat.format("dd/MM/yyyy", date).toString()
+        canSend = if (lastDate == today) {
+            val count = prefManager.getInt(FEEDBACK_COUNT, 0)
+            count < 3
+        } else {
+            prefManager.edit().putString(LAST_DATE_SEND_FEEDBACK, "").apply()
+            prefManager.edit().putInt(FEEDBACK_COUNT, 0).apply()
+            true
+        }
+        return canSend
+    }
+
+    private fun updateCounterFeedback() {
+        val date = Date()
+        val today = DateFormat.format("dd/MM/yyyy", date).toString()
+        prefManager.edit().putString(LAST_DATE_SEND_FEEDBACK, today).apply()
+        var count = prefManager.getInt(FEEDBACK_COUNT, 0)
+        count += 1
+        prefManager.edit().putInt(FEEDBACK_COUNT, count).apply()
+    }
+
+
+    fun setSelaluLoginPetani(isAlwaysLogin: Boolean) {
         if (isAlwaysLogin) {
             prefManager.edit().putBoolean(IS_ALWAYS_LOGIN_PETANI, true).apply()
         } else {
+            logoutPetani()
             prefManager.edit().putBoolean(IS_ALWAYS_LOGIN_PETANI, false).apply()
-            prefManager.edit().putString(SESI_PETANI_ID, "").apply()
         }
     }
 
@@ -110,7 +147,6 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
                 val serverValue = System.currentTimeMillis()
                 if (connected == true) {
                     _isConnected.value = true
-                    Log.d("TAG", connected.toString())
                     userLastCon?.setValue("connected")
                     userLastCon?.onDisconnect()?.setValue(serverValue)
                     userCon?.setValue(true)
@@ -122,6 +158,7 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
                     _isConnected.value = false
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.d("TAG", "cancel")
             }
@@ -129,20 +166,141 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
         })
     }
 
+    fun updateUserData(data: UserData) {
+        _isLoading.value=true
+        getCurrentUserUid()?.let { it ->
+            userDataRef.child(it).setValue(data).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    _isLoading.value=false
+                    _message.value=Pair(false, Event(context.getString(R.string.berhasil_ubah_data)))
+                } else {
+                    _isLoading.value=false
+                    _message.value=Pair(true,Event(context.getString(R.string.gagal_ubah_data)))
+                }
+            }
+        }
+    }
 
     fun getCurrentUserUid(): String? {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    fun autoLoginPetani(idPetani: String) {
-        getCurrentUserUid()?.let {
-            smartFarming?.child(it)?.child("petani")
-        }?.keepSynced(true)
+    fun kirimMasukan(data: Masukan) {
+        val key = feedbackRef.push().key
+        _isLoading.value = true
+        key?.let { it ->
+            feedbackRef.child(it).setValue(data).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    _isLoading.value = false
+                    _message.value =
+                        Pair(
+                            false,
+                            Event(context.resources.getString(R.string.berhasil_kirim_masukan))
+                        )
+                    updateCounterFeedback()
+                } else {
+                    _isLoading.value = false
+                    _message.value =
+                        Pair(true, Event(context.resources.getString(R.string.gagal_kirim_masukan)))
+                }
+            }
+        }
+    }
 
-        smartFarming?.child(idPetani)?.addValueEventListener(object : ValueEventListener {
+
+    fun getAllPetani(petaniName: String = "") {
+        getCurrentUserUid()?.let { it ->
+            smartFarming?.child(it)?.child("petani")
+                ?.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val list = ArrayList<Petani>()
+
+                        if (snapshot.exists()) {
+                            for (i in snapshot.children) {
+                                try {
+                                    val petani = i.getValue(Petani::class.java)
+                                    petani?.let {
+                                        if (it.id_petani != "" && i.key.toString() == it.id_petani) {
+                                            if (petaniName != "") {
+                                                if (it.nama_petani.contains(petaniName, true)) {
+                                                    list.add(petani)
+                                                }
+                                            } else {
+                                                list.add(it)
+                                            }
+                                        }
+                                    }
+
+                                } catch (e: Exception) {
+                                    Log.d("TAG", e.message.toString())
+                                }
+                            }
+                            _allPetani.value = list
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.d("TAG", error.message)
+                    }
+                })
+        }
+    }
+
+    fun getAllKebun(kebunName: String = "") {
+        getCurrentUserUid()?.let { it ->
+            smartFarming?.child(it)?.child("kebun")
+                ?.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val list = ArrayList<Kebun>()
+                        if (snapshot.exists()) {
+                            for (i in snapshot.children) {
+                                try {
+                                    val kebun = i.getValue(Kebun::class.java)
+                                    kebun?.let { it ->
+                                        if (it.id_kebun != "" && i.key.toString() == it.id_kebun) {
+                                            if (kebunName != "") {
+                                                if (it.nama_kebun.contains(kebunName, true)) {
+                                                    list.add(kebun)
+                                                }
+                                            } else {
+                                                list.add(it)
+                                            }
+                                        }
+                                    }
+
+                                } catch (e: Exception) {
+                                    Log.d("TAG", e.message.toString())
+                                }
+                            }
+                            _allKebun.value = list
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.d("TAG", error.message)
+                    }
+
+                })
+        }
+    }
+
+    fun autoLoginPetani(idPetani: String) {
+        val query = getCurrentUserUid()?.let {
+            smartFarming?.child(it)?.child("petani")?.child(idPetani)
+        }
+        query?.keepSynced(true)
+
+        query?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 if (snapshot.exists()) {
-                    _idPetani.value = idPetani
+                    //_idPetani.value = idPetani
+                    try {
+                        _petani.value = snapshot.getValue(Petani::class.java)
+                    } catch (e: Exception) {
+                        Log.d("TAG", e.message.toString())
+                    }
+
                 } else {
                     _message.value = Pair(
                         true,
@@ -157,83 +315,90 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
         })
     }
 
-    fun clearDataKebun(){
-        _kebun.value=null
-        _controlling.value=null
-        _monitoring.value=null
-        idActiveKebun=""
+    fun clearDataKebun() {
+        _kebun.value = null
+        _controlling.value = null
+        _monitoring.value = null
+        idActiveKebun = ""
     }
 
 
-
     fun loginPetani(idPetani: String, passPetani: String) {
-        getCurrentUserUid()?.let {
-            smartFarming?.child(it)?.child("petani")
-        }?.keepSynced(true)
 
-        lastPetaniId = idPetani
+        val query = getCurrentUserUid()?.let {
+            smartFarming?.child(it)?.child("petani")?.child(idPetani)
+        }
+        query?.keepSynced(true)
+
+
         if (_isConnected.value == false) {
             _isLoading.value = false
         } else if (_isConnected.value == true) {
             _isLoading.value = true
         }
-        getCurrentUserUid()?.let {
-            smartFarming?.child(it)?.child("petani")
-                ?.child(idPetani)?.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        Log.d("TAG", "login2 petani")
-                        if (snapshot.exists()) {
-                            first@ for (i in snapshot.children) {
-                                if (i.key.equals("password_petani")) {
-                                    if (i.value == passPetani) {
-                                        Log.d("TAG", "login petani")
-                                        _idPetani.value = idPetani
-                                    } else {
-                                        Log.d("TAG", "wrong pass")
-                                        _message.value = Pair(
-                                            true,
-                                            Event(context.resources.getString(R.string.wrong_password))
-                                        )
-                                    }
-                                    break@first
+        query?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    first@ for (i in snapshot.children) {
+                        if (i.key.equals("password_petani")) {
+                            if (i.value == passPetani) {
+                                prefManager.edit().putString(SESI_PETANI_ID, idPetani).apply()
+                                lastPetaniId = idPetani
+                                //_idPetani.value = idPetani
+                                try {
+                                    _petani.value = snapshot.getValue(Petani::class.java)
+                                } catch (e: Exception) {
+                                    Log.d("TAG", e.message.toString())
                                 }
+                            } else {
+                                _message.value = Pair(
+                                    true,
+                                    Event(context.resources.getString(R.string.wrong_password))
+                                )
                             }
-
-                        } else {
-                            Log.d("TAG", "id petani not found")
-                            _message.value = Pair(
-                                true,
-                                Event(context.resources.getString(R.string.id_petani_not_found))
-                            )
+                            break@first
                         }
-                        _isLoading.value = false
                     }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        _isLoading.value = false
-                        _message.value = Pair(
-                            true,
-                            Event(context.resources.getString(R.string.error)))
-                    }
-                })
-        }
+                } else {
+                    Log.d("TAG", "id petani not found")
+                    _message.value = Pair(
+                        true,
+                        Event(context.resources.getString(R.string.id_petani_not_found))
+                    )
+                }
+                _isLoading.value = false
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                _isLoading.value = false
+                _message.value = Pair(
+                    true,
+                    Event(context.resources.getString(R.string.error))
+                )
+            }
+        })
+
     }
 
     fun logoutPetani() {
-        _idPetani.value = null
         _kebunPetani.value = listOf()
         _kebun.value = null
         _monitoring.value = null
-        getCurrentUserUid()?.let {
-            smartFarming?.child(it)?.child("petani")
-        }?.keepSynced(false)
+
+        /*getCurrentUserUid()?.let {
+            _idPetani.value?.let { it1 -> smartFarming?.child(it)?.child("petani")?.child(it1) }
+        }?.keepSynced(false)*/
+
+        //_idPetani.value = null
+        _petani.value = null
         getCurrentUserUid()?.let {
             smartFarming?.child(it)?.child("realtime_kebun")?.keepSynced(false)
         }
         prefManager.edit().putString(SESI_PETANI_ID, "").apply()
     }
 
-    fun getAllKebun(idPetani: String, kebunName: String = "") {
+    fun getAllKebunPetani(idPetani: String, kebunName: String = "") {
         val queryAll = getCurrentUserUid()?.let {
             smartFarming?.child(it)?.child("kebun")?.orderByChild("id_petani")?.equalTo(idPetani)
         }
@@ -247,24 +412,23 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
                         try {
                             val kebun = i.getValue(Kebun::class.java)
                             kebun?.let {
+                                if (it.id_kebun != "" && i.key.toString() == it.id_kebun) {
+                                    if (kebunName != "") {
+                                        if (it.nama_kebun.contains(kebunName, true)) {
+                                            list.add(kebun)
+                                        }
+                                    } else {
+                                        list.add(it)
 
-                                list.add(it)
+                                    }
+                                }
                             }
+
                         } catch (e: Exception) {
                             Log.d("TAG", e.message.toString())
                         }
                     }
-                    if (kebunName != "") {
-                        val newList = ArrayList<Kebun>()
-                        for (i in list) {
-                            if (i.nama_kebun.contains(kebunName, true)) {
-                                newList.add(i)
-                            }
-                        }
-                        _kebunPetani.value = newList
-                    } else {
-                        _kebunPetani.value = list
-                    }
+                    _kebunPetani.value = list
                 } else {
                     //_kebunPetani.value = list
                     _message.value =
@@ -321,6 +485,13 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
             smartFarming?.child(it)?.child("realtime_kebun")?.child(idKebun)
                 ?.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        val pompa = arrayListOf<Device>()
+                        val sprinkler = arrayListOf<Device>()
+                        val drip = arrayListOf<Device>()
+                        val fogger = arrayListOf<Device>()
+                        val sirine = arrayListOf<Device>()
+                        val cctv = arrayListOf<Device>()
+
                         val devices = arrayListOf<Device>()
                         if (snapshot.exists() && snapshot.key == idActiveKebun) {
                             for (i in snapshot.children) {
@@ -330,15 +501,27 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
                                     for (j in i.children) {
                                         try {
                                             j.getValue(Device::class.java)?.let { it ->
-                                                if (it.id_device != "" && j.key.toString() == it.id_device) devices.add(
-                                                    it
-                                                )
+                                                if (it.id_device != "" && j.key.toString() == it.id_device) {
+                                                    when (it.type) {
+                                                        "pompa" -> pompa.add(it)
+                                                        "sprinkler" -> sprinkler.add(it)
+                                                        "drip" -> drip.add(it)
+                                                        "fogger" -> fogger.add(it)
+                                                        "sirine" -> sirine.add(it)
+                                                        "cctv" -> cctv.add(it)
+                                                        else -> devices.add(it)
+                                                    }
+                                                }
+                                                //devices.add(it)
                                             }
                                         } catch (e: Exception) {
                                             Log.d("TAG", e.message.toString())
                                         }
                                     }
-                                    _controlling.value = devices
+                                    _controlling.value =
+                                        pompa.asSequence().plus(sprinkler).plus(drip).plus(fogger)
+                                            .plus(sirine).plus(cctv).plus(devices)
+                                            .toList()
                                 }
                             }
                         } else {
@@ -362,14 +545,17 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
         mAuth?.signInWithEmailAndPassword(email, pass)?.addOnCompleteListener {
             if (it.isSuccessful) {
                 _isLoading.value = false
-                val name = FirebaseAuth.getInstance().currentUser?.displayName ?: ""
+                //val name = FirebaseAuth.getInstance().currentUser?.displayName ?: ""
                 _message.value =
                     Pair(false, Event(context.resources.getString(R.string.msg_login_successfully)))
                 _firebaseUser.value = FirebaseAuth.getInstance().currentUser
             } else {
                 _isLoading.value = false
                 _message.value =
-                    Pair(true, Event(context.resources.getString(R.string.msg_email_pass_might_be_wrong)))
+                    Pair(
+                        true,
+                        Event(context.resources.getString(R.string.msg_email_pass_might_be_wrong))
+                    )
             }
         }
 
@@ -378,6 +564,17 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
     fun signOut() {
         if (_firebaseUser.value != null) {
             if (FirebaseAuth.getInstance().currentUser != null) {
+                logoutPetani()
+
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(context.resources.getString(R.string.default_web_client_id_2))
+                    .requestEmail()
+                    .build()
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                googleSignInClient.signOut()
+
+                _allKebun.value = listOf()
+                _allPetani.value = listOf()
                 _firebaseUser.value = null
                 FirebaseAuth.getInstance().signOut()
             }
@@ -408,13 +605,17 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _isLoading.value = false
+                    _firebaseUser.value = FirebaseAuth.getInstance().currentUser
                     //_message.value = Pair(false, context.resources.getString(R.string.msg_login_with_google_acc))
                     //_firebaseUser.value = FirebaseAuth.getInstance().currentUser
                     setUserData()
                 } else {
                     _isLoading.value = false
                     _message.value =
-                        Pair(true, Event(context.resources.getString(R.string.msg_failed_to_register)))
+                        Pair(
+                            true,
+                            Event(context.resources.getString(R.string.msg_failed_to_register))
+                        )
 
                 }
             }
@@ -443,13 +644,19 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
 
 
         currentUser?.uid?.let { it ->
-            mDb.getReference("user_data").child(it).setValue(user).addOnCompleteListener { v ->
+            userDataRef.child(it).setValue(user).addOnCompleteListener { v ->
                 if (v.isSuccessful) {
                     _firebaseUser.value = FirebaseAuth.getInstance().currentUser
                     _message.value = if (name != "") {
-                        Pair(false, Event(context.resources.getString(R.string.msg_account_registered)))
+                        Pair(
+                            false,
+                            Event(context.resources.getString(R.string.msg_account_registered))
+                        )
                     } else {
-                        Pair(false, Event(context.resources.getString(R.string.msg_login_with_google_acc)))
+                        Pair(
+                            false,
+                            Event(context.resources.getString(R.string.msg_login_with_google_acc))
+                        )
                     }
                     _isLoading.value = false
                 } else {
@@ -467,13 +674,16 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
     fun getUserData(): MutableLiveData<UserData?> {
         val userData = MutableLiveData<UserData?>()
         getCurrentUserUid()?.let {
-            mDb.getReference("user_data").orderByChild("uid").equalTo(it)
+            mDb.getReference("user_data").child(it)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
-                            for (i in snapshot.children) {
-                                val user = i.getValue(UserData::class.java)
+                            try {
+                                val user = snapshot.getValue(UserData::class.java)
                                 userData.value = user
+                            } catch (e: Exception) {
+                                Log.d("TAG", e.message.toString())
+
                             }
                         }
                     }
@@ -492,7 +702,7 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
         @Volatile
         private var instance: Repository? = null
 
-        fun getInstance(context: Context): Repository {
+        fun getInstance(context: Application): Repository {
             return instance ?: synchronized(this) {
                 if (instance == null) {
                     val mDb: FirebaseDatabase?
@@ -506,7 +716,7 @@ class Repository(private val context: Context, private var mDb: FirebaseDatabase
 
         }
 
-        const val FIREBASE_URL =
+        private const val FIREBASE_URL =
             "https://smart-farming-andro-default-rtdb.asia-southeast1.firebasedatabase.app/"
     }
 

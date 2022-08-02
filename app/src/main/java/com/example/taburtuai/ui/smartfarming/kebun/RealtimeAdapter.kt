@@ -4,10 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taburtuai.R
-import com.example.taburtuai.ViewModelFactory
 import com.example.taburtuai.data.Device
 
 class RealtimeAdapter(private val onClick: ((Device) -> Unit)?) :
@@ -15,10 +13,17 @@ class RealtimeAdapter(private val onClick: ((Device) -> Unit)?) :
 
     var list = mutableListOf<Device>()
     var isConnected=false
-    fun submitList(mList: List<Device>) {
-        list = mList.toMutableList()
-        notifyDataSetChanged()
-        Log.d("TAG", "sd " + list.toString())
+    var  clickedItemPos=-1
+    fun submitList(mList: MutableList<Device>) {
+
+        if(clickedItemPos!=-1){
+            list[clickedItemPos] = mList[clickedItemPos]
+            notifyItemChanged(clickedItemPos)
+            clickedItemPos=-1
+        }else{
+            list=mList
+            notifyDataSetChanged()
+        }
 
     }
 
@@ -29,15 +34,17 @@ class RealtimeAdapter(private val onClick: ((Device) -> Unit)?) :
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvTitle: ControlDeviceView = itemView.findViewById(R.id.item_controlling_device)
+        private val tvTitle: ControlDeviceView = itemView.findViewById(R.id.item_controlling_device)
 
-        fun bind(device: Device) {
+        fun bind(device: Device,position: Int) {
             tvTitle.setData(device)
             if(device.state==0||device.state==1){
                 itemView.setOnClickListener {
                     if(isConnected){
-                        onClick?.let { it1 -> it1(device) }
+                        onClick?.let {it1 -> it1(device);clickedItemPos=position }
                     }
+                    /*list[position].name="tess"
+                    notifyItemChanged(position)*/
 
                 }
             }
@@ -47,12 +54,11 @@ class RealtimeAdapter(private val onClick: ((Device) -> Unit)?) :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = list[position]
-        holder.bind(item)
         if (item.id_device != "") {
-            holder.bind(item)
+            holder.bind(item,position)
         } else {
             list.removeAt(position)
-            Log.d("TAG",list.toString())
+            Log.d("TAG","remove list")
         }
     }
 

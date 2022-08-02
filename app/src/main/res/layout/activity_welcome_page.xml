@@ -21,7 +21,7 @@
             android:src="@drawable/img_welcome_page"
             app:layout_constraintTop_toTopOf="parent"
 
-            />
+            android:contentDescription="@string/welcome_page" />
 
         <TextView
             android:id="@+id/tv_slogan"
@@ -33,7 +33,7 @@
             android:text="@string/slogan"
             android:textAlignment="textStart"
             android:textColor="@color/green"
-            android:textSize="34dp"
+            android:textSize="34sp"
             app:layout_constraintTop_toBottomOf="@id/img" />
 
         <TextView
@@ -53,10 +53,12 @@
             android:id="@+id/bt_mulai"
             style="@style/SubSubHeader"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/mulai_btn_selector"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/mulai_btn_selector"
             android:text="@string/mulai"
             android:textAllCaps="false"
             android:textColor="@color/white"

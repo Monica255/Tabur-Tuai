@@ -1,23 +1,15 @@
 package com.example.taburtuai.ui.smartfarming.kebun
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.taburtuai.R
-import com.example.taburtuai.SectionsPagerAdapter
 import com.example.taburtuai.ViewModelFactory
 import com.example.taburtuai.data.Kebun
-import com.example.taburtuai.data.RealtimeKebun
 import com.example.taburtuai.databinding.ActivityKebunBinding
 import com.example.taburtuai.util.*
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
 class KebunActivity : AppCompatActivity() {
@@ -33,7 +25,7 @@ class KebunActivity : AppCompatActivity() {
 
 
         viewModel =
-            ViewModelProvider(this, ViewModelFactory.getInstance(this))[KebunViewModel::class.java]
+            ViewModelProvider(this, ViewModelFactory.getInstance(application))[KebunViewModel::class.java]
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         binding.viewPager.adapter = sectionsPagerAdapter
@@ -47,10 +39,11 @@ class KebunActivity : AppCompatActivity() {
         viewModel.kebunId = kebunId
 
 
-
         viewModel.kebun.observe(this) {
-            Log.d("TAG", "data " + it.toString())
-            if (it != null) setData(it) else {
+            if (it != null) {
+                setData(it)
+                //Log.d("TAG","data kebun "+isNoData)
+            }else {
                 //TODO show user there is no data kebun
             }
         }
@@ -68,6 +61,7 @@ class KebunActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.clearDataKebun()
+        viewModel.kebunId=""
     }
 
 
@@ -79,14 +73,14 @@ class KebunActivity : AppCompatActivity() {
 
 
     private fun setData(data: Kebun) {
-        binding.toolbarLayout.title = data.nama_kebun
+        binding.toolbarLayout.title = if(data.nama_kebun!="")data.nama_kebun else data.id_kebun
         binding.tvKodeKebun.text = data.id_kebun
         binding.tvLokasiKebun.text = TextFormater.getLokasiKebun(data.kota, data.provinsi, this)
         binding.tvLuasKebun.text =
             TextFormater.getLuasKebun(data.luas_kebun, data.satuan_luas, this)
         Glide.with(binding.root)
             .load(data.img_kebun)
-            .placeholder(R.drawable.placeholder_kebun)
+            .placeholder(R.drawable.img_farm_login)
             .into(binding.imgKebun)
     }
 

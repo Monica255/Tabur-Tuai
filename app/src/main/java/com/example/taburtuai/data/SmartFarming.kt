@@ -17,12 +17,12 @@ data class UserData(
 )
 
 data class MonitoringKebun(
-    var temperatur:Int=0,
-    var kelembaban_tanah:Int=0,
-    var ph_tanah:Int=0,
-    var kecepatan_air:Int=0,
+    var temperatur:Int?=null,
+    var kelembaban_tanah:Int?=null,
+    var ph_tanah:Int?=null,
+    var humidity:Int?=null,
     var arah_angin:String="",
-    var kecepatan_angin:Int=0
+    var kecepatan_angin:Int?=null
 )
 
 data class Kebun(
@@ -36,19 +36,26 @@ data class Kebun(
     var nama_kebun:String="",
 )
 
-data class RealtimeKebun(
+/*data class RealtimeKebun(
     var id_kebun:String="",
     var monitoring:MonitoringKebun?=null,
     var controlling:List<Device>?=null
-)
+)*/
 /*data class Kebun(
     var nama_kebun: String="",
     var id_kebun:String=""
 )*/
 
 data class Petani(
+    var nama_petani:String="",
     var id_petani:String="",
     var password_petani:String="",
     )
 
+data class Masukan(
+    var jenis_masukan:String="",
+    var masukan:String="",
+    var email:String="anonim",
+    var time:String=""
+)
 

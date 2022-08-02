@@ -2,7 +2,6 @@ package com.example.taburtuai.ui.loginsignup
 
 import androidx.lifecycle.ViewModel
 import com.example.taburtuai.data.Repository
-import com.example.taburtuai.data.UserData
 
 class LoginSignupViewModel(private val repository: Repository) :ViewModel() {
 

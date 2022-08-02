@@ -1,6 +1,7 @@
 package com.example.taburtuai.util
 
 import android.content.Context
+import android.util.Log
 import com.example.taburtuai.R
 
 class TextFormater {
@@ -8,11 +9,28 @@ class TextFormater {
         fun toTitleCase(data:String?):String{
             var newString=""
             if(data!=null){
-                val x=data.trim().split(" ")
+                val x=data.lowercase().trim().split(" ")
                 for (i in x){
                     newString= "$newString ${
                         i.lowercase()
                             .replaceFirstChar(Char::titlecase)
+                    }"
+                }
+            }
+            return newString.trim()
+        }
+
+        fun toTitleCaseCCTV(data:String?):String{
+            var newString = ""
+            if (data!=null){
+                var list = data.lowercase().trim().split(" ")
+                for (i in list) {
+
+                    newString = "$newString ${
+                        if (i == "cctv")
+                            i.uppercase()
+                        else
+                            i.lowercase().replaceFirstChar(Char::titlecase)
                     }"
                 }
             }
@@ -23,7 +41,21 @@ class TextFormater {
             if(luas==0){
                 return ctx.getString(R.string.tidak_ada_data_luas_kebun)
             }else{
-                return "$luas $satuan"
+                return when (satuan) {
+                    "meter persegi" -> {
+                        "$luas \u33A1"
+                    }
+                    "hektar" -> {
+                        "$luas Ha"
+                    }
+                    "are" ->{
+                        "$luas Are"
+                    }
+                    else -> {
+                        "$luas $satuan"
+                    }
+                }
+
             }
         }
 

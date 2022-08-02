@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -14,7 +15,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.example.taburtuai.R
 import com.example.taburtuai.data.Device
 import com.example.taburtuai.util.TextFormater
-import java.math.RoundingMode.valueOf
 
 class ControlDeviceView : RelativeLayout {
 
@@ -60,7 +60,26 @@ class ControlDeviceView : RelativeLayout {
 
     fun setData(data: Device) {
 
-        tvItemName.text = if(data.name!="")TextFormater.toTitleCase(data.name) else data.id_device
+        tvItemName.text =
+            if (data.name != "" && !data.name.contains("cctv", true)) {
+                TextFormater.toTitleCase(data.name)
+            } else if (data.name.contains("cctv", true)) {
+                TextFormater.toTitleCaseCCTV(data.name)
+            } else data.id_device
+
+
+        drawable.setImageDrawable(
+            when (data.type.lowercase()) {
+                "pompa" -> AppCompatResources.getDrawable(context, R.drawable.icon_pompa)
+                "sprinkler" -> AppCompatResources.getDrawable(context, R.drawable.icon_sprinkle)
+                "drip" -> AppCompatResources.getDrawable(context, R.drawable.icon_drip)
+                "fogger" -> AppCompatResources.getDrawable(context, R.drawable.icon_fogger)
+                "sirine" -> AppCompatResources.getDrawable(context, R.drawable.icon_siren)
+                "cctv" -> AppCompatResources.getDrawable(context, R.drawable.icon_cctv_1)
+                else -> AppCompatResources.getDrawable(context, R.drawable.icon_placeholder_2)
+            }
+        )
+
         when (data.state) {
             0 -> {
                 turnOffView()
@@ -79,8 +98,8 @@ class ControlDeviceView : RelativeLayout {
 
     }
 
-    fun turnOnView() {
-        alpha=1F
+    private fun turnOnView() {
+        alpha = 1F
         tvItemName.setTextColor(context.getColor(R.color.white))
         tvState.setTextColor(context.getColor(R.color.green))
         bg.setBackgroundColor(context.getColor(R.color.green))
@@ -91,9 +110,9 @@ class ControlDeviceView : RelativeLayout {
         )
     }
 
-    fun turnOffView() {
-        alpha=1F
-        isClickable=false
+    private fun turnOffView() {
+        alpha = 1F
+        isClickable = false
         tvItemName.setTextColor(context.getColor(R.color.green))
         tvState.setTextColor(context.getColor(R.color.white))
         bg.setBackgroundColor(context.getColor(R.color.white))
@@ -105,8 +124,8 @@ class ControlDeviceView : RelativeLayout {
     }
 
 
-    fun disableView(){
+    private fun disableView() {
         turnOffView()
-        alpha=0.5F
+        alpha = 0.5F
     }
 }

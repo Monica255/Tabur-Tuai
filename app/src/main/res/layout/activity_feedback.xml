@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.feedback.FeedbackActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay" >
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:text="@string/feedback"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".ui.loginsignup.LoginFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/tv_daftar"
+                    style="@style/Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/beri_masukan"
+                    android:textColor="@color/green"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:textAlignment="textStart"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_marginEnd="@dimen/margin_start_end"
+                    android:id="@+id/tv_masuk_untuk_melanjutkan"
+                    style="@style/SubSubHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/beri_masukan_des"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_daftar" />
+
+                <ImageView
+                    android:id="@+id/img_logo"
+                    android:layout_width="262dp"
+                    android:layout_height="144dp"
+                    android:layout_marginTop="20dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/feedback"
+                    android:src="@drawable/ilus_drop_a_line"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toBottomOf="@id/tv_masuk_untuk_melanjutkan" />
+
+                <TextView
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/tv_label_jenis_masukan"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_width="match_parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_logo"
+                    android:text="@string/jenis_masukan"
+                    style="@style/SubSubHeader"
+                    android:textAlignment="textStart"
+                    android:layout_height="wrap_content"/>
+
+                <RadioGroup
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_jenis_masukan"
+                    android:id="@+id/rg_jenis_masukan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/margin_start_end"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="@dimen/margin_start_end"
+                    android:paddingBottom="10dp">
+
+                    <RadioButton
+                        android:id="@+id/rb_gangguan"
+                        android:layout_width="69dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/masukan_btn_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
+                        android:gravity="center"
+                        android:text="@string/gangguan_teknis"
+                        android:textColor="@color/not_so_black" />
+
+                    <RadioButton
+                        android:id="@+id/rb_ide"
+                        android:layout_width="69dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/masukan_btn_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
+                        android:gravity="center"
+                        android:text="@string/ide"
+                        android:textColor="@color/not_so_black" />
+
+                </RadioGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_masukan"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_marginEnd="@dimen/margin_start_end"
+                    android:layout_marginBottom="5dp"
+                    app:boxStrokeColor="@color/not_so_black"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="200"
+                    app:errorIconDrawable="@null"
+                    app:helperTextEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@id/rg_jenis_masukan">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_masukan"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:gravity="top|left"
+                        android:hint="@string/tulis_masukanmu_disini"
+                        android:inputType="textMultiLine"
+                        tools:ignore="RtlHardcoded" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <CheckBox
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/cb_anonim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kirim_secara_anonim"
+                    app:layout_constraintStart_toStartOf="@id/il_masukan"
+                    app:layout_constraintTop_toBottomOf="@id/il_masukan" />
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/max_feedback"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginBottom="20dp"
+                android:id="@+id/bt_kirim"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:background="@drawable/login_btn_selector"
+                android:text="@string/kirim"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cb_show_pass" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

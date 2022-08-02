@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_petani_kebun"
+    app:startDestination="@id/listPetaniFragment2">
+
+    <fragment
+        android:id="@+id/listKebunFragment"
+        android:name="com.example.taburtuai.ui.listpetanikebun.ListKebunFragment"
+        android:label="fragment_list_kebun"
+        tools:layout="@layout/fragment_list_kebun" >
+        <action
+            android:id="@+id/action_listKebunFragment_to_listPetaniFragment2"
+            app:destination="@id/listPetaniFragment2"
+            app:popUpTo="@id/nav_petani_kebun"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPetaniFragment2"
+        android:name="com.example.taburtuai.ui.listpetanikebun.ListPetaniFragment"
+        android:label="fragment_list_petani"
+        tools:layout="@layout/fragment_list_petani" >
+        <action
+            android:id="@+id/action_listPetaniFragment2_to_listKebunFragment"
+            app:destination="@id/listKebunFragment"
+            app:popUpTo="@id/nav_petani_kebun"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

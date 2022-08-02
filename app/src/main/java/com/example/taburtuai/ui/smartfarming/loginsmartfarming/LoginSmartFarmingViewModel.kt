@@ -7,7 +7,9 @@ class LoginSmartFarmingViewModel(private val repository: Repository) :ViewModel(
 
     fun loginPetani(idPetani:String,passPetani:String)=repository.loginPetani(idPetani,passPetani)
 
-    val idPetani=repository.idPetani
+    //val idPetani=repository.idPetani
+
+    val petani=repository.petani
 
     val isLoading=repository.isLoading
 

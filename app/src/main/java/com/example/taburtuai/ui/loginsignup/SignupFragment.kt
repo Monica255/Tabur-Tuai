@@ -30,8 +30,9 @@ import com.google.android.gms.common.api.ApiException
 
 
 class SignupFragment : Fragment() {
+    private var _binding: FragmentSignupBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: LoginSignupViewModel
-    private lateinit var binding: FragmentSignupBinding
     private var nama = ""
     private var email = ""
     private var telepon = ""
@@ -100,7 +101,7 @@ class SignupFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory.getInstance(requireActivity())
+            ViewModelFactory.getInstance(requireActivity().application)
         )[LoginSignupViewModel::class.java]
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -111,16 +112,16 @@ class SignupFragment : Fragment() {
 
         setAction()
 
+        var goHome=true
         viewModel.firebaseUser.observe(requireActivity()) {
-            if (it != null) {
+            if (it != null&&isAdded&&goHome) {
+                goHome=false
                 startActivity(
                     Intent(
                         activity,
                         HomeActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
-            } else {
-
             }
         }
 
@@ -276,10 +277,13 @@ class SignupFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSignupBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentSignupBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
+    }
 }
