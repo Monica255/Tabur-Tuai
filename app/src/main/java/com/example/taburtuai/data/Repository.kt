@@ -486,6 +486,7 @@ class Repository(private val context: Application, private var mDb: FirebaseData
                 ?.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val pompa = arrayListOf<Device>()
+                        val lampu = arrayListOf<Device>()
                         val sprinkler = arrayListOf<Device>()
                         val drip = arrayListOf<Device>()
                         val fogger = arrayListOf<Device>()
@@ -504,6 +505,7 @@ class Repository(private val context: Application, private var mDb: FirebaseData
                                                 if (it.id_device != "" && j.key.toString() == it.id_device) {
                                                     when (it.type) {
                                                         "pompa" -> pompa.add(it)
+                                                        "lampu" -> lampu.add(it)
                                                         "sprinkler" -> sprinkler.add(it)
                                                         "drip" -> drip.add(it)
                                                         "fogger" -> fogger.add(it)
@@ -519,7 +521,7 @@ class Repository(private val context: Application, private var mDb: FirebaseData
                                         }
                                     }
                                     _controlling.value =
-                                        pompa.asSequence().plus(sprinkler).plus(drip).plus(fogger)
+                                        pompa.asSequence().plus(lampu).plus(sprinkler).plus(drip).plus(fogger)
                                             .plus(sirine).plus(cctv).plus(devices)
                                             .toList()
                                 }

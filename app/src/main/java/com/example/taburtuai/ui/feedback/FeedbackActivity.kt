@@ -38,11 +38,7 @@ class FeedbackActivity : AppCompatActivity() {
         binding= ActivityFeedbackBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setActionBar()
-
-        val pref=androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
-        val count=pref.getInt(FEEDBACK_COUNT,0)
-        Log.d("TAG",count.toString())
-
+        
         viewModel=ViewModelProvider(
             this,ViewModelFactory.getInstance(application)
         )[FeedbackViewModel::class.java]

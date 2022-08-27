@@ -71,6 +71,7 @@ class ControlDeviceView : RelativeLayout {
         drawable.setImageDrawable(
             when (data.type.lowercase()) {
                 "pompa" -> AppCompatResources.getDrawable(context, R.drawable.icon_pompa)
+                "lampu" -> AppCompatResources.getDrawable(context, R.drawable.icon_lightbulb)
                 "sprinkler" -> AppCompatResources.getDrawable(context, R.drawable.icon_sprinkle)
                 "drip" -> AppCompatResources.getDrawable(context, R.drawable.icon_drip)
                 "fogger" -> AppCompatResources.getDrawable(context, R.drawable.icon_fogger)

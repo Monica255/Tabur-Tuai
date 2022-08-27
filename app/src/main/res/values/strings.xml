@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tabur Tuai</string>
+    <string name="app_name">TaburTuai</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--welcome page-->
@@ -91,7 +91,7 @@
     <string name="kembali_online">Kembali online</string>
     <string name="profile">Profile</string>
     <string name="petani">Petani</string>
-    <string name="beri_masukan_des">Yukk bantu Tabur Tuai jadi lebih baik lagi dengan cara beri kami masukan</string>
+    <string name="beri_masukan_des">Yukk bantu TaburTuai jadi lebih baik lagi dengan cara beri kami masukan</string>
     <string name="feedback">Feedback</string>
     <string name="kirim">Kirim</string>
     <string name="tulis_masukanmu_disini">Tulis masukanmu disini</string>
@@ -120,7 +120,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="beri_masukan">Beri Masukan</string>
     <string name="jenis_masukan">Jenis masukan</string>
-    <string name="ayo_mulai_gunakan_smart_farming_bersama_tabur_tuai">Ayo mulai gunakan Smart Farming bersama Tabur Tuai</string>
+    <string name="ayo_mulai_gunakan_smart_farming_bersama_tabur_tuai">Ayo mulai gunakan Smart Farming bersama TaburTuai</string>
     <string name="petani_amp_kebun"><![CDATA[Petani & Kebun]]></string>
     <string name="lihat_data_petani_dan_kebunmu_disini">Lihat data petani dan kebunmu disini</string>
     <string name="pengaturan">Pengaturan</string>

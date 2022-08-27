@@ -30,10 +30,15 @@
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/ic_baseline_save_24.xml" value="0.125" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.121" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_google_resize.xml" value="0.14666666666666667" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_lightbulb.xml" value="0.1465" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_lightbulb_1.xml" value="0.1465" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_list_kebun.xml" value="0.1465" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_list_petani.xml" value="0.1465" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_person.xml" value="0.1" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_placeholder_2.xml" value="0.1395" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_pompa.xml" value="0.1395" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/icon_sprinkle.xml" value="0.1255" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/img_toolbar.xml" value="0.1465" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/login_bg.xml" value="0.111" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/login_btn_bg.xml" value="0.1175" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/login_btn_bg_pressed.xml" value="0.11" />
@@ -46,9 +51,9 @@
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/smart_farming_btn_bg.xml" value="0.1175" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/drawable/smart_farming_btn_selector.xml" value="0.112" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_edit_profile.xml" value="0.45112781954887216" />
-        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_feedback.xml" value="0.12" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_feedback.xml" value="0.4466666666666667" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_home.xml" value="0.5" />
-        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_kebun.xml" value="0.22" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_kebun.xml" value="0.6666666666666666" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_login_signup.xml" value="0.16666666666666666" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_login_smart_farming.xml" value="0.3333333333333333" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/layout/activity_petani_kebun.xml" value="0.4466666666666667" />
@@ -73,7 +78,7 @@
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/menu/menu.xml" value="0.1" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/menu/menu_edit_profile.xml" value="0.1" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/menu/menu_home.xml" value="0.16666666666666666" />
-        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/menu/menu_petani_kebun.xml" value="0.14666666666666667" />
+        <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/menu/menu_petani_kebun.xml" value="1.3333333333333333" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/menu/menu_pilih_kebun.xml" value="0.1" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1255" />
         <entry key="..\:/Tabut Tuai/TaburTuai/app/src/main/res/mipmap-anydpi-v26/ic_launcher_icon.xml" value="0.1255" />

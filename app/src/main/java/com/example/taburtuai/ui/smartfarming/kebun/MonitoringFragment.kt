@@ -2,6 +2,7 @@ package com.example.taburtuai.ui.smartfarming.kebun
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,12 +33,17 @@ class MonitoringFragment : Fragment() {
 
         viewModel.monitoring.observe(requireActivity()) {
             //Log.d("TAG","data "+it.toString())
-            if (it != null) {
-                showData(it)
-            }
-            else {
-                Toast.makeText(requireContext(),getString(R.string.tidak_ada_data_monitoring),Toast.LENGTH_SHORT).show()
-                //TODO show no data
+            if(isAdded){
+                if (it != null) {
+                    showData(it)
+                } /*else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.tidak_ada_data_monitoring),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    //TODO show no data
+                }*/
             }
 
         }
