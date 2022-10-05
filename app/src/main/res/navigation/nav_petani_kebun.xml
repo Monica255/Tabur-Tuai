@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listKebunFragment"
-        android:name="com.example.taburtuai.ui.listpetanikebun.ListKebunFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.listpetanikebun.ListKebunFragment"
         android:label="fragment_list_kebun"
         tools:layout="@layout/fragment_list_kebun" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/listPetaniFragment2"
-        android:name="com.example.taburtuai.ui.listpetanikebun.ListPetaniFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.listpetanikebun.ListPetaniFragment"
         android:label="fragment_list_petani"
         tools:layout="@layout/fragment_list_petani" >
         <action

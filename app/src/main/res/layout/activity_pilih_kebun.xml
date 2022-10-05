@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.smartfarming.pilihkebun.PilihKebunActivity">
+    tools:context=".ui.smartfarming.aksessmartfarming.pilihkebun.PilihKebunActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!--<com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:fitsSystemWindows="true"
@@ -38,7 +38,38 @@
                 app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/toolbar_img"
+        app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_gravity="center_vertical"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay">
+
+                <TextView
+                    android:textColor="@color/green"
+                    style="@style/Header"
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/kebun" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </FrameLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.core.widget.NestedScrollView
         android:fillViewport="true"

@@ -18,4 +18,9 @@
     <color name="yellow">#FCCD0B</color>
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#0F8161</color>
+
+    <color name="super_light_blue">#ECF4FA</color>
+    <color name="dark_blue">#2B478B</color>
+    <color name="light_blue">#ABCADD</color>
+    <color name="grey">#66737B</color>
 </resources>

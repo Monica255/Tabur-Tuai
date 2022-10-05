@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.feedback.FeedbackActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_layout"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="?attr/actionBarSize">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay" >
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:text="@string/daftar_smart_farming"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".ui.loginsignup.LoginFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/tv_halo_petani"
+                    style="@style/Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/halo_petani_milenial"
+                    android:textColor="@color/green"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:textAlignment="textStart"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_marginEnd="@dimen/margin_start_end"
+                    android:id="@+id/tv_mau_kebunmu"
+                    style="@style/SubSubHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/mau_kebunmu_menerapkan_smart_farming"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_halo_petani" />
+
+                <ImageView
+                    android:id="@+id/img_logo"
+                    android:layout_width="262dp"
+                    android:layout_height="144dp"
+                    android:layout_marginTop="20dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/feedback"
+                    android:src="@drawable/logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toBottomOf="@id/tv_mau_kebunmu" />
+
+                <TextView
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/tv_label_hubungi"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_width="match_parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_logo"
+                    android:text="Untuk informasi lebih lanjut hubungi tim support kami di email berikut"
+                    style="@style/SubSubHeader"
+                    android:textAlignment="textStart"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:textColor="@color/green"
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/tv_email"
+                    android:layout_marginStart="@dimen/margin_start_end"
+                    android:layout_width="match_parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_hubungi"
+                    tools:text="email here"
+                    android:textStyle="italic"
+                    style="@style/SubSubHeader"
+                    android:textAlignment="center"
+                    android:layout_height="wrap_content"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginBottom="20dp"
+                android:id="@+id/bt_copy"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:background="@drawable/login_btn_selector"
+                android:text="@string/copy_email"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cb_show_pass" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

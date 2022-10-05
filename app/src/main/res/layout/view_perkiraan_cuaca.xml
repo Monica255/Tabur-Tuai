@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_perkiraan_cuaca_dini_hari"
+            android:layout_width="0dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            android:backgroundTint="@color/super_light_blue"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:id="@+id/ll_perkiraan_cuaca_dini_hari"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_item_with_ds">
+
+                <TextView
+                    style="@style/SubTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/dini_hari"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/icon_perkiraan_cuaca_dini_hari"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_berawan" />
+
+                <TextView
+                    android:id="@+id/tv_perkiraan_cuaca_dini_hari"
+                    style="@style/SmallText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    tools:text="Hujan\n ringan"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_perkiraan_cuaca_pagi"
+            android:layout_width="0dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            android:backgroundTint="@color/super_light_blue"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:id="@+id/ll_perkiraan_cuaca_pagi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_item_with_ds">
+
+                <TextView
+                    style="@style/SubTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pagi"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/icon_perkiraan_cuaca_pagi"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_berawan" />
+
+                <TextView
+                    android:id="@+id/tv_perkiraan_cuaca_pagi"
+                    style="@style/SmallText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    tools:text="Berawan\n tebal"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_perkiraan_cuaca_siang"
+            android:layout_width="0dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            android:backgroundTint="@color/super_light_blue"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:id="@+id/ll_perkiraan_cuaca_siang"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_item_with_ds">
+
+                <TextView
+                    style="@style/SubTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/siang"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/icon_perkiraan_cuaca_siang"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_berawan" />
+
+                <TextView
+                    android:id="@+id/tv_perkiraan_cuaca_siang"
+                    style="@style/SmallText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    tools:text="Berawan"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_perkiraan_cuaca_malam"
+            android:layout_width="0dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_item_with_ds"
+            android:layout_weight="1"
+            android:backgroundTint="@color/super_light_blue"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:id="@+id/ll_perkiraan_cuaca_malam"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_item_with_ds">
+
+                <TextView
+                    style="@style/SubTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/malam"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/icon_perkiraan_cuaca_malam"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_berawan" />
+
+                <TextView
+                    android:id="@+id/tv_perkiraan_cuaca_malam"
+                    style="@style/SmallText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    tools:text="Berawan\n tebal"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</layout>

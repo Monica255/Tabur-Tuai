@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/margin_start_end"
+    android:background="@android:color/transparent"
+    tools:context=".ui.profile.EditProfilePictureFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/margin_start_end"
+            android:background="@drawable/ic_baseline_close_24"
+            android:backgroundTint="@color/green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/foto_profil"
+            style="@style/Header"
+            android:textColor="@color/green"
+            android:layout_margin="@dimen/margin_start_end"
+
+            />
+
+        <ImageView
+            android:id="@+id/img_profile_picture"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="@dimen/margin_start_end"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"
+            app:layout_constraintTop_toBottomOf="@id/btn_close" />
+
+        <LinearLayout
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/margin_layout_with_ds"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/img_profile_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_pilih_foto"
+                android:layout_marginTop="@dimen/margin_start_end"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/margin_item_with_ds"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:background="@drawable/bg_kategori_artikel"
+                android:text="@string/pilih_foto"
+                android:textColor="@color/green"
+                app:layout_constraintTop_toBottomOf="@id/img_profile_picture" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:visibility="gone"
+                android:id="@+id/btn_simpan"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/margin_item_with_ds"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:layout_marginTop="@dimen/margin_layout_with_ds"
+                android:background="@drawable/bg_kategori_artikel"
+                android:text="@string/simpan"
+                android:textColor="@color/green"
+                app:layout_constraintTop_toBottomOf="@id/btn_pilih_foto" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_artikel"
+    app:startDestination="@id/artikelFragment">
+
+    <fragment
+        android:id="@+id/artikelFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.smartfarming.artikel.ArtikelFragment"
+        android:label="fragment_artikel"
+        tools:layout="@layout/fragment_artikel" >
+        <action
+            android:id="@+id/action_artikelFragment_to_listArtikelFragment"
+            app:destination="@id/listArtikelFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/listArtikelFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.smartfarming.artikel.ListArtikelFragment"
+        android:label="fragment_list_artikel"
+        tools:layout="@layout/fragment_list_artikel" />
+</navigation>

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.taburtuai.ui.loginsignup.LoginFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.loginsignup.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.taburtuai.ui.loginsignup.SignupFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.loginsignup.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action

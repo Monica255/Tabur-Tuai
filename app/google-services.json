@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "228509552110",
+    "firebase_url": "https://smart-farming-andro-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "smart-farming-andro",
+    "storage_bucket": "smart-farming-andro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228509552110:android:8afa403cb20dd8977c12ff",
+        "android_client_info": {
+          "package_name": "com.taburtuaigroup.taburtuai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228509552110-shpt0snjlaoe13bn7nvq7p3tnhpiht3b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taburtuaigroup.taburtuai",
+            "certificate_hash": "974c1b408207bbf8aa15db71ff9ef98ffc2e87f0"
+          }
+        },
+        {
+          "client_id": "228509552110-7gdr2988lk0s80sk7p2qfssak2hrd4da.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU9mj87Pq1ixTQm7lkzMHtaz1Eqm0Iht0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228509552110-7gdr2988lk0s80sk7p2qfssak2hrd4da.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228509552110:android:3013381865e185557c12ff",
+        "android_client_info": {
+          "package_name": "com.taburtuaigroup.taburtuai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228509552110-db2kguun3k1vbdf1bc9cmp9elj5ikags.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taburtuaigroup.taburtuai",
+            "certificate_hash": "974c1b408207bbf8aa15db71ff9ef98ffc2e87f0"
+          }
+        },
+        {
+          "client_id": "228509552110-7gdr2988lk0s80sk7p2qfssak2hrd4da.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU9mj87Pq1ixTQm7lkzMHtaz1Eqm0Iht0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228509552110-7gdr2988lk0s80sk7p2qfssak2hrd4da.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

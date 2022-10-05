@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/green"
     android:fillViewport="true"
-    tools:context=".ui.smartfarming.loginsmartfarming.LoginSmartFarmingActivity">
+    tools:context=".ui.smartfarming.aksessmartfarming.loginsmartfarming.LoginSmartFarmingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:background="@drawable/toolbar_img"
+            android:background="@drawable/img_toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:buttonGravity="center_vertical"
             app:layout_constraintTop_toTopOf="parent">
@@ -29,8 +29,7 @@
                 android:layout_gravity="center"
                 android:text="@string/smart_farming"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@id/cv_login"
-                app:layout_constraintTop_toTopOf="@id/img_toolbar" />
+                app:layout_constraintBottom_toTopOf="@id/cv_login" />
         </androidx.appcompat.widget.Toolbar>
 
 
@@ -145,8 +144,8 @@
                         />
                     <ImageView
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/logo_vertical"
                         android:contentDescription="@string/logo" />
                 </LinearLayout>

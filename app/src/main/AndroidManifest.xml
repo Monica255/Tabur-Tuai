@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.taburtuai">
+    package="com.taburtuaigroup.taburtuai">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -10,8 +13,45 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaburTuai.NoActionBar">
         <activity
-            android:name=".ui.profile.EditProfileActivity"
+            android:name=".ui.smartfarming.tutorial.CaraDaftarActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
+        <activity
+            android:name=".ui.smartfarming.tutorial.PengenalanSmartFarmingActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".ui.smartfarming.tutorial.CaraKerjaActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".ui.smartfarming.penyakittumbuhan.PenyakitTumbuhanActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.smartfarming.artikel.ArtikelActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.smartfarming.fav.FavActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.smartfarming.penyakittumbuhan.DetailPenyakitActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.smartfarming.artikel.DetailArtikelActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.smartfarming.SmartFarmingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.profile.EditProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.feedback.FeedbackActivity"
             android:exported="false"
@@ -47,15 +87,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.smartfarming.kebun.KebunActivity"
+            android:name=".ui.smartfarming.aksessmartfarming.kebun.KebunActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.smartfarming.pilihkebun.PilihKebunActivity"
+            android:name=".ui.smartfarming.aksessmartfarming.pilihkebun.PilihKebunActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.smartfarming.loginsmartfarming.LoginSmartFarmingActivity"
+            android:name=".ui.smartfarming.aksessmartfarming.loginsmartfarming.LoginSmartFarmingActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
     </application>

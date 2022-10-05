@@ -6,26 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_layout"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay">
+        android:layout_height="?attr/actionBarSize">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/Theme.TaburTuai.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/profile"
-            android:textSize="20sp" />
-    </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile"
+                android:textSize="20sp" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,6 +90,7 @@
 
                         <TextView
                             android:id="@+id/tv_name"
+                            android:textStyle="bold"
                             android:gravity="center_vertical"
                             style="@style/SubSubHeader"
                             android:layout_width="match_parent"
@@ -87,7 +103,6 @@
                             tools:ignore="RtlCompat" />
 
                         <TextView
-                            android:fontFamily="sans-serif-light"
                             android:gravity="center_vertical"
                             android:id="@+id/tv_email"
                             style="@style/SubTitleText"
@@ -101,7 +116,6 @@
                             tools:ignore="RtlCompat" />
 
                         <TextView
-                            android:fontFamily="sans-serif-light"
                             android:gravity="center_vertical"
                             android:id="@+id/tv_phone"
                             style="@style/SubTitleText"
@@ -157,7 +171,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:fontFamily="sans-serif-light"
                         android:text="@string/lihat_data_petani_dan_kebunmu_disini"
                         android:textAlignment="textStart"
                         android:textColor="@color/white" />
@@ -214,7 +227,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:fontFamily="sans-serif-light"
                             android:text="@string/kamu_akan_selalu_masuk_akun_petani_meski_telah_keluar_dari_aplikasi"
                             android:textAlignment="textStart"
                             android:textColor="@color/not_so_black" />
@@ -309,6 +321,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

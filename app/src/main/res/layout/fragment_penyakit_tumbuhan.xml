@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".ui.loginsignup.LoginFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_jelajahi"
+                style="@style/Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="20dp"
+                android:text="@string/jelajahi_penyakit_tumbuhan"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_penyakit_terpopuler_label"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:text="@string/penyakit_tumbuhan_terpopuler"
+                android:textAlignment="textStart"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_jelajahi" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_penyakit_terpopuler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_layout_with_ds"
+                android:layout_marginEnd="@dimen/margin_layout_with_ds"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tv_penyakit_terpopuler_label" />
+
+            <TextView
+                android:id="@+id/tv_penyakit_lainnya"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:text="@string/penyakit_tumbuhan_lainnya"
+                android:textAlignment="textStart"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_penyakit_terpopuler" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:id="@+id/rv_penyakit_tumbuhan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="70dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_penyakit_lainnya"
+                app:layout_constraintVertical_bias="1.0"
+                tools:itemCount="4"
+                tools:layout_editor_absoluteX="24dp"
+                tools:listitem="@layout/item_penyakit_tumbuhan" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_muat_lebih"
+                style="@style/SubTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_start_end"
+                android:background="@drawable/bg_muat_lebih"
+                android:paddingStart="@dimen/margin_start_end"
+                android:paddingEnd="@dimen/margin_start_end"
+                android:text="Muat lebih banyak"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_penyakit_tumbuhan" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bt_muat_lebih" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/pb_loading"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_penyakit_tumbuhan"
+    app:startDestination="@id/penyakitTumbuhanFragment2">
+    <fragment
+        android:id="@+id/penyakitTumbuhanFragment2"
+        android:name="com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan.PenyakitTumbuhanFragment"
+        android:label="fragment_penyakit_tumbuhan" >
+        <action
+            android:id="@+id/action_penyakitTumbuhanFragment2_to_listPenyakitTumbuhanFragment"
+            app:destination="@id/listPenyakitTumbuhanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPenyakitTumbuhanFragment"
+        android:name="com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan.ListPenyakitTumbuhanFragment"
+        android:label="fragment_list_penyakit_tumbuhan" />
+</navigation>

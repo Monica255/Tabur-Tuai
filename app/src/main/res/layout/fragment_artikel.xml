@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".ui.loginsignup.LoginFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_daftar"
+                style="@style/Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="20dp"
+                android:text="@string/jelajahi_artikel"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_artikel_terpopuler_label"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:text="Artikel Terpopuler"
+                android:textAlignment="textStart"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_daftar" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_artikel_terpopuler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_layout_with_ds"
+                android:layout_marginEnd="@dimen/margin_layout_with_ds"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tv_artikel_terpopuler_label" />
+
+            <TextView
+                android:id="@+id/tv_artikel_lainnya"
+                style="@style/SubSubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginTop="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:text="@string/artikel_lainnya"
+                android:textAlignment="textStart"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_artikel_terpopuler" />
+
+
+            <HorizontalScrollView
+                android:id="@+id/hsv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                app:layout_constraintTop_toBottomOf="@id/tv_artikel_lainnya">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <RadioGroup
+                        android:id="@+id/rg_kategori"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <RadioButton
+                            android:id="@+id/rb_semua"
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_marginStart="@dimen/margin_start_end"
+                            android:background="@drawable/kategori_selector"
+                            android:button="@android:color/transparent"
+                            android:checked="true"
+                            android:paddingStart="@dimen/margin_start_end"
+                            android:paddingEnd="@dimen/margin_start_end"
+                            android:text="@string/semua"
+                            android:textColor="@drawable/kategori_text_selector" />
+
+                        <RadioButton
+                            android:id="@+id/rb_informasi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_marginStart="@dimen/margin_start_end"
+                            android:background="@drawable/kategori_selector"
+                            android:button="@android:color/transparent"
+                            android:paddingStart="@dimen/margin_start_end"
+                            android:paddingEnd="@dimen/margin_start_end"
+                            android:text="@string/informasi"
+                            android:textColor="@drawable/kategori_text_selector" />
+
+                        <RadioButton
+                            android:id="@+id/rb_edukasi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_marginStart="@dimen/margin_start_end"
+                            android:layout_marginEnd="@dimen/margin_start_end"
+                            android:background="@drawable/kategori_selector"
+                            android:button="@android:color/transparent"
+                            android:paddingStart="@dimen/margin_start_end"
+                            android:paddingEnd="@dimen/margin_start_end"
+                            android:text="@string/edukasi"
+                            android:textColor="@drawable/kategori_text_selector" />
+
+                        <RadioButton
+                            android:id="@+id/rb_lainnya"
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:layout_marginEnd="@dimen/margin_start_end"
+                            android:background="@drawable/kategori_selector"
+                            android:button="@android:color/transparent"
+                            android:paddingStart="@dimen/margin_start_end"
+                            android:paddingEnd="@dimen/margin_start_end"
+                            android:text="Lainnya"
+                            android:textColor="@drawable/kategori_text_selector" />
+
+                    </RadioGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </HorizontalScrollView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginStart="@dimen/margin_start_end"
+                android:layout_marginEnd="@dimen/margin_start_end"
+                android:id="@+id/rv_artikel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="70dp"
+                app:layout_constraintTop_toBottomOf="@id/hsv"
+                app:layout_constraintVertical_bias="1.0"
+                tools:itemCount="4"
+                tools:layout_editor_absoluteX="24dp"
+                tools:listitem="@layout/item_artikel" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_muat_lebih"
+                style="@style/SubTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_start_end"
+                android:background="@drawable/bg_muat_lebih"
+                android:paddingStart="@dimen/margin_start_end"
+                android:paddingEnd="@dimen/margin_start_end"
+                android:text="Muat lebih banyak"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_artikel" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bt_muat_lebih" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/pb_loading"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
