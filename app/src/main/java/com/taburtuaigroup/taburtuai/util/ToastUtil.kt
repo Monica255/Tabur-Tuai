@@ -28,18 +28,14 @@ class ToastUtil {
             }
         }
 
-        fun showSnackbar(view: View, pair: Pair<Boolean, Event<String>>){
+        fun showSnackbar(view: View, pair: Pair<Boolean, Event<String>>) {
             val msg = pair.second.getContentIfNotHandled()
             if (msg != null) {
-                if (!pair.first) {
-                    Snackbar.make(
-                        view,
-                        msg,
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                } else {
-                    //TODO show error toast
-                }
+                Snackbar.make(
+                    view,
+                    msg,
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 

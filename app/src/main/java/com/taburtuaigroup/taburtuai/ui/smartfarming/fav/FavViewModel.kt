@@ -20,7 +20,6 @@ class FavViewModel(private val repository: Repository) : ViewModel() {
 
     val messsage = repository.message
 
-
     private val modificationEventsArtikel = MutableStateFlow<List<ViewEventsArtikel>>(emptyList())
     private val modificationEventsPenyakit = MutableStateFlow<List<ViewEventsPenyakit>>(emptyList())
 
@@ -67,6 +66,12 @@ class FavViewModel(private val repository: Repository) : ViewModel() {
                         else return@map it
                     }
             }
+            is ViewEventsArtikel.Rebind -> {
+                paging.map {
+                    if (ViewEvents.entity.id_artikel == it.id_artikel) return@map it
+                    else return@map it
+                }
+            }
         }
     }
 
@@ -87,6 +92,12 @@ class FavViewModel(private val repository: Repository) : ViewModel() {
                         )
                         else return@map it
                     }
+            }
+            is ViewEventsPenyakit.Rebind -> {
+                paging.map {
+                    if (ViewEvents.entity.id_penyakit == it.id_penyakit) return@map it
+                    else return@map it
+                }
             }
         }
     }

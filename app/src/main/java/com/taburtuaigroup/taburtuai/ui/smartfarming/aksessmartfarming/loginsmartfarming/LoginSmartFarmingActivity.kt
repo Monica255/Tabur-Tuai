@@ -63,28 +63,6 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
             ToastUtil.makeToast(this, it)
         }
 
-        viewModel.isConnected.observe(this) {
-            viewModel.isConnected.value?.let {
-                ToastUtil.showInternetSnackbar(
-                    this,
-                    binding.root,
-                    it
-                )
-            }
-        }
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        ToastUtil.sb = null
-        viewModel.isConnected.value?.let {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
     }
 
     private fun showLoading(isLoading: Boolean) {

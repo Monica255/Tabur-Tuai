@@ -24,7 +24,6 @@ class ArtikelAdapter(
     var list = mutableListOf<Artikel>()
     lateinit var ctx: Context
     private val uid=FirebaseAuth.getInstance().currentUser?.uid
-    private var isFav=false
 
     fun submitList(mList: MutableList<Artikel>) {
         list = mList
@@ -72,7 +71,7 @@ class ArtikelAdapter(
                 }
 
                 cbFav.setOnClickListener {
-                    onCheckChange?.invoke(artikel)
+                    onCheckChange.invoke(artikel)
                     if(artikel.favorites!=null&&uid!=null){
                         cbFav.isChecked = !artikel.favorites!!.contains(uid)
                         if(!artikel.favorites!!.contains(uid)){

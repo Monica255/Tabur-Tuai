@@ -5,8 +5,8 @@ import com.taburtuaigroup.taburtuai.data.*
 
 class DataMapper {
     companion object {
-        fun responseWeatherToWeatherData(data: ResponseWeather): WeatherForcast {
-            var returnData: WeatherForcast
+        fun responseWeatherToWeatherData(data: ResponseWeather): WeatherForcast? {
+            var returnData: WeatherForcast?
             try {
                 var x=0
                 val kota = data.data.description
@@ -69,7 +69,7 @@ class DataMapper {
                 }
                 returnData = WeatherForcast(kota, provinsi, dailyWeather)
             } catch (e: Exception) {
-                returnData = WeatherForcast()
+                returnData = null
                 Log.d("TAG", e.message.toString())
             }
             return returnData

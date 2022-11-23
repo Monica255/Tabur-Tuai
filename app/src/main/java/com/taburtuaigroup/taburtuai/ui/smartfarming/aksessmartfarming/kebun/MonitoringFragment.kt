@@ -17,6 +17,7 @@ import com.taburtuaigroup.taburtuai.data.WeatherTime
 import com.taburtuaigroup.taburtuai.databinding.FragmentMonitoringBinding
 import com.taburtuaigroup.taburtuai.util.DataConverter
 import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.util.ToastUtil
 import java.util.*
 
 
@@ -58,16 +59,19 @@ class MonitoringFragment : Fragment() {
         }
 
         viewModel.weatherForcast.observe(requireActivity()){
-            it.dailyWeather?.let { it1 ->
+            it?.dailyWeather?.let { it1 ->
                 weatherForcastAdapter.submitList(it1)
                 showCurrentWeather(it.dailyWeather)
             }
-
         }
 
         viewModel.message.observe(requireActivity()){
-            if(!it.first)it.second.getContentIfNotHandled()
-            showWeatherForcast(it.first)
+            if(!it.first) {
+                it.second.getContentIfNotHandled()
+            }else{
+                ToastUtil.makeToast(requireActivity(),it)
+            }
+            showWeatherForcast(!it.first)
         }
 
     }
@@ -109,8 +113,13 @@ class MonitoringFragment : Fragment() {
         }
     }
 
-    fun showWeatherForcast(data:Boolean){
-        if(!data){
+    override fun onStart() {
+        super.onStart()
+        binding.cvPerkiraanCuaca.visibility=View.GONE
+        binding.tvPerkiraanCuacaLabel.visibility=View.GONE
+    }
+    private fun showWeatherForcast(isShow:Boolean){
+        if(isShow){
             /*val text = ObjectAnimator.ofFloat(binding.tvPerkiraanCuacaLabel, View.ALPHA, 1f).setDuration(500)
             val cv = ObjectAnimator.ofFloat(binding.cvPerkiraanCuaca, View.ALPHA, 1f).setDuration(500)
             val s=AnimatorSet()
@@ -133,8 +142,6 @@ class MonitoringFragment : Fragment() {
             tvKelembaban.text = (data.kelembaban_tanah ?:"-").toString()+" RH"
             tvPhTanah.text = "pH "+(data.ph_tanah ?:"-").toString()
             tvKelembabanUdara.text = (data.humidity ?:"-").toString()+" g/"+"\u33A5"
-            /*tvArahAngin.text = if(data.arah_angin !="") TextFormater.toTitleCase(data.arah_angin) else "-"
-            tvKecepatanAngin.text = (data.kecepatan_angin ?:"-").toString()+" km/H"*/
         }
     }
 

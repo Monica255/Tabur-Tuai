@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.taburtuaigroup.taburtuai.ViewModelFactory
 import com.taburtuaigroup.taburtuai.data.Device
 import com.taburtuaigroup.taburtuai.databinding.FragmentControllingBinding
+import com.taburtuaigroup.taburtuai.util.ToastUtil
 
 
 class ControllingFragment : Fragment() {

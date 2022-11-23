@@ -18,6 +18,4 @@ class PetaniKebunViewModel(private val repository: Repository) : ViewModel() {
 
     val allKebun=repository.allKebun
 
-    val isConnected=repository.isConnected
-
 }

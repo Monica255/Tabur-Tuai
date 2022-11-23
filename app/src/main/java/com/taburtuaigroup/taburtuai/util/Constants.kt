@@ -28,9 +28,11 @@ enum class KategoriArtikel(val printable:String) {
 sealed class ViewEventsArtikel {
     data class Edit(val entity: Artikel) : ViewEventsArtikel()
     data class Remove(val entity: Artikel) : ViewEventsArtikel()
+    data class Rebind(val entity: Artikel) : ViewEventsArtikel()
 }
 
 sealed class ViewEventsPenyakit {
     data class Edit(val entity: PenyakitTumbuhan) : ViewEventsPenyakit()
     data class Remove(val entity: PenyakitTumbuhan) : ViewEventsPenyakit()
+    data class Rebind(val entity: PenyakitTumbuhan) : ViewEventsPenyakit()
 }

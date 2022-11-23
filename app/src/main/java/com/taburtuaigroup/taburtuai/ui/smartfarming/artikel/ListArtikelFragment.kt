@@ -2,14 +2,12 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -81,7 +79,7 @@ class ListArtikelFragment : Fragment() {
         viewModel.getData(viewModel.mKategoriArtikel)
         viewModel.pagingData.observe(requireActivity()){
             if(isAdded){
-                it.observe(requireActivity()){
+                it.observe(requireActivity()){ it ->
                     if(it!=null&& isAdded){
                         if(viewModel.mKeyword!=""){
                             binding.tvArtikelLainnya.text="Hasil pencarian "+viewModel.mKeyword
@@ -109,7 +107,7 @@ class ListArtikelFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentListArtikelBinding.inflate(inflater, container, false)
         return binding.root
     }

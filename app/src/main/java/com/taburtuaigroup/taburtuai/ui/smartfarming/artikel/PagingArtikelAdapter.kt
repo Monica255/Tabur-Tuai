@@ -1,13 +1,13 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -18,12 +18,15 @@ import com.taburtuaigroup.taburtuai.data.Artikel
 import com.taburtuaigroup.taburtuai.util.DateConverter
 import com.taburtuaigroup.taburtuai.util.TextFormater
 
-class PagingArtikelAdapter(private val onClick: ((Artikel) -> Unit),private val onCheckChanged:((Artikel)->Unit)?): PagingDataAdapter<Artikel, PagingArtikelAdapter.ArtikelVH>(
+class PagingArtikelAdapter(
+    private val onClick: ((Artikel) -> Unit),
+    private val onCheckChanged: ((Artikel) -> Unit)?
+) : PagingDataAdapter<Artikel, PagingArtikelAdapter.ArtikelVH>(
     Companion
 ) {
     lateinit var ctx: Context
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-    private val uid=FirebaseAuth.getInstance().currentUser?.uid
     inner class ArtikelVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_artikel)
         private val imgKebun: ImageView = itemView.findViewById(R.id.img_header_artikel)
@@ -32,36 +35,27 @@ class PagingArtikelAdapter(private val onClick: ((Artikel) -> Unit),private val 
         private val cbFav: CheckBox = itemView.findViewById(R.id.cb_fav)
         private val tvKategori: TextView = itemView.findViewById(R.id.tv_kategori_artikel)
 
-        fun bind(artikel: Artikel) {
-            if(onCheckChanged!=null){
-                cbFav.visibility=View.VISIBLE
-                cbFav.setOnClickListener {
-                    onCheckChanged?.invoke(artikel)
-                    if(artikel.favorites!=null&&uid!=null){
-                        cbFav.isChecked = !artikel.favorites!!.contains(uid)
-                        if(!artikel.favorites!!.contains(uid)){
-                            artikel.favorites?.add(uid)
-                        }else{
-                            artikel.favorites?.remove(uid)
-                        }
-                    }else{
-                        cbFav.isChecked=false
-                    }
+        fun bind(artikel: Artikel, position: Int) {
+            if (onCheckChanged != null && artikel.favorites != null && uid != null) {
+                cbFav.visibility = View.VISIBLE
+                if (artikel.favorites != null && uid != null) {
+                    cbFav.isChecked = artikel.favorites!!.contains(uid)
+                } else {
+                    cbFav.isChecked = false
                 }
-            }else{
-                cbFav.visibility=View.GONE
+                cbFav.setOnClickListener {
+                    onCheckChanged.invoke(artikel)
+                }
+
+            } else {
+                cbFav.isChecked = false
+                cbFav.visibility = View.GONE
             }
 
             tvTitle.text = TextFormater.toTitleCase(artikel.title)
-            tvDes.text=artikel.artikel_text
-            tvDate.text= DateConverter.convertMillisToDate(artikel.timestamp,ctx)
-            if(artikel.favorites!=null&&uid!=null){
-                cbFav.isChecked = artikel.favorites!!.contains(uid)
-            }else{
-                cbFav.isChecked=false
-            }
-
-            tvKategori.text= TextFormater.toTitleCase(artikel.kategori)
+            tvDes.text = artikel.artikel_text
+            tvDate.text = DateConverter.convertMillisToDate(artikel.timestamp, ctx)
+            tvKategori.text = TextFormater.toTitleCase(artikel.kategori)
 
             Glide.with(itemView)
                 .load(artikel.img_header)
@@ -71,25 +65,24 @@ class PagingArtikelAdapter(private val onClick: ((Artikel) -> Unit),private val 
             itemView.setOnClickListener {
                 onClick(artikel)
             }
-
-
-
         }
 
     }
 
     override fun onBindViewHolder(holder: ArtikelVH, position: Int) {
-        val data=getItem(position)
-        if(data!=null){
-            holder.bind(data)
+        val data = getItem(position)
+        if (data != null) {
+            holder.bind(data, position)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtikelVH {
-        ctx=parent.context
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_artikel, parent, false)
+        ctx = parent.context
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_artikel, parent, false)
         return ArtikelVH(view)
     }
+
     companion object : DiffUtil.ItemCallback<Artikel>() {
         override fun areItemsTheSame(oldItem: Artikel, newItem: Artikel): Boolean {
             return oldItem.id_artikel == newItem.id_artikel

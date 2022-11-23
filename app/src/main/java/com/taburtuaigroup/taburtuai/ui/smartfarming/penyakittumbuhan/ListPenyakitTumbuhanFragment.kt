@@ -2,6 +2,7 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,11 +51,12 @@ class ListPenyakitTumbuhanFragment : Fragment() {
         lifecycleScope.launch {
             adapterPenyakit.loadStateFlow.collectLatest { loadStates ->
                 showLoading(loadStates.refresh is LoadState.Loading)
+                Log.d("TAG",adapterPenyakit.snapshot().toString())
             }
         }
 
         viewModel.getData()
-        viewModel.pagingData.observe(requireActivity()){
+        viewModel.pagingData.observe(requireActivity()){ it ->
             if(isAdded){
                 it.observe(requireActivity()){
                     if(it!=null&& isAdded){
@@ -63,6 +65,7 @@ class ListPenyakitTumbuhanFragment : Fragment() {
                         }else{
                             binding.tvPenyakitLainnya.text="Penyakit Tumbuhan lainnya"
                         }
+                        Log.d("TAG","submit data")
                         adapterPenyakit.submitData(lifecycle, it)
                     }
                 }

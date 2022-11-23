@@ -14,7 +14,4 @@ class ProfileViewModel(private val repository: Repository) :ViewModel() {
     val firebaseUser=repository.firebaseUser
 
     val userData=repository.getUserData()
-
-    val isConnected=repository.isConnected
-
 }

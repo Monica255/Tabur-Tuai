@@ -11,7 +11,7 @@ class PilihKebunViewModel(private val repository: Repository) : ViewModel() {
 
     val kebunPetani=repository.kebunPetani
 
-    val isConnected=repository.isConnected
+    val  isLoading=repository.isLoading
 
     fun logoutPetani()=repository.logoutPetani()
 

@@ -1,14 +1,10 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
-import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.graphics.drawable.DrawableCompat
@@ -64,7 +60,7 @@ class ArtikelActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText!=null){
-                    if(newText?.trim()?.isEmpty()){
+                    if(newText.trim().isEmpty()){
                         if(viewModel.mKeyword!=""){
                             viewModel.getData(keyword = "")
                         }

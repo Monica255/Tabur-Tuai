@@ -37,15 +37,6 @@ class PetaniKebunActivity : AppCompatActivity() {
         viewModel= ViewModelProvider(
             this, ViewModelFactory.getInstance(application)
         )[PetaniKebunViewModel::class.java]
-
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
-
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -116,18 +107,6 @@ class PetaniKebunActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        ToastUtil.sb = null
-        viewModel.isConnected.value?.let {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
         }
     }
 

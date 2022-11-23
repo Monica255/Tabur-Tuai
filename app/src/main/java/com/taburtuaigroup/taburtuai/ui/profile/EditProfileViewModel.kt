@@ -13,8 +13,6 @@ class EditProfileViewModel(private val repository: Repository) :ViewModel() {
 
     val userData=repository.getUserData()
 
-    val isConnected=repository.isConnected
-
     var newData= MutableLiveData<UserData>()
 
     val isLoading=repository.isLoading

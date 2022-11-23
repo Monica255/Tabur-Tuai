@@ -7,6 +7,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.paging.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -35,7 +36,7 @@ import java.util.*
 class Repository(
     private val context: Application,
     private val mDb: FirebaseDatabase,
-    private val mFb: FirebaseFirestore
+    mFb: FirebaseFirestore
 ) {
 
     //private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
@@ -107,8 +108,11 @@ class Repository(
     private val _penyakit = MutableLiveData<PenyakitTumbuhan>()
     val penyakit: LiveData<PenyakitTumbuhan> = _penyakit
 
-    private val _WeatherForcast = MutableLiveData<WeatherForcast>()
-    val weatherForcast: LiveData<WeatherForcast> = _WeatherForcast
+    private val _weatherForecast = MutableLiveData<WeatherForcast?>()
+    val weatherForecast: LiveData<WeatherForcast?> = _weatherForecast
+
+    private val _isFav = MutableLiveData<Event<Any?>>()
+    val isFav: LiveData<Event<Any?>> = _isFav
 
     var idActiveKebun = ""
     var lastPetaniId = ""
@@ -137,41 +141,62 @@ class Repository(
     }
 
     fun getWeatherForcast(province: String, city: String) {
-        _isLoading.value = true
-        val api = ApiConfig.getApiService().getWeatherForcast(province.trim(), city.trim())
-        api.enqueue(object : Callback<ResponseWeather> {
-            override fun onResponse(
-                call: Call<ResponseWeather>,
-                response: Response<ResponseWeather>
-            ) {
-                _isLoading.value = false
-                val responseBody = response.body()
-                if (response.isSuccessful) {
-                    if(responseBody!=null){
-                        //Log.d("TAG","repo "+responseBody)
-                       _WeatherForcast.value= DataMapper.responseWeatherToWeatherData(responseBody)
-                    }
-                    _message.value = Pair(
-                        false,
-                        Event(
-                            "Berhasil mendapatkan data perkiraan cuaca"
-                        )
-                    )
-                } else {
-                    _message.value = Pair(
-                        true,
-                        Event(
-                            "Gagal mendapatkan data perkiraan cuaca"
-                        )
-                    )
-                }
-            }
+        if(province==""||city==""){
+            _message.value = Pair(
+                true,
+                Event(
+                    "Data provinsi atau kota kosong"
+                )
+            )
+        }else{
+            _isLoading.value = true
+            val api = ApiConfig.getApiService().getWeatherForcast(province.trim(), city.trim())
+            api.enqueue(object : Callback<ResponseWeather> {
+                override fun onResponse(
+                    call: Call<ResponseWeather>,
+                    response: Response<ResponseWeather>
+                ) {
+                    _isLoading.value = false
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        val x = DataMapper.responseWeatherToWeatherData(responseBody)
+                        _weatherForecast.value = x
+                        if (x != null) {
+                            _message.value = Pair(
+                                false,
+                                Event(
+                                    "Berhasil mendapatkan data perkiraan cuaca"
+                                )
+                            )
+                        } else {
+                            _message.value = Pair(
+                                true,
+                                Event(
+                                    "Gagal mendapatkan data perkiraan cuaca"
+                                )
+                            )
+                        }
 
-            override fun onFailure(call: Call<ResponseWeather>, t: Throwable) {
-                _isLoading.value = false
-            }
-        })
+                    } else {
+                        _weatherForecast.value = null
+                        _message.value = Pair(
+                            true,
+                            Event(
+                                "Gagal mendapatkan data perkiraan cuaca"
+                            )
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseWeather>, t: Throwable) {
+                    _weatherForecast.value = null
+                    _isLoading.value = false
+                }
+            })
+        }
+
     }
+
 
     fun favoriteArtikel(artike: Artikel) {
         val favorite: Boolean
@@ -193,6 +218,7 @@ class Repository(
                                 false,
                                 Event(if (favorite) "Artikel disimpan di list disukai" else "Artikel dihapus dari list disukai")
                             )
+                            _isFav.value=Event(favorite)
                         } else {
                             Log.d("TAG", "error")
                         }
@@ -200,7 +226,7 @@ class Repository(
 
             } else {
                 _message.value = Pair(
-                    false,
+                    true,
                     Event(if (favorite) "Gagal menyimpan artikel" else "Gagal menghapus artikel")
                 )
             }
@@ -233,6 +259,7 @@ class Repository(
                                     false,
                                     Event(if (favorite) "Penyakit tumbuhan disimpan di list disukai" else "Penyakit tumbuhan dihapus dari list disukai")
                                 )
+                                _isFav.value=Event(favorite)
                             } else {
                                 Log.d("TAG", "error")
                             }
@@ -240,7 +267,7 @@ class Repository(
 
                 } else {
                     _message.value = Pair(
-                        false,
+                        true,
                         Event(if (favorite) "Gagal menyimpan penyakit tumbuhan" else "Gagal menghapus penyakit tumbuhan")
                     )
                 }
@@ -287,7 +314,6 @@ class Repository(
                         val x = i.toObject<Artikel>()
                         list.add(x)
                     }
-                    Log.d("TAG", "yyyyyy")
                     _listArtikelTerpopuler.value = list
                 } catch (e: Exception) {
                     _listArtikelTerpopuler.value = listOf()
@@ -357,7 +383,6 @@ class Repository(
                         val x = i.toObject<PenyakitTumbuhan>()
                         list.add(x)
                     }
-                    Log.d("TAG", "yyyyyy")
                     _listPenyakitTerpopuler.value = list
                 } catch (e: Exception) {
                     _listPenyakitTerpopuler.value = listOf()
@@ -771,6 +796,7 @@ class Repository(
         _kebun.value = null
         _controlling.value = null
         _monitoring.value = null
+        _weatherForecast.value = null
         idActiveKebun = ""
     }
 
@@ -850,6 +876,7 @@ class Repository(
     }
 
     fun getAllKebunPetani(idPetani: String, kebunName: String = "") {
+        _isLoading.value=true
         val queryAll = getCurrentUserUid()?.let {
             smartFarming?.child(it)?.child("kebun")?.orderByChild("id_petani")?.equalTo(idPetani)
         }
@@ -870,7 +897,6 @@ class Repository(
                                         }
                                     } else {
                                         list.add(it)
-
                                     }
                                 }
                             }
@@ -879,16 +905,17 @@ class Repository(
                             Log.d("TAG", e.message.toString())
                         }
                     }
+                    _isLoading.value=false
                     _kebunPetani.value = list
                 } else {
-                    //_kebunPetani.value = list
+                    _isLoading.value=false
                     _message.value =
                         (Pair(false, Event(context.resources.getString(R.string.tidak_ada_kebun))))
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                //kebunPetani.value = list
+                _isLoading.value=false
                 Log.d("TAG", error.message)
             }
 

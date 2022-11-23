@@ -27,7 +27,7 @@ class KebunViewModel(private val repository: Repository) :ViewModel() {
 
     val controlling=repository.controlling
 
-    val weatherForcast=repository.weatherForcast
+    val weatherForcast=repository.weatherForecast
 
     val message=repository.message
 

@@ -1,9 +1,8 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -11,7 +10,6 @@ import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.ViewModelFactory
 import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
 import com.taburtuaigroup.taburtuai.databinding.ActivityDetailPenyakitBinding
-import com.taburtuaigroup.taburtuai.ui.smartfarming.artikel.DetailArtikelViewModel
 import com.taburtuaigroup.taburtuai.util.*
 
 class DetailPenyakitActivity : AppCompatActivity() {
@@ -19,9 +17,8 @@ class DetailPenyakitActivity : AppCompatActivity() {
     private lateinit var viewModel:DetailPenyakitViewModel
     private var penyakitId=""
     private var data=PenyakitTumbuhan()
-    private var isfav=false
     private val uid=FirebaseAuth.getInstance().currentUser?.uid
-
+    private var sendReslt=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityDetailPenyakitBinding.inflate(layoutInflater)
@@ -37,28 +34,34 @@ class DetailPenyakitActivity : AppCompatActivity() {
 
         viewModel.penyakit.observe(this){itt->
             data=itt
-            isFavorite(data.favorites)
             setData(data)
             binding.cbFav.setOnClickListener {
                 viewModel.favoritePenyakit(data)
-                if (isfav){
-                    data.favorites?.remove(uid)
-                }else{
-                    uid?.let { it1 -> data.favorites?.add(it1) }
-                }
+            }
+        }
+
+        viewModel.isFav.observe(this){
+            val x=it.getContentIfNotHandled()
+            if (x==true){
+                uid?.let { it1 -> data.favorites?.add(it1) }
+            }else if(x==false){
+                data.favorites?.remove(uid)
             }
         }
 
         viewModel.message.observe(this){
             ToastUtil.showSnackbar(binding.root,it)
+            if(it.first)binding.cbFav.isChecked=isFavorite(data.favorites)
+            sendReslt = !it.first
         }
     }
 
     private fun isFavorite(list:List<String>?):Boolean{
+        var x=false
         if(list!=null){
-            isfav=list.contains(uid)
+            x=list.contains(uid)
         }
-        return isfav
+        return x
     }
 
     private fun setData(penyakit: PenyakitTumbuhan){
@@ -74,7 +77,7 @@ class DetailPenyakitActivity : AppCompatActivity() {
             tvAuthor.text=if(penyakit.author.trim()!="")getString(R.string.oleh,TextFormater.toTitleCase(penyakit.author)) else ""
             tvDeskripsi.text=penyakit.deskripsi.replace("\\n","\n")
             tvSolusi.text=penyakit.solusi.replace("\\n","\n")
-            cbFav.isChecked=isfav
+            cbFav.isChecked=isFavorite(penyakit.favorites)
         }
 
     }
@@ -85,9 +88,11 @@ class DetailPenyakitActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        var intent= Intent()
-        intent.putExtra(PENYAKIT_TUMBUHAN,data)
-        setResult(RESULT_OK,intent)
+        if(sendReslt){
+            val intent = Intent()
+            intent.putExtra(PENYAKIT_TUMBUHAN, data)
+            setResult(RESULT_OK, intent)
+        }
         super.onBackPressed()
     }
 

@@ -38,14 +38,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, SmartFarmingActivity::class.java))
         }
 
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
-
         viewModel.userData.observe(this) {
             if (it != null) setData(it)
         }
@@ -78,18 +70,6 @@ class HomeActivity : AppCompatActivity() {
                 .load(uri)
                 .placeholder(R.drawable.placeholder)
                 .into(binding.imgProfile)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        ToastUtil.sb = null
-        viewModel.isConnected.value?.let {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
         }
     }
 

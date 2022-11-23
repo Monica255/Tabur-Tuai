@@ -58,20 +58,12 @@ class EditProfileActivity : AppCompatActivity() {
             ViewModelFactory.getInstance(application)
         )[EditProfileViewModel::class.java]
 
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
 
         binding.imgProfile.setOnClickListener {
             newDialog()
         }
 
         viewModel.userData.observe(this){
-            //Log.d("TAG",it.toString())
             if(it!=null) {
                 data= UserData(it.email,it.name,it.phone_number,it.uid,it.img_profile)
                 if(viewModel.newData.value==UserData()){
@@ -82,14 +74,6 @@ class EditProfileActivity : AppCompatActivity() {
                 }
                 setData(it)
             }
-        }
-
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
         }
 
         binding.etName.addTextChangedListener {
@@ -187,22 +171,8 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun isDataSame(newData:UserData):Boolean{
         return newData==data
-    }
-
-    override fun onStart() {
-        super.onStart()
-        ToastUtil.sb = null
-        viewModel.isConnected.value?.let {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
     }
 
     private fun setActionBar() {

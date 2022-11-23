@@ -2,7 +2,6 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -11,8 +10,6 @@ import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.ViewModelFactory
 import com.taburtuaigroup.taburtuai.data.Artikel
 import com.taburtuaigroup.taburtuai.databinding.DetailArtikelBinding
-import com.taburtuaigroup.taburtuai.databinding.FragmentArtikelBinding
-import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.kebun.KebunViewModel
 import com.taburtuaigroup.taburtuai.util.*
 
 class DetailArtikelActivity  : AppCompatActivity() {
@@ -22,7 +19,6 @@ class DetailArtikelActivity  : AppCompatActivity() {
     private lateinit var viewModel:DetailArtikelViewModel
     private var data=Artikel()
     private val uid=FirebaseAuth.getInstance().currentUser?.uid
-    private var isfav=false
     private var sendReslt=false
     override fun onDestroy() {
         binding.cbFav.isChecked=false
@@ -44,29 +40,34 @@ class DetailArtikelActivity  : AppCompatActivity() {
 
         viewModel.artikel.observe(this){itt->
             data=itt
-            isFavorite(data.favorites)
             setData(data)
             binding.cbFav.setOnClickListener {
-                viewModel.favoriteArtikel(data,!isfav)
-                if (isfav){
-                    data.favorites?.remove(uid)
-                }else{
-                    uid?.let { it1 -> data.favorites?.add(it1) }
-                }
+                viewModel.favoriteArtikel(data)
+            }
+        }
+
+        viewModel.isFav.observe(this){
+            val x=it.getContentIfNotHandled()
+            if (x==true){
+                uid?.let { it1 -> data.favorites?.add(it1) }
+            }else if(x==false){
+                data.favorites?.remove(uid)
             }
         }
 
         viewModel.mesage.observe(this){
             ToastUtil.showSnackbar(binding.root,it)
+            if(it.first)binding.cbFav.isChecked=isFavorite(data.favorites)
             sendReslt = !it.first
         }
     }
 
     private fun isFavorite(list:List<String>?):Boolean{
+        var x=false
         if(list!=null){
-            isfav=list.contains(uid)
+            x=list.contains(uid)
         }
-        return isfav
+        return x
     }
 
     private fun setData(artikel:Artikel){
@@ -85,7 +86,7 @@ class DetailArtikelActivity  : AppCompatActivity() {
                 "edukasi"->resources.getString(R.string.edukasi)
                 else->resources.getString(R.string.lainnya)
             }
-            cbFav.isChecked=isfav
+            cbFav.isChecked=isFavorite(artikel.favorites)
         }
 
     }
@@ -97,7 +98,7 @@ class DetailArtikelActivity  : AppCompatActivity() {
 
     override fun onBackPressed() {
         if(sendReslt){
-            var intent = Intent()
+            val intent = Intent()
             intent.putExtra(ARTIKEL, data)
             setResult(RESULT_OK, intent)
         }

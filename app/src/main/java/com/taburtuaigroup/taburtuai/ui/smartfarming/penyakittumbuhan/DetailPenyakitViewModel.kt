@@ -10,6 +10,8 @@ class DetailPenyakitViewModel(private val repository: Repository) :ViewModel() {
 
     val message=repository.message
 
+    val isFav=repository.isFav
+
     fun favoritePenyakit(penyakit:PenyakitTumbuhan)=repository.favoritePenyakit(penyakit)
 
     var penyakitId=""

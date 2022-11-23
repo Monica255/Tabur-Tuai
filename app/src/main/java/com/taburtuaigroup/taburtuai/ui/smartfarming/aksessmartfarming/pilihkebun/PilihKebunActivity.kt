@@ -25,7 +25,7 @@ class PilihKebunActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPilihKebunBinding
     private lateinit var viewModel: PilihKebunViewModel
     private var idPetani: String? = null
-    private lateinit var kebunAdapter:KebunAdapter
+    private lateinit var kebunAdapter: KebunAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPilihKebunBinding.inflate(layoutInflater)
@@ -58,11 +58,11 @@ class PilihKebunActivity : AppCompatActivity() {
         }*/
 
         viewModel.petani.observe(this) {
-            if(it!=null){
+            if (it != null) {
                 binding.toolbarTitle.text = getString(R.string.kebun_petani, it.nama_petani)
                 idPetani = it.id_petani
                 viewModel.getAllKebun(idPetani = it.id_petani)
-            }else{
+            } else {
                 finish()
             }
         }
@@ -71,13 +71,15 @@ class PilihKebunActivity : AppCompatActivity() {
             showRecyclerView(it)
         }
 
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(this,binding.root,it)
 
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
         }
 
+    }
 
-
+    private fun showLoading(it: Boolean) {
+        binding.pbLoading.visibility = if (it) View.VISIBLE else View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -116,22 +118,8 @@ class PilihKebunActivity : AppCompatActivity() {
     private fun showRecyclerView(kebun: List<Kebun>) {
         kebunAdapter.submitList(kebun)
         kebunAdapter.notifyDataSetChanged()
-        binding.rvKebun.visibility=if(kebun.isNotEmpty())View.VISIBLE else View.GONE
+        binding.rvKebun.visibility = if (kebun.isNotEmpty()) View.VISIBLE else View.GONE
     }
-
-
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.isConnected.value?.let {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
-    }
-
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -141,14 +129,13 @@ class PilihKebunActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val prefManager =
             androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
-        val isAlwaysLogin=prefManager.getBoolean(IS_ALWAYS_LOGIN_PETANI,false)
+        val isAlwaysLogin = prefManager.getBoolean(IS_ALWAYS_LOGIN_PETANI, false)
 
-        if(!isAlwaysLogin){
+        if (!isAlwaysLogin) {
             viewModel.logoutPetani()
         }
         super.onBackPressed()
     }
-
 
 
     private fun setActionBar() {

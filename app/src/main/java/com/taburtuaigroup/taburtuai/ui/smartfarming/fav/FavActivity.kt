@@ -42,7 +42,6 @@ class FavActivity : AppCompatActivity() {
     private val onCheckChangedPenyakit:((PenyakitTumbuhan)->Unit)={ penyakit ->
         viewModel.favoritePenyakit(penyakit)
         tempPenyakit=penyakit
-        //if(!favorite)viewModel.onViewEvent(ViewEventsPenyakit.Remove(penyakit))
     }
 
     private val onCLickArtikel:((Artikel)->Unit)={ artikel ->
@@ -54,8 +53,6 @@ class FavActivity : AppCompatActivity() {
     private val onCheckChangedArtikel:((Artikel)->Unit)={ artikel ->
         viewModel.favoriteArtikel(artikel)
         tempArtikel=artikel
-        //if(!favorite)viewModel.onViewEvent(ViewEventsArtikel.Remove(artikel))
-
     }
     private val launcherForResult= registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -122,6 +119,15 @@ class FavActivity : AppCompatActivity() {
             if(!it.first){
                 if(tempArtikel!=null)viewModel.onViewEvent(ViewEventsArtikel.Remove(tempArtikel!!));tempArtikel=null
                 if(tempPenyakit!=null)viewModel.onViewEvent(ViewEventsPenyakit.Remove(tempPenyakit!!));tempPenyakit=null
+            }else{
+                tempArtikel?.let { it ->
+                    viewModel.onViewEvent(ViewEventsArtikel.Rebind(it))
+                    tempArtikel=null
+                }
+                tempPenyakit?.let { it ->
+                    viewModel.onViewEvent(ViewEventsPenyakit.Rebind(it))
+                    tempPenyakit=null
+                }
             }
         }
 
@@ -131,6 +137,10 @@ class FavActivity : AppCompatActivity() {
 
         viewModel.pagingPenyakitViewStates.observe(this){
             adapterPenyakit.submitData(lifecycle,it)
+        }
+
+        binding.toolbar.setOnClickListener {
+
         }
 
     }

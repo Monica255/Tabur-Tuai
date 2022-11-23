@@ -219,12 +219,12 @@ class SmartFarmingActivity : AppCompatActivity() {
         dataArtikel: List<Artikel>,
         dataPenyakit: List<PenyakitTumbuhan>
     ): List<Any> {
-        var list = arrayListOf<Any>()
+        val list = arrayListOf<Any>()
         tempArtikel = dataArtikel.toMutableList()
         tempPenyakit = dataPenyakit.toMutableList()
         var artikelCount = dataArtikel.size
         var penyakitCount = dataPenyakit.size
-        var max = if (artikelCount >= penyakitCount) artikelCount else penyakitCount
+        val max = if (artikelCount >= penyakitCount) artikelCount else penyakitCount
         if (max != 0) {
             for (i in 0 until max) {
                 if (max == dataArtikel.size) {

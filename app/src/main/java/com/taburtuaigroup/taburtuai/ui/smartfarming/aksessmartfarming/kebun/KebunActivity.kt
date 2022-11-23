@@ -21,7 +21,8 @@ class KebunActivity : AppCompatActivity() {
     private lateinit var binding: ActivityKebunBinding
     private lateinit var kebunId: String
     private lateinit var viewModel: KebunViewModel
-    private var indicatorWidth:Int=0
+    private var province=""
+    private var city=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKebunBinding.inflate(layoutInflater)
@@ -46,11 +47,9 @@ class KebunActivity : AppCompatActivity() {
         viewModel.kebun.observe(this) {
             if (it != null) {
                 setData(it)
-                viewModel.getWeatherForcast(
-                    it.provinsi.trim().replace(" ","-"),
-                    it.kota.trim().replace(" ","-")
-                )
-                //Log.d("TAG","data kebun "+isNoData)
+                province=it.provinsi.trim().replace(" ","-")
+                city=it.kota.trim().replace(" ","-")
+                viewModel.getWeatherForcast(province, city)
             }else {
                 //TODO show user there is no data kebun
             }

@@ -69,15 +69,6 @@ class FeedbackActivity : AppCompatActivity() {
         viewModel.message.observe(this){
             makeToast(it)
         }
-
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
-
     }
 
     private fun makeToast(pair: Pair<Boolean, Event<String>>) {

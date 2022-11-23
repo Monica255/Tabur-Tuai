@@ -1,7 +1,9 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.taburtuaigroup.taburtuai.data.Artikel
@@ -11,17 +13,12 @@ import com.taburtuaigroup.taburtuai.util.KategoriArtikel
 class ArtikelViewModel(private val repository: Repository) : ViewModel() {
     val listArtikelTerpopuler = repository.listArtikelTerpopuler
 
-    fun favoriteArtikel(artikel: Artikel) = repository.favoriteArtikel(artikel)
-
     val listArtikel = repository.listArtikel
 
     val isLoading=repository.isLoading
 
     var currentDes = ""
     var mKategoriArtikel = KategoriArtikel.SEMUA
-        set(value) {
-            field = value
-        }
     var mKeyword = ""
 
     fun setKategoriArtikel(kategoriArtikel: KategoriArtikel) {

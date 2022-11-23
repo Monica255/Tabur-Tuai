@@ -18,7 +18,6 @@ class ArtikelFirestorePagingSource (
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Artikel> {
         return try {
-            Log.d("TAG","aa")
             val currentPage = params.key ?: queryArtikelByTime.get().await()
             var lastVisibleProduct:DocumentSnapshot
             var nextPage:QuerySnapshot?

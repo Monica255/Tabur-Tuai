@@ -1,15 +1,14 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import com.taburtuaigroup.taburtuai.R
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
+import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.data.Artikel
 import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
 import com.taburtuaigroup.taburtuai.util.DateConverter

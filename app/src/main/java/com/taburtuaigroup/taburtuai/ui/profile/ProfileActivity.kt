@@ -52,26 +52,8 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.isConnected.observe(this) {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        ToastUtil.sb = null
-        viewModel.isConnected.value?.let {
-            ToastUtil.showInternetSnackbar(
-                this,
-                binding.root,
-                it
-            )
-        }
-    }
 
     private fun setActionBar() {
         setSupportActionBar(binding.toolbar)

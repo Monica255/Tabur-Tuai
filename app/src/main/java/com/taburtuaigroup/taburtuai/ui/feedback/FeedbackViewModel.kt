@@ -12,5 +12,4 @@ class FeedbackViewModel(private val repository: Repository) : ViewModel() {
 
     val isCanSendFeedBack=repository.isCanSendFeedBack()
 
-    val isConnected=repository.isConnected
 }
