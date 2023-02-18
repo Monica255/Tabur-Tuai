@@ -1,17 +1,17 @@
 package com.taburtuaigroup.taburtuai.ui.profile
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
-import com.taburtuaigroup.taburtuai.data.UserData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.AuthUseCase
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ProfileViewModel(private val repository: Repository) :ViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(private val authUseCase: AuthUseCase,private val smartFarmingUseCase: SmartFarmingUseCase) :ViewModel() {
 
-    fun setSelaluLoginPetani(isAlwaysLogin:Boolean)=repository.setSelaluLoginPetani(isAlwaysLogin)
+    fun setSelaluLoginPetani(isAlwaysLogin:Boolean)=smartFarmingUseCase.setSelaluLoginPetani(isAlwaysLogin)
 
-    fun signOut()=repository.signOut()
+    fun signOut()=authUseCase.signOut()
 
-    val firebaseUser=repository.firebaseUser
-
-    val userData=repository.getUserData()
+    val userData=authUseCase.getUserData()
 }

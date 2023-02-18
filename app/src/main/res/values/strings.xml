@@ -201,7 +201,7 @@
     <string name="berubah_ubah">Berubah - ubah</string>
     <string name="load_web">Memuat halaman web</string>
     <string name="load_web_success">Berhasil memuat website</string>
-    <string name="web_url_cara_kerja_smartfarming">https://dinpertanpangan.demakkab.go.id/?p=4089</string>
+    <string name="web_url_cara_kerja_smartfarming">https://dinpertanpangan.demakkab.go.id/?p=4089#:~:text=Smart%20farming%20(pertanian%20pintar)%20merupakan,dari%20lapang%20dari%20perangkat%20yang</string>
     <string name="pengenalan_smart_farming">Pengenalan\nSmart Farming</string>
     <string name="pengenalan_smart_farming2">Pengenalan Smart Farming</string>
     <string name="web_url_pengenalan_smart_farming">https://youtu.be/2gfJost-yhw</string>
@@ -211,4 +211,22 @@
     <string name="copy_email">Copy email</string>
     <string name="copied_to_clipboard">Disalin ke papan klip</string>
     <string name="foto_profil">Foto Profil</string>
+    <string name="pompa">Pompa</string>
+    <string name="belum_ada_sesi_petani">Belum ada sesi petani</string>
+    <string name="device_dinyalakan">%1$s di %2$s dinyalakan</string>
+    <string name="device_dimatikan">%1$s di %2$s dimatikan</string>
+    <string name="alat_tidak_ditemukan">Alat tidak ditemukan</string>
+    <string name="kebun_tidak_ditemukan">Kebun tidak ditemukan</string>
+    <string name="perintah_invalid">Perintah invalid</string>
+    <string name="command">%1$s %2$s pada %3$s</string>
+    <string name="hasil_pencarian">Hasil pencarian %1$s</string>
+    <string name="penyakit_dihapus_dari_list_disukai">Penyakit tumbuhan dihapus dari list disukai</string>
+    <string name="artikel_dihapus_dari_list_disukai">Artikel dihapus dari list disukai</string>
+
+    <string-array name="FarmQueries">
+        <item>$status $device_name di $farm_name</item>
+        <item>$status $device_name pada $farm_name</item>
+        <item>$status $device_name $farm_name</item>
+    </string-array>
 </resources>
+

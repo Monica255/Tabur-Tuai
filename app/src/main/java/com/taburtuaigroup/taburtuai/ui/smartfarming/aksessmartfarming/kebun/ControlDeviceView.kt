@@ -13,8 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Device
-import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.core.domain.model.Device
+import com.taburtuaigroup.taburtuai.core.util.TextFormater
 
 class ControlDeviceView : RelativeLayout {
 

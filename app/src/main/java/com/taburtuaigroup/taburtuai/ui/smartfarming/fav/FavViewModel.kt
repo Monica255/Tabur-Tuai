@@ -2,28 +2,30 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.fav
 
 import androidx.lifecycle.*
 import androidx.paging.*
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
-import com.taburtuaigroup.taburtuai.data.Repository
-import com.taburtuaigroup.taburtuai.util.ViewEventsArtikel
-import com.taburtuaigroup.taburtuai.util.ViewEventsPenyakit
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.ViewEventsArtikel
+import com.taburtuaigroup.taburtuai.core.util.ViewEventsPenyakit
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import javax.inject.Inject
 
-class FavViewModel(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class FavViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) : ViewModel() {
 
     fun favoriteArtikel(artikel: Artikel) =
-        repository.favoriteArtikel(artikel)
+        smartFarmingUseCase.favoriteArtikel(artikel).asLiveData()
 
     fun favoritePenyakit(penyakit: PenyakitTumbuhan) =
-        repository.favoritePenyakit(penyakit)
+        smartFarmingUseCase.favoritePenyakit(penyakit).asLiveData()
 
-    val messsage = repository.message
 
     private val modificationEventsArtikel = MutableStateFlow<List<ViewEventsArtikel>>(emptyList())
     private val modificationEventsPenyakit = MutableStateFlow<List<ViewEventsPenyakit>>(emptyList())
 
-    private val combinedArtikel =repository.getPagingArtikel(true)
+    private val combinedArtikel =smartFarmingUseCase.getPagingArtikel(true)
             .cachedIn(viewModelScope)
             .combine(modificationEventsArtikel) { pagingData, modifications ->
                 modifications.fold(pagingData) { acc, event ->
@@ -31,7 +33,7 @@ class FavViewModel(private val repository: Repository) : ViewModel() {
                 }
             }
 
-    private val combinedPenyakit =repository.getPagingPenyakit(true)
+    private val combinedPenyakit =smartFarmingUseCase.getPagingPenyakit(true)
         .cachedIn(viewModelScope)
         .combine(modificationEventsPenyakit) { pagingData, modifications ->
             modifications.fold(pagingData) { acc, event ->

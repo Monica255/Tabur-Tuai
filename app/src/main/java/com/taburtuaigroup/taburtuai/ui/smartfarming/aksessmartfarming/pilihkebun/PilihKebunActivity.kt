@@ -7,23 +7,26 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Kebun
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.model.Kebun
+import com.taburtuaigroup.taburtuai.core.domain.model.Petani
 import com.taburtuaigroup.taburtuai.databinding.ActivityPilihKebunBinding
 import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.kebun.KebunActivity
-import com.taburtuaigroup.taburtuai.util.IS_ALWAYS_LOGIN_PETANI
-import com.taburtuaigroup.taburtuai.util.KEBUN_ID
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.util.EXTRA_PETANI
+import com.taburtuaigroup.taburtuai.core.util.KEBUN_ID
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PilihKebunActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPilihKebunBinding
-    private lateinit var viewModel: PilihKebunViewModel
+    private val viewModel: PilihKebunViewModel by viewModels()
     private var idPetani: String? = null
     private lateinit var kebunAdapter: KebunAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +38,6 @@ class PilihKebunActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, 2)
         binding.rvKebun.layoutManager = layoutManager
 
-        viewModel = ViewModelProvider(
-            this, ViewModelFactory.getInstance(application)
-        )[PilihKebunViewModel::class.java]
-
         kebunAdapter = KebunAdapter { kebun ->
             val intent = Intent(this, KebunActivity::class.java)
             intent.putExtra(KEBUN_ID, kebun.id_kebun)
@@ -46,36 +45,32 @@ class PilihKebunActivity : AppCompatActivity() {
         }
         binding.rvKebun.adapter = kebunAdapter
 
-
-        /*viewModel.idPetani.observe(this) {
-            if(it!=null){
-                binding.toolbarLayout.title = getString(R.string.kebun_petani, it)
-                idPetani = it
-                viewModel.getAllKebun(idPetani = it)
-            }else{
-                finish()
+        viewModel.petani=intent.getParcelableExtra<Petani>(EXTRA_PETANI)
+        val x= viewModel.petani
+        if (x != null) {
+            binding.toolbarTitle.text = getString(R.string.kebun_petani, x.nama_petani)
+            idPetani = x.id_petani
+            viewModel.getAllKebun(idPetani = x.id_petani).observe(this){
+                handleDataKebun(it)
             }
-        }*/
+        } else {
+            finish()
+        }
+    }
 
-        viewModel.petani.observe(this) {
-            if (it != null) {
-                binding.toolbarTitle.text = getString(R.string.kebun_petani, it.nama_petani)
-                idPetani = it.id_petani
-                viewModel.getAllKebun(idPetani = it.id_petani)
-            } else {
-                finish()
+    private fun handleDataKebun(data:Resource<List<Kebun>>){
+        when(data){
+            is Resource.Loading-> showLoading(true)
+            is Resource.Success->{
+                showLoading(false)
+                val list= data.data
+                list?.let {showRecyclerView(it) }
+            }
+            is Resource.Error->{
+                showLoading(false)
+                data.message?.let { ToastUtil.makeToast(baseContext, it) }
             }
         }
-
-        viewModel.kebunPetani.observe(this) {
-            showRecyclerView(it)
-        }
-
-
-        viewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
     }
 
     private fun showLoading(it: Boolean) {
@@ -106,7 +101,9 @@ class PilihKebunActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 idPetani?.let {
-                    viewModel.getAllKebun(it, newText?.trim() ?: "")
+                    viewModel.getAllKebun(it,newText?.trim() ?: "").observe(this@PilihKebunActivity){
+                        handleDataKebun(it)
+                    }
                 }
                 return true
             }
@@ -125,18 +122,6 @@ class PilihKebunActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-    override fun onBackPressed() {
-        val prefManager =
-            androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
-        val isAlwaysLogin = prefManager.getBoolean(IS_ALWAYS_LOGIN_PETANI, false)
-
-        if (!isAlwaysLogin) {
-            viewModel.logoutPetani()
-        }
-        super.onBackPressed()
-    }
-
 
     private fun setActionBar() {
         setSupportActionBar(binding.toolbar)

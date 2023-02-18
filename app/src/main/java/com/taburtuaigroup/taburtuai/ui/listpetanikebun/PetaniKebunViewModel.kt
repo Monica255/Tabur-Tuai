@@ -1,21 +1,27 @@
 package com.taburtuaigroup.taburtuai.ui.listpetanikebun
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.Kebun
+import com.taburtuaigroup.taburtuai.core.domain.model.Petani
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PetaniKebunViewModel(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class PetaniKebunViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) : ViewModel() {
 
-    init {
-        repository.getAllPetani()
-        repository.getAllKebun()
-    }
+    fun getAllPetani(filter:String="")=smartFarmingUseCase.getAllPetani(filter)
 
-    fun getAllPetani(filter:String)=repository.getAllPetani(filter)
+    fun getAllKebun(filter:String="")=smartFarmingUseCase.getAllKebun(filter)
 
-    fun getAllKebun(filter:String)=repository.getAllKebun(filter)
+    val allPetani = MutableLiveData<Resource<List<Petani>>>()
 
-    val allPetani=repository.allPetani
+    val allKebun=MutableLiveData<Resource<List<Kebun>>>()
 
-    val allKebun=repository.allKebun
+
+
+
 
 }

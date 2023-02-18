@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.databinding.ActivityCaraDaftarBinding
-import com.taburtuaigroup.taburtuai.databinding.ActivityPengenalanSmartFarmingBinding
-import com.taburtuaigroup.taburtuai.util.EMAIL
+import com.taburtuaigroup.taburtuai.core.util.EMAIL
+
 
 class CaraDaftarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCaraDaftarBinding

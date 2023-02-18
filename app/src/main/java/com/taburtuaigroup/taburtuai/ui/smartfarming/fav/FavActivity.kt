@@ -1,37 +1,41 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.taburtuaigroup.taburtuai.ui.smartfarming.fav
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.*
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
 import com.taburtuaigroup.taburtuai.databinding.ActivityFavBinding
 import com.taburtuaigroup.taburtuai.ui.smartfarming.artikel.PagingArtikelAdapter
 import com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan.PagingPenyakitTumbuhanAdapter
 import com.taburtuaigroup.taburtuai.ui.smartfarming.artikel.DetailArtikelActivity
 import com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan.DetailPenyakitActivity
-import com.taburtuaigroup.taburtuai.util.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class FavActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavBinding
     private var kategoriFav: Kategori = Kategori.ARTIKEL
     private lateinit var adapterArtikel: PagingArtikelAdapter
     private lateinit var adapterPenyakit: PagingPenyakitTumbuhanAdapter
-    private lateinit var viewModel: FavViewModel
+    private val viewModel: FavViewModel by viewModels()
     private val uid=FirebaseAuth.getInstance().currentUser?.uid
-    private var tempArtikel:Artikel?=null
-    private var tempPenyakit:PenyakitTumbuhan?=null
+    private var tempArtikel: Artikel?=null
+    private var tempPenyakit: PenyakitTumbuhan?=null
 
     private val onClickPenyakit:((PenyakitTumbuhan)->Unit)={ penyakit ->
         val intent = Intent(this, DetailPenyakitActivity::class.java)
@@ -40,8 +44,28 @@ class FavActivity : AppCompatActivity() {
     }
 
     private val onCheckChangedPenyakit:((PenyakitTumbuhan)->Unit)={ penyakit ->
-        viewModel.favoritePenyakit(penyakit)
         tempPenyakit=penyakit
+        viewModel.favoritePenyakit(penyakit).observe(this){
+            when(it){
+                is Resource.Loading->showLoading(true)
+                is Resource.Success->{
+                    it.data?.let {
+                        val msg=getString(R.string.penyakit_dihapus_dari_list_disukai)
+                        ToastUtil.makeSnackbar(binding.root, msg)
+                        showLoading(false)
+                        if(tempPenyakit!=null)viewModel.onViewEvent(ViewEventsPenyakit.Remove(tempPenyakit!!));tempPenyakit=null
+                    }
+                }
+                is Resource.Error->{
+                    ToastUtil.makeSnackbar(binding.root, it.message.toString())
+                    showLoading(false)
+                    tempPenyakit?.let { it ->
+                        viewModel.onViewEvent(ViewEventsPenyakit.Rebind(it))
+                        tempPenyakit=null
+                    }
+                }
+            }
+        }
     }
 
     private val onCLickArtikel:((Artikel)->Unit)={ artikel ->
@@ -51,8 +75,30 @@ class FavActivity : AppCompatActivity() {
     }
 
     private val onCheckChangedArtikel:((Artikel)->Unit)={ artikel ->
-        viewModel.favoriteArtikel(artikel)
         tempArtikel=artikel
+        viewModel.favoriteArtikel(artikel).observe(this){
+            when(it){
+                is Resource.Loading->showLoading(true)
+                is Resource.Success->{
+                    it.data?.let {
+                        val msg=getString(R.string.artikel_dihapus_dari_list_disukai)
+                        ToastUtil.makeSnackbar(binding.root, msg)
+                        showLoading(false)
+                        if(tempArtikel!=null)viewModel.onViewEvent(ViewEventsArtikel.Remove(tempArtikel!!));tempArtikel=null
+
+                    }
+                }
+                is Resource.Error->{
+                    ToastUtil.makeSnackbar(binding.root, it.message.toString())
+                    showLoading(false)
+                    tempArtikel?.let { it ->
+                        viewModel.onViewEvent(ViewEventsArtikel.Rebind(it))
+                        tempArtikel=null
+                    }
+                }
+            }
+        }
+
     }
     private val launcherForResult= registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -60,8 +106,10 @@ class FavActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val resultArtikel = result.data?.getParcelableExtra<Artikel>(ARTIKEL)
             val resultPenyakit =result.data?.getParcelableExtra<PenyakitTumbuhan>(PENYAKIT_TUMBUHAN)
-            if(!isFavorite(resultArtikel?.favorites)&&resultArtikel!=null) viewModel.onViewEvent(ViewEventsArtikel.Remove(resultArtikel))
-            if(!isFavorite(resultPenyakit?.favorites)&&resultPenyakit!=null) viewModel.onViewEvent(ViewEventsPenyakit.Remove(resultPenyakit))
+            if(!isFavorite(resultArtikel?.favorites)&&resultArtikel!=null) viewModel.onViewEvent(
+                ViewEventsArtikel.Remove(resultArtikel))
+            if(!isFavorite(resultPenyakit?.favorites)&&resultPenyakit!=null) viewModel.onViewEvent(
+                ViewEventsPenyakit.Remove(resultPenyakit))
         }
     }
     private fun isFavorite(list:List<String>?):Boolean{
@@ -81,12 +129,6 @@ class FavActivity : AppCompatActivity() {
 
 
         binding.rgKategori.check(R.id.rb_kategori_artikel)
-
-        viewModel =
-            ViewModelProvider(
-                this,
-                ViewModelFactory.getInstance(application)
-            )[FavViewModel::class.java]
 
         val layoutManagerPenyakit = LinearLayoutManager(this)
         binding.rvPenyakit.layoutManager = layoutManagerPenyakit
@@ -113,24 +155,6 @@ class FavActivity : AppCompatActivity() {
             }
         }
 
-
-        viewModel.messsage.observe(this){
-            ToastUtil.showSnackbar(binding.root,it)
-            if(!it.first){
-                if(tempArtikel!=null)viewModel.onViewEvent(ViewEventsArtikel.Remove(tempArtikel!!));tempArtikel=null
-                if(tempPenyakit!=null)viewModel.onViewEvent(ViewEventsPenyakit.Remove(tempPenyakit!!));tempPenyakit=null
-            }else{
-                tempArtikel?.let { it ->
-                    viewModel.onViewEvent(ViewEventsArtikel.Rebind(it))
-                    tempArtikel=null
-                }
-                tempPenyakit?.let { it ->
-                    viewModel.onViewEvent(ViewEventsPenyakit.Rebind(it))
-                    tempPenyakit=null
-                }
-            }
-        }
-
         viewModel.pagingArtikelViewStates.observe(this){
             adapterArtikel.submitData(lifecycle,it)
         }
@@ -138,11 +162,6 @@ class FavActivity : AppCompatActivity() {
         viewModel.pagingPenyakitViewStates.observe(this){
             adapterPenyakit.submitData(lifecycle,it)
         }
-
-        binding.toolbar.setOnClickListener {
-
-        }
-
     }
 
 

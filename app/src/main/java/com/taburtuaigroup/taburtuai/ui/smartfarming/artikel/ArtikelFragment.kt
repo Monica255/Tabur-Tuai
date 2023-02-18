@@ -1,31 +1,36 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Artikel
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
 import com.taburtuaigroup.taburtuai.databinding.FragmentArtikelBinding
-import com.taburtuaigroup.taburtuai.util.ARTIKEL_ID
-import com.taburtuaigroup.taburtuai.util.KategoriArtikel
+import com.taburtuaigroup.taburtuai.core.util.ARTIKEL_ID
+import com.taburtuaigroup.taburtuai.core.util.KategoriArtikel
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ArtikelFragment : Fragment() {
 
     private var _binding: FragmentArtikelBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ArtikelViewModel
+    private val viewModel: ArtikelViewModel by activityViewModels()
     private lateinit var adapterTerpopuler: TerpopulerAdapter
     private lateinit var artikelAdapter: ArtikelAdapter
-    private var terpopuler= listOf<Artikel>()
-    private var artikel= listOf<Artikel>()
+    private var terpopuler = listOf<Artikel>()
+    private var artikel = listOf<Artikel>()
 
     private val onCLickArtikel: ((Artikel) -> Unit) = { artikel ->
         val intent = Intent(requireActivity(), DetailArtikelActivity::class.java)
@@ -33,6 +38,7 @@ class ArtikelFragment : Fragment() {
         startActivity(intent)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btMuatLebih.setOnClickListener {
@@ -57,71 +63,89 @@ class ArtikelFragment : Fragment() {
         artikelAdapter = ArtikelAdapter(onCLickArtikel, null)
         binding.rvArtikel.adapter = artikelAdapter
 
-        viewModel =
-            ViewModelProvider(
-                requireActivity(),
-                ViewModelFactory.getInstance(requireActivity().application)
-            )[ArtikelViewModel::class.java]
-
-        viewModel.getArtikelTerpopuler()
         viewModel.currentDes = findNavController().currentDestination?.label.toString()
         showListTerpopuler(terpopuler)
         showListArtikel(artikel)
-        viewModel.setKategoriArtikel(viewModel.mKategoriArtikel)
-        viewModel.listArtikelTerpopuler.observe(requireActivity()) { terpopuler ->
-            if(terpopuler!=this.terpopuler){
-                this.terpopuler=terpopuler
-                showListTerpopuler(terpopuler)
-            }
-            binding.rgKategori.check(
-                when (viewModel.mKategoriArtikel) {
-                    KategoriArtikel.SEMUA -> R.id.rb_semua
-                    KategoriArtikel.INFORMASI -> R.id.rb_informasi
-                    KategoriArtikel.EDUKASI -> R.id.rb_edukasi
-                    else -> R.id.rb_lainnya
+        viewModel.getArtikelTerpopuler().observe(requireActivity()) {
+            when (it) {
+                is Resource.Loading -> showLoading(true)
+                is Resource.Success -> {
+                    showLoading(false)
+                    it.data?.let { it->
+                        if (terpopuler != it) {
+                            terpopuler = it
+                            showListTerpopuler(terpopuler)
+                        }
+                        binding.rgKategori.check(
+                            when (viewModel.mKategoriArtikel) {
+                                KategoriArtikel.SEMUA -> R.id.rb_semua
+                                KategoriArtikel.INFORMASI -> R.id.rb_informasi
+                                KategoriArtikel.EDUKASI -> R.id.rb_edukasi
+                                else -> R.id.rb_lainnya
+                            }
+                        )
+                        observeListArtikel(viewModel.mKategoriArtikel)
+                    }
                 }
-            )
-            viewModel.listArtikel.observe(requireActivity()) {
-                var newList = it.toMutableList().minus(terpopuler.toSet())
-                newList = newList.take(if (newList.size >= 4) 4 else newList.size)
-                if(artikel!=newList){
-                    artikel=newList
-                    showListArtikel(newList)
+                is Resource.Error -> {
+                    showLoading(false)
+                    ToastUtil.makeToast(requireContext(), it.message.toString())
                 }
             }
+
         }
 
         binding.rbSemua.setOnClickListener {
-            if (viewModel.mKategoriArtikel!=KategoriArtikel.SEMUA)
-            viewModel.setKategoriArtikel(KategoriArtikel.SEMUA)
+            if (viewModel.mKategoriArtikel != KategoriArtikel.SEMUA)
+                observeListArtikel(KategoriArtikel.SEMUA)
         }
         binding.rbInformasi.setOnClickListener {
-            if (viewModel.mKategoriArtikel!=KategoriArtikel.INFORMASI)
-            viewModel.setKategoriArtikel(KategoriArtikel.INFORMASI)
+            if (viewModel.mKategoriArtikel != KategoriArtikel.INFORMASI)
+                observeListArtikel(KategoriArtikel.INFORMASI)
         }
         binding.rbEdukasi.setOnClickListener {
-            if (viewModel.mKategoriArtikel!=KategoriArtikel.EDUKASI)
-            viewModel.setKategoriArtikel(KategoriArtikel.EDUKASI)
-
+            if (viewModel.mKategoriArtikel != KategoriArtikel.EDUKASI)
+                observeListArtikel(KategoriArtikel.EDUKASI)
         }
         binding.rbLainnya.setOnClickListener {
-            if (viewModel.mKategoriArtikel!=KategoriArtikel.LAINNYA)
-            viewModel.setKategoriArtikel(KategoriArtikel.LAINNYA)
+            if (viewModel.mKategoriArtikel != KategoriArtikel.LAINNYA)
+                observeListArtikel(KategoriArtikel.LAINNYA)
         }
 
-        viewModel.isLoading.observe(requireActivity()){
-            showLoading(it)
-        }
 
     }
 
-    private fun showLoading(isLoading:Boolean){
-        if(isLoading){
-            binding.pbLoading.visibility=View.VISIBLE
+    private fun observeListArtikel(kategoriArtikel: KategoriArtikel) {
+        viewModel.getListArtikelByKategori(kategoriArtikel).observe(requireActivity()) {
+            when (it) {
+                is Resource.Loading -> showLoading(true)
+                is Resource.Success -> {
+                    showLoading(false)
+                    var newList = it.data?.toMutableList()?.minus(terpopuler.toSet())
+                    if(newList!=null) {
+                        newList = newList.take(if (newList.size >= 4) 4 else newList.size)
+                        if (artikel != newList) {
+                            artikel = newList
+                            showListArtikel(newList)
+                        }
+                    }else showListArtikel(listOf())
+
+                }
+                is Resource.Error -> {
+                    showLoading(false)
+                    ToastUtil.makeToast(requireContext(), it.message.toString())
+                }
+            }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.pbLoading.visibility = View.VISIBLE
             //binding.rvArtikel.visibility=View.GONE
             //binding.btMuatLebih.visibility=View.GONE
-        }else{
-            binding.pbLoading.visibility=View.GONE
+        } else {
+            binding.pbLoading.visibility = View.GONE
             //binding.rvArtikel.visibility=View.VISIBLE
             //binding.btMuatLebih.visibility=View.VISIBLE
         }

@@ -1,18 +1,16 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.pilihkebun
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.Petani
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PilihKebunViewModel(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class PilihKebunViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) : ViewModel() {
 
-    val petani=repository.petani
+    var petani: Petani?=null
 
-    fun getAllKebun(idPetani: String, kebunName:String="")=repository.getAllKebunPetani(idPetani,kebunName)
-
-    val kebunPetani=repository.kebunPetani
-
-    val  isLoading=repository.isLoading
-
-    fun logoutPetani()=repository.logoutPetani()
+    fun getAllKebun(idPetani: String, kebunName:String="")=smartFarmingUseCase.getAllKebunPetani(idPetani,kebunName)
 
 }

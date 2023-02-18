@@ -4,18 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.taburtuaigroup.taburtuai.ViewModelFactory
+import androidx.lifecycle.lifecycleScope
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.model.Petani
 import com.taburtuaigroup.taburtuai.databinding.ActivityLoginSmartFarmingBinding
 import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.pilihkebun.PilihKebunActivity
-import com.taburtuaigroup.taburtuai.util.LoadingUtils
-import com.taburtuaigroup.taburtuai.util.SESI_PETANI_ID
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.util.EXTRA_PETANI
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
+import com.taburtuaigroup.taburtuai.core.util.SESI_PETANI_ID
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginSmartFarmingActivity : AppCompatActivity() {
-    private lateinit var viewModel: LoginSmartFarmingViewModel
+    private val viewModel: LoginSmartFarmingViewModel by viewModels()
     private lateinit var binding: ActivityLoginSmartFarmingBinding
     private lateinit var id: String
     private lateinit var pass: String
@@ -26,43 +31,47 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
         binding.etSfPassword.transformationMethod =
             PasswordTransformationMethod.getInstance()
         setActionBar()
-
         setAction()
-
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory.getInstance(application)
-        )[LoginSmartFarmingViewModel::class.java]
-        viewModel.message.value?.second?.getContentIfNotHandled()
-
-        viewModel.petani.observe(this) {
-            if (it != null) {
-                val prefManager =
-                    androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
-                prefManager.edit().putString(SESI_PETANI_ID, it.id_petani).apply()
-                startActivity(
-                    Intent(
-                        this,
-                        PilihKebunActivity::class.java
-                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
-                )
-                finish()
-            }
-        }
-
 
         binding.btMasuk.setOnClickListener {
             if (!isFieldEmpty()) {
-                viewModel.loginPetani(id, pass)
+                lifecycleScope.launch {
+                    viewModel.loginPetani(id, pass).observe(this@LoginSmartFarmingActivity){
+                        when(it){
+                            is Resource.Loading->{
+                                showLoading(true)
+                            }
+                            is Resource.Success->{
+                                showLoading(false)
+                                it.data?.let{
+                                    val prefManager =
+                                        androidx.preference.PreferenceManager.getDefaultSharedPreferences(this@LoginSmartFarmingActivity)
+                                    prefManager.edit().putString(SESI_PETANI_ID, it?.id_petani).apply()
+                                    goToPetaniProfile(it)
+                                    finish()
+                                }
+
+                            }
+                            is Resource.Error->{
+                                ToastUtil.makeToast(this@LoginSmartFarmingActivity,it.message.toString())
+                                showLoading(false)
+                            }
+                        }
+                    }
+                }
+
             }
 
         }
-        viewModel.isLoading.observe(this, Observer(this::showLoading))
+    }
 
-        viewModel.message.observe(this) {
-            ToastUtil.makeToast(this, it)
-        }
-
+    private fun goToPetaniProfile(petani: Petani){
+        startActivity(
+            Intent(
+                this,
+                PilihKebunActivity::class.java
+            ).putExtra(EXTRA_PETANI,petani).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {

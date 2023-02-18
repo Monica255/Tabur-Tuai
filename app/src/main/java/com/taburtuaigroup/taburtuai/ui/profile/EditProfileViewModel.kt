@@ -1,27 +1,27 @@
 package com.taburtuaigroup.taburtuai.ui.profile
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
-import com.taburtuaigroup.taburtuai.data.UserData
-import com.taburtuaigroup.taburtuai.util.Event
+import androidx.lifecycle.asLiveData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.AuthUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.UserData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class EditProfileViewModel(private val repository: Repository) :ViewModel() {
-    fun uploadProfilePic(uri: Uri)=repository.uploadProfilePicture(uri)
+@HiltViewModel
+class EditProfileViewModel @Inject constructor(private val authUseCase: AuthUseCase) :ViewModel() {
+    suspend fun uploadProfilePic(uri: Uri)=authUseCase.uploadProfilePicture(uri).asLiveData()
 
-    val userData=repository.getUserData()
+    val userData=authUseCase.getUserData()
+
+    val currentUser=authUseCase.getCurrentUser()
 
     var newData= MutableLiveData<UserData>()
 
-    val isLoading=repository.isLoading
-
-    val message=repository.message
-
     var isDialogOpen=false
 
-    fun updateUserData(data: UserData)=repository.updateUserData(data)
+    suspend fun updateUserData(data: UserData)=authUseCase.updateUserData(data).asLiveData()
 
     init {
         newData.value= UserData()

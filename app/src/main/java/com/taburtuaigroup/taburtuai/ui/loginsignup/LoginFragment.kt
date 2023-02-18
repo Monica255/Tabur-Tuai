@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -12,40 +13,41 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
 import com.taburtuaigroup.taburtuai.databinding.FragmentLoginBinding
 import com.taburtuaigroup.taburtuai.ui.home.HomeActivity
-import com.taburtuaigroup.taburtuai.util.Event
-import com.taburtuaigroup.taburtuai.util.LoadingUtils
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.util.Event
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: LoginSignupViewModel
-    private var email=""
-    private var pass=""
+    private val viewModel: LoginSignupViewModel by viewModels()
+    private var email = ""
+    private var pass = ""
     private lateinit var googleSignInClient: GoogleSignInClient
-    private var errorMsg: Event<Any>?=null
-    private var isEmailValid=false
-    get() {
-        checkEmail()
-        return field
-    }
-    private var isPasswordValid=false
-    get() {
-        checkPassword()
-        return field
-    }
+    private var errorMsg: Event<Any>? = null
+    private var isEmailValid = false
+        get() {
+            checkEmail()
+            return field
+        }
+    private var isPasswordValid = false
+        get() {
+            checkPassword()
+            return field
+        }
 
     private val resultCOntract =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
@@ -53,19 +55,35 @@ class LoginFragment : Fragment() {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result?.data)
                 val exception = task.exception
                 if (task.isSuccessful) {
-                    try {
-                        val account = task.getResult(ApiException::class.java)
+                    val account = task.getResult(ApiException::class.java)
+                    lifecycleScope.launch {
                         viewModel.firebaseAuthWithGoogle(account.idToken.toString())
-                    } catch (e: ApiException) {
-                        errorMsg=Event(e.toString())
-                        showToast()
+                            .observe(viewLifecycleOwner) {
+                                when (it) {
+                                    is Resource.Loading -> {
+                                        showLoading(true)
+                                    }
+                                    is Resource.Success -> {
+                                        showLoading(false)
+                                        goHome()
+                                    }
+                                    is Resource.Error -> {
+                                        showLoading(false)
+                                        it.data?.let { it1 ->
+                                            errorMsg = Event(it1)
+                                            showToast()
+                                        }
+                                    }
+                                }
+                            }
                     }
+
                 } else {
-                    errorMsg=Event(exception?.message.toString())
+                    errorMsg = Event(exception?.message.toString())
                     showToast()
                 }
             } catch (e: Exception) {
-                errorMsg=Event(e.toString())
+                errorMsg = Event(e.toString())
                 showToast()
             }
         }
@@ -80,52 +98,47 @@ class LoginFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         setAction()
-
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory.getInstance(requireActivity().application)
-        )[LoginSignupViewModel::class.java]
-
-        var goHome=true
-        viewModel.firebaseUser.observe(requireActivity()){
-
-            if(it!=null&&isAdded&&goHome){
-                goHome=false
-                startActivity(
-                    Intent(
-                        activity,
-                        HomeActivity::class.java
-                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
-            }
-        }
-
-        viewModel.message.observe(requireActivity()){
-            if(isAdded) ToastUtil.makeToast(requireActivity(),it)
-        }
-
-        viewModel.isLoading.observe(requireActivity(),Observer(this::showLoading))
-
     }
 
 
-    private fun showLoading(isLoading:Boolean){
-        if(isLoading){
-            LoadingUtils.showLoading(activity,false)
-        }else{
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            LoadingUtils.showLoading(activity, false)
+        } else {
             LoadingUtils.hideLoading()
         }
     }
 
-    private fun setAction(){
+    private fun setAction() {
         binding.btSudahPunyaAkun.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_loginFragment_to_signupFragment)
         }
 
         binding.btMasuk.setOnClickListener {
-            if(isDataValid()){
-                viewModel.login(email,pass)
-            }else if(!isFieldsEmpty()){
+            if (isDataValid()) {
+                lifecycleScope.launch {
+                    viewModel.login(email, pass).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Resource.Loading -> {
+                                Log.d("TAG", "loading")
+                                showLoading(true)
+                            }
+                            is Resource.Success -> {
+                                Log.d("TAG", "success")
+                                showLoading(false)
+                                goHome()
+                            }
+                            is Resource.Error -> {
+                                it.data?.let { it1 ->
+                                    Log.d("TAG", it1)
+                                    errorMsg = Event(it1)
+                                    showToast()
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (!isFieldsEmpty()) {
                 showToast()
             }
         }
@@ -135,7 +148,8 @@ class LoginFragment : Fragment() {
                 binding.etMasukPassword.transformationMethod =
                     HideReturnsTransformationMethod.getInstance()
             } else {
-                binding.etMasukPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.etMasukPassword.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
             }
         }
 
@@ -144,50 +158,61 @@ class LoginFragment : Fragment() {
         }
 
     }
+
+    private fun goHome(){
+        startActivity(
+            Intent(
+                activity,
+                HomeActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+    }
+
     private fun isFieldsEmpty(): Boolean {
         return binding.etMasukEmail.text.toString().trim() == ""
                 && binding.etMasukPassword.text.toString().trim() == ""
 
     }
 
-    private fun isDataValid():Boolean{
-        errorMsg=null
-        return isEmailValid&&isPasswordValid
+    private fun isDataValid(): Boolean {
+        errorMsg = null
+        return isEmailValid && isPasswordValid
     }
 
-    private fun showToast(){
-        val msg=errorMsg?.getContentIfNotHandled()?:return
-        Toast.makeText(requireContext(),
-            when(msg){
-                is Int->getString(msg)
-                is String->msg
-                else->"Error"
-            }
-            ,Toast.LENGTH_SHORT).show()
+    private fun showToast() {
+        val msg = errorMsg?.getContentIfNotHandled() ?: return
+        Toast.makeText(
+            requireContext(),
+            when (msg) {
+                //is Int -> getString(msg)
+                is String -> msg
+                else -> "Error"
+            }, Toast.LENGTH_SHORT
+        ).show()
 
     }
 
-    private fun checkEmail(){
+    private fun checkEmail() {
         email = binding.etMasukEmail.text.toString().trim()
         if (email.isEmpty()) {
             isEmailValid = false
-            errorMsg=Event(R.string.email_empty)
+            errorMsg = Event(getString(R.string.email_empty))
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             isEmailValid = false
-            errorMsg=Event(R.string.email_invalid)
+            errorMsg = Event(getString(R.string.email_invalid))
         } else {
             isEmailValid = true
         }
     }
 
-    private fun checkPassword(){
+    private fun checkPassword() {
         pass = binding.etMasukPassword.text.toString().trim()
         if (pass.isEmpty()) {
             isPasswordValid = false
-            errorMsg=Event(R.string.password_empty)
+            errorMsg = Event(getString(R.string.password_empty))
         } else if (pass.length < 6) {
             isPasswordValid = false
-            errorMsg=Event(R.string.password_length_invalid)
+            errorMsg = Event(getString(R.string.password_length_invalid))
         } else {
             isPasswordValid = true
         }
@@ -209,7 +234,7 @@ class LoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding=null
+        _binding = null
     }
 
 }

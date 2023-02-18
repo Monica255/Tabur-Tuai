@@ -1,39 +1,39 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.kebun
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
+import androidx.lifecycle.asLiveData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.usecase.WeatherUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.DailyWeather
+import com.taburtuaigroup.taburtuai.core.domain.model.Device
+import com.taburtuaigroup.taburtuai.core.domain.model.MonitoringKebun
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class KebunViewModel(private val repository: Repository) :ViewModel() {
+@HiltViewModel
+class KebunViewModel @Inject constructor(
+    private val weatherUseCase: WeatherUseCase,
+    private val smartFarmingUseCase: SmartFarmingUseCase
+    ) :ViewModel() {
 
     var kebunId:String=""
-        set(value) {
-            field=value
-            repository.idActiveKebun=field
-            getKebun(value)
-            getRealtimeKebun(value)
-        }
 
-    fun clearDataKebun()=repository.clearDataKebun()
+    fun getKebun(idKebun:String)=smartFarmingUseCase.getKebun(idKebun)
 
-    private fun getKebun(idKebun:String)=repository.getKebun(idKebun)
+    fun getMonitoringKebun(idKebun: String)=smartFarmingUseCase.getMonitoringKebun(idKebun)
 
-    val kebun=repository.kebun
+    fun getControllingKebun(idKebun: String)=smartFarmingUseCase.getControllingKebun(idKebun)
 
-    private fun getRealtimeKebun(idKebun: String)=repository.getRealtimeKebun(idKebun)
+    val monitoring=MutableLiveData<MonitoringKebun>()
 
-    val monitoring=repository.monitoring
+    val isConnected=smartFarmingUseCase.isConnected
 
-    val isConnected=repository.isConnected
+    val controlling=MutableLiveData<List<Device>>()
 
-    val controlling=repository.controlling
+    fun updateDeviceState(idKebun:String,idDevice:String,value:Int)=smartFarmingUseCase.updateDeviceState(idKebun,idDevice,value)
 
-    val weatherForcast=repository.weatherForecast
+    val weatherForcastData= MutableLiveData<List<DailyWeather>>()
 
-    val message=repository.message
-
-    fun updateDeviceState(idKebun:String,idDevice:String,value:Int)=repository.updateDeviceState(idKebun,idDevice,value)
-
-    fun getWeatherForcast(province:String,city:String){
-        repository.getWeatherForcast(province,city)
-    }
+    suspend fun getWeatherForecast(province: String,city: String)=weatherUseCase.getWeatherForecast(province,city).asLiveData()
 }

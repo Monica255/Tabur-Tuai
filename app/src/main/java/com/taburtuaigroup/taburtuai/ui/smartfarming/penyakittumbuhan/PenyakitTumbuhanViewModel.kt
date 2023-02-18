@@ -1,40 +1,28 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
-import com.taburtuaigroup.taburtuai.data.Repository
-import com.taburtuaigroup.taburtuai.util.KategoriArtikel
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PenyakitTumbuhanViewModel(private val repository: Repository) :ViewModel() {
-    val listPenyakitTerpopuler = repository.listPenyakitTerpopuler
-
-    fun favoritePenyakit(penyakit: PenyakitTumbuhan) = repository.favoritePenyakit(penyakit)
-
-    val listPenyakit = repository.listPenyakit
-
-    val isLoading=repository.isLoading
-
+@HiltViewModel
+class PenyakitTumbuhanViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) :ViewModel() {
     var currentDes = ""
     var mKeyword = ""
 
-    fun getListPenyakit() {
-        repository.getListPenyakit()
-    }
+    fun getListPenyakit() = smartFarmingUseCase.getListPenyakit().asLiveData()
 
     val pagingData = MutableLiveData<LiveData<PagingData<PenyakitTumbuhan>>>()
 
     fun getData( keyword: String = mKeyword) {
         if (mKeyword != keyword) mKeyword = keyword
         pagingData.value =
-            repository.getPagingPenyakit(keyword).cachedIn(viewModelScope)
+            smartFarmingUseCase.getPagingPenyakit(keyword).cachedIn(viewModelScope)
 
     }
 
-    fun getPenyakitTerpopuler() = repository.getPenyakitTerpopuler()
+    fun getPenyakitTerpopuler() = smartFarmingUseCase.getPenyakitTerpopuler().asLiveData()
 }

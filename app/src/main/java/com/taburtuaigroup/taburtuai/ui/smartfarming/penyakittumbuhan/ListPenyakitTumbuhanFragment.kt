@@ -2,28 +2,29 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.R
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
 import com.taburtuaigroup.taburtuai.databinding.FragmentListPenyakitTumbuhanBinding
-import com.taburtuaigroup.taburtuai.util.PENYAKIT_ID
+import com.taburtuaigroup.taburtuai.core.util.PENYAKIT_ID
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class ListPenyakitTumbuhanFragment : Fragment() {
     private var _binding: FragmentListPenyakitTumbuhanBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: PenyakitTumbuhanViewModel
+    private val viewModel: PenyakitTumbuhanViewModel by activityViewModels()
     private lateinit var adapterPenyakit: PagingPenyakitTumbuhanAdapter
 
     private val onCLickPenyakit: ((PenyakitTumbuhan) -> Unit) = { artikel ->
@@ -34,12 +35,6 @@ class ListPenyakitTumbuhanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel =
-            ViewModelProvider(
-                requireActivity(),
-                ViewModelFactory.getInstance(requireActivity().application)
-            )[PenyakitTumbuhanViewModel::class.java]
-
         val layoutManagerArtikel = LinearLayoutManager(requireActivity())
         binding.rvArtikelSemua.layoutManager = layoutManagerArtikel
 
@@ -51,7 +46,6 @@ class ListPenyakitTumbuhanFragment : Fragment() {
         lifecycleScope.launch {
             adapterPenyakit.loadStateFlow.collectLatest { loadStates ->
                 showLoading(loadStates.refresh is LoadState.Loading)
-                Log.d("TAG",adapterPenyakit.snapshot().toString())
             }
         }
 
@@ -61,11 +55,10 @@ class ListPenyakitTumbuhanFragment : Fragment() {
                 it.observe(requireActivity()){
                     if(it!=null&& isAdded){
                         if(viewModel.mKeyword!=""){
-                            binding.tvPenyakitLainnya.text="Hasil pencarian "+viewModel.mKeyword
+                            binding.tvPenyakitLainnya.text=getString(R.string.hasil_pencarian,viewModel.mKeyword)
                         }else{
-                            binding.tvPenyakitLainnya.text="Penyakit Tumbuhan lainnya"
+                            binding.tvPenyakitLainnya.text=getString(R.string.penyakit_tumbuhan_lainnya)
                         }
-                        Log.d("TAG","submit data")
                         adapterPenyakit.submitData(lifecycle, it)
                     }
                 }

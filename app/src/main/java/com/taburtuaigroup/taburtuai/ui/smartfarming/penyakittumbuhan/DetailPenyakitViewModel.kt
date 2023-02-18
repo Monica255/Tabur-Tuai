@@ -1,24 +1,16 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
-import com.taburtuaigroup.taburtuai.data.Repository
+import androidx.lifecycle.asLiveData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class DetailPenyakitViewModel(private val repository: Repository) :ViewModel() {
+@HiltViewModel
+class DetailPenyakitViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) :ViewModel() {
 
-    val penyakit=repository.penyakit
+    fun favoritePenyakit(penyakit: PenyakitTumbuhan)=smartFarmingUseCase.favoritePenyakit(penyakit).asLiveData()
 
-    val message=repository.message
-
-    val isFav=repository.isFav
-
-    fun favoritePenyakit(penyakit:PenyakitTumbuhan)=repository.favoritePenyakit(penyakit)
-
-    var penyakitId=""
-        set(value) {
-            field=value
-            getPenyakit(value)
-        }
-
-    private fun getPenyakit(penyakitId: String)=repository.getPenyakit(penyakitId)
+    fun getPenyakit(penyakitId: String)=smartFarmingUseCase.getPenyakit(penyakitId).asLiveData()
 }

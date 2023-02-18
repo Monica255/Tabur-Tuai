@@ -18,24 +18,25 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.util.Event
-import com.taburtuaigroup.taburtuai.util.PROFILE_URL
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
+import com.taburtuaigroup.taburtuai.core.util.PROFILE_URL
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 
-
+@AndroidEntryPoint
 class EditProfilePictureFragment : DialogFragment() {
     private lateinit var dialogView: View
     private var profileUrl: String = ""
-    private lateinit var uid: String
     private var getFile: File? = null
     private var filePath: Uri? = null
 
@@ -45,15 +46,9 @@ class EditProfilePictureFragment : DialogFragment() {
     private lateinit var btnSimpan: Button
 
 
-    private lateinit var viewModel: EditProfileViewModel
+    private val viewModel: EditProfileViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        try {
-            uid = FirebaseAuth.getInstance().currentUser!!.uid
-        } catch (e: Exception) {
-
-        }
 
         if (profileUrl != "") {
             Glide.with(dialogView)
@@ -77,28 +72,45 @@ class EditProfilePictureFragment : DialogFragment() {
 
         btnSimpan.setOnClickListener {
             if (filePath != null) {
-                viewModel.uploadProfilePic(filePath!!)
-            }
-        }
-
-        viewModel.message.observe(this) {
-            if (isAdded) {
-                val msg = it.second.getContentIfNotHandled()
-                if (msg != null) {
-                    val x = Pair(it.first, Event(msg))
-                    ToastUtil.makeToast(requireActivity(), x)
-                    if (!x.first) dismiss().also { viewModel.isDialogOpen = false }
+                lifecycleScope.launch {
+                    viewModel.uploadProfilePic(filePath!!).observe(viewLifecycleOwner){
+                        when (it) {
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+                                it.data?.let { it1 ->
+                                    ToastUtil.makeToast(requireActivity(),it1)
+                                    dismiss()
+                                }
+                            }
+                            is Resource.Error -> {
+                                showLoading(false)
+                                it.data?.let { it1 ->
+                                    ToastUtil.makeToast(requireActivity(),it1)
+                                }
+                            }
+                        }
+                    }
                 }
+
             }
         }
 
     }
 
-
+    private fun showLoading(isLoading:Boolean){
+        if(isLoading){
+            LoadingUtils.showLoading(requireActivity(),false)
+        }else{
+            LoadingUtils.hideLoading()
+        }
+    }
 
     private fun createCustomTempFile(context: Context): File {
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(uid, ".jpg", storageDir)
+        return File.createTempFile(viewModel.currentUser?.uid, ".jpg", storageDir)
     }
 
     private fun uriToFile(selectedImg: Uri, context: Context): File {
@@ -148,11 +160,6 @@ class EditProfilePictureFragment : DialogFragment() {
         val inflater = layoutInflater
         dialogView = inflater.inflate(R.layout.fragment_edit_profile_picture, null)
         builder.setView(dialogView)
-        viewModel =
-            ViewModelProvider(
-                this,
-                ViewModelFactory.getInstance(requireActivity().application)
-            )[EditProfileViewModel::class.java]
 
         img = dialogView.findViewById(R.id.img_profile_picture)
         btnClose = dialogView.findViewById(R.id.btn_close)
@@ -169,7 +176,7 @@ class EditProfilePictureFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return layoutInflater.inflate(R.layout.fragment_edit_profile_picture, null)
     }
 

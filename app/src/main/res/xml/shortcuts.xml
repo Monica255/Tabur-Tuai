@@ -1,0 +1,60 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <capability android:name="actions.intent.OPEN_APP_FEATURE">
+        <intent>
+            <url-template android:value="https://taburtuaigroup.page.link/open{?featureName}" />
+            <parameter
+                android:name="feature"
+                android:key="featureName" />
+        </intent>
+    </capability>
+
+    <capability
+        android:name="custom.actions.intent.FARM_INTENT"
+        app:queryPatterns="@array/FarmQueries">
+        <intent>
+            <url-template android:value="https://taburtuaigroup.page.link/set{?status,device_name,farm_name}" />
+            <parameter
+                android:name="status"
+                android:key="status"
+                android:mimeType="https://schema.org/Text" />
+            <parameter
+                android:name="device_name"
+                android:key="device_name"
+                android:mimeType="https://schema.org/Text" />
+            <parameter
+                android:name="farm_name"
+                android:key="farm_name"
+                android:mimeType="https://schema.org/Text" />
+        </intent>
+    </capability>
+
+    <shortcut
+        android:shortcutId="profile"
+        android:shortcutShortLabel="@string/profile">
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="profile" />
+        </capability-binding>
+    </shortcut>
+    <shortcut
+        android:shortcutId="feedback"
+        android:shortcutShortLabel="@string/feedback">
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="feedback" />
+        </capability-binding>
+    </shortcut>
+    <shortcut
+        android:shortcutId="smartfarming"
+        android:shortcutShortLabel="@string/smart_farming">
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="smart farming" />
+        </capability-binding>
+    </shortcut>
+</shortcuts>

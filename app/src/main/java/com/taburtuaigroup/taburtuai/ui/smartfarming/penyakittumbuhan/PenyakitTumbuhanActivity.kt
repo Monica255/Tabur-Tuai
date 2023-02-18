@@ -3,34 +3,30 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 import android.app.SearchManager
 import android.content.Context
 import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.databinding.ActivityArtikelBinding
 import com.taburtuaigroup.taburtuai.databinding.ActivityPenyakitTumbuhanBinding
-import com.taburtuaigroup.taburtuai.ui.smartfarming.artikel.ArtikelViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PenyakitTumbuhanActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityPenyakitTumbuhanBinding
-    private lateinit var viewModel: PenyakitTumbuhanViewModel
+    private lateinit var binding: ActivityPenyakitTumbuhanBinding
+    private val viewModel: PenyakitTumbuhanViewModel by viewModels()
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityPenyakitTumbuhanBinding.inflate(layoutInflater)
+        binding = ActivityPenyakitTumbuhanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setActionBar()
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory.getInstance(this.application))[PenyakitTumbuhanViewModel::class.java]
         navController = findNavController(R.id.frame_container)
     }
 
@@ -53,9 +49,9 @@ class PenyakitTumbuhanActivity : AppCompatActivity() {
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if(query!=null){
+                if (query != null) {
                     //Log.d("TAG",viewModel.currentDes)
-                    if(viewModel.currentDes=="fragment_penyakit_tumbuhan"){
+                    if (viewModel.currentDes == "fragment_penyakit_tumbuhan") {
                         navController.navigate(R.id.action_penyakitTumbuhanFragment2_to_listPenyakitTumbuhanFragment)
                     }
                     viewModel.getData(keyword = query)
@@ -64,9 +60,9 @@ class PenyakitTumbuhanActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if(newText!=null){
-                    if(newText?.trim()?.isEmpty()){
-                        if(viewModel.mKeyword!=""){
+                if (newText != null) {
+                    if (newText.trim().isEmpty()) {
+                        if (viewModel.mKeyword != "") {
                             viewModel.getData(keyword = "")
                         }
                     }

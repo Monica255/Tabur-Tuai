@@ -9,10 +9,10 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
-import com.taburtuaigroup.taburtuai.util.DateConverter
-import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.DateConverter
+import com.taburtuaigroup.taburtuai.core.util.TextFormater
 
 
 class SliderAdapter(private val onClick: ((Any) -> Unit)) :
@@ -41,11 +41,10 @@ class SliderAdapter(private val onClick: ((Any) -> Unit)) :
     }
 
     inner class SliderAdapterVH(itemView: View) : ViewHolder(itemView) {
-        //var itemView2: View
-        var imageViewBackground: ImageView
-        var textTitle: TextView
-        var textAuthor: TextView
-        var textDate: TextView
+        private var imageViewBackground: ImageView
+        private var textTitle: TextView
+        private var textAuthor: TextView
+        private var textDate: TextView
 
         init {
             imageViewBackground = itemView.findViewById(R.id.iv_auto_image_slider)
@@ -70,7 +69,7 @@ class SliderAdapter(private val onClick: ((Any) -> Unit)) :
                         onClick(data)
                     }
                 }
-                is PenyakitTumbuhan->{
+                is PenyakitTumbuhan ->{
                     textTitle.text = data.title
                     textAuthor.text = TextFormater.toTitleCase(data.author)
                     textDate.text = DateConverter.convertMillisToDate(data.timestamp,ctx)

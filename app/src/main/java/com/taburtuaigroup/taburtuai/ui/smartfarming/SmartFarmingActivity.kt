@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.taburtuaigroup.taburtuai.ui.smartfarming
 
 import android.content.Intent
@@ -9,16 +11,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.*
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.domain.model.Petani
 import com.taburtuaigroup.taburtuai.databinding.ActivitySmartFarmingAvtivityBinding
 import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.loginsmartfarming.LoginSmartFarmingActivity
 import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.pilihkebun.PilihKebunActivity
@@ -32,13 +36,14 @@ import com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan.PenyakitTum
 import com.taburtuaigroup.taburtuai.ui.smartfarming.tutorial.CaraDaftarActivity
 import com.taburtuaigroup.taburtuai.ui.smartfarming.tutorial.CaraKerjaActivity
 import com.taburtuaigroup.taburtuai.ui.smartfarming.tutorial.PengenalanSmartFarmingActivity
-import com.taburtuaigroup.taburtuai.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SmartFarmingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySmartFarmingAvtivityBinding
     private var list = mutableListOf<Any>()
     private lateinit var mAdapter: SliderAdapter
-    private lateinit var viewModel: SmartFarmingViewModel
+    private val viewModel: SmartFarmingViewModel by viewModels()
     private lateinit var penyakitTumbuhanAdapter: PenyakitTumbuhanAdapter
     private lateinit var artikelAdapter: ArtikelAdapter
 
@@ -54,18 +59,13 @@ class SmartFarmingActivity : AppCompatActivity() {
         intent.putExtra(ARTIKEL_ID, artikel.id_artikel)
         startActivity(intent)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySmartFarmingAvtivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setActionBar()
         setAction()
-
-        viewModel =
-            ViewModelProvider(
-                this,
-                ViewModelFactory.getInstance(application)
-            )[SmartFarmingViewModel::class.java]
 
         val layoutManagerPenyakit = LinearLayoutManager(this)
         binding.rvPenyakitTumbuhan.layoutManager = layoutManagerPenyakit
@@ -104,22 +104,40 @@ class SmartFarmingActivity : AppCompatActivity() {
             startAutoCycle()
         }
 
-        viewModel.message.observe(this) {
-            ToastUtil.showSnackbar(binding.root, it)
-        }
 
-        viewModel.artikel.observe(this) { artikel ->
-            viewModel.penyakit.observe(this) { penyakit ->
-                setSliderData(getDataSlider(artikel, penyakit).toMutableList())
-                showRecyclerViewArtikel(tempArtikel)
-                showRecyclerViewPenyakit(tempPenyakit)
+        viewModel.getListArtikelByKategory(KategoriArtikel.SEMUA).observe(this) { it ->
+            when(it){
+                is Resource.Loading->showLoading(true)
+                is Resource.Success->{
+                    it.data?.let {artikel->
+                        viewModel.getListPenyakitTumbuhan().observe(this) {
+                            when (it) {
+                                is Resource.Loading -> showLoading(true)
+                                is Resource.Success -> {
+                                    it.data?.let { penyakit ->
+                                        setSliderData(getDataSlider(artikel, penyakit).toMutableList())
+                                        showRecyclerViewArtikel(tempArtikel)
+                                        showRecyclerViewPenyakit(tempPenyakit)
+                                        showLoading(false)
+                                    }
+                                }
+
+                                is Resource.Error -> {
+                                    showLoading(false)
+                                    ToastUtil.makeToast(baseContext, it.message.toString())
+                                }
+                            }
+                        }
+                    }
+
+                }
+                is Resource.Error->{
+                    ToastUtil.makeToast(baseContext,it.message.toString())
+                }
             }
-        }
 
-        viewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
 
+        }
 
     }
 
@@ -149,10 +167,34 @@ class SmartFarmingActivity : AppCompatActivity() {
 
             if (alwaysLogin) {
                 if (petaniId != "" && petaniId != null) {
-                    viewModel.autoLoginPetani(petaniId)
+                    viewModel.loginPetani(petaniId, null).observe(this) { it ->
+                        when (it) {
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Success -> {
+                                showLoading(false)
+                                it.data?.let {
+                                    val prefManager =
+                                        androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+                                            this
+                                        )
+                                    prefManager.edit().putString(SESI_PETANI_ID, it.id_petani)
+                                        .apply()
+                                    goToPetaniProfile(it)
+                                    //finish()
+                                }
+
+                            }
+                            is Resource.Error -> {
+                                ToastUtil.makeToast(baseContext, it.message.toString())
+                                showLoading(false)
+                            }
+                        }
+                    }
                     startActivity(Intent(this, PilihKebunActivity::class.java))
                 } else {
-                    Toast.makeText(this, "Belum ada sesi petani", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.belum_ada_sesi_petani), Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginSmartFarmingActivity::class.java))
                 }
             } else {
@@ -177,13 +219,22 @@ class SmartFarmingActivity : AppCompatActivity() {
         }
     }
 
+    private fun goToPetaniProfile(petani: Petani) {
+        startActivity(
+            Intent(
+                this,
+                PilihKebunActivity::class.java
+            ).putExtra(EXTRA_PETANI, petani)
+        )
+    }
+
     private fun setSliderData(data: MutableList<Any>) {
         if (data.isNotEmpty()) {
-            binding.cvImageSlider.visibility=View.VISIBLE
+            binding.cvImageSlider.visibility = View.VISIBLE
             list = data
             mAdapter.submitList(list)
         } else {
-            binding.cvImageSlider.visibility=View.GONE
+            binding.cvImageSlider.visibility = View.GONE
             //TODO show user no data
         }
     }

@@ -1,7 +1,6 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.util.DateConverter
-import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.util.DateConverter
+import com.taburtuaigroup.taburtuai.core.util.TextFormater
 
 class PagingArtikelAdapter(
     private val onClick: ((Artikel) -> Unit),
@@ -35,7 +34,7 @@ class PagingArtikelAdapter(
         private val cbFav: CheckBox = itemView.findViewById(R.id.cb_fav)
         private val tvKategori: TextView = itemView.findViewById(R.id.tv_kategori_artikel)
 
-        fun bind(artikel: Artikel, position: Int) {
+        fun bind(artikel: Artikel) {
             if (onCheckChanged != null && artikel.favorites != null && uid != null) {
                 cbFav.visibility = View.VISIBLE
                 if (artikel.favorites != null && uid != null) {
@@ -72,7 +71,7 @@ class PagingArtikelAdapter(
     override fun onBindViewHolder(holder: ArtikelVH, position: Int) {
         val data = getItem(position)
         if (data != null) {
-            holder.bind(data, position)
+            holder.bind(data)
         }
     }
 

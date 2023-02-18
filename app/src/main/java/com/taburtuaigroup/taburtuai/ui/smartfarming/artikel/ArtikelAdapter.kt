@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.util.DateConverter
-import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.util.DateConverter
+import com.taburtuaigroup.taburtuai.core.util.TextFormater
 
 class ArtikelAdapter(
     private val onClick: ((Artikel) -> Unit),

@@ -16,7 +16,5 @@ class WelcomePageActivity : AppCompatActivity() {
         binding.btMulai.setOnClickListener {
             startActivity(Intent(this, LoginSignupActivity::class.java))
         }
-
-
     }
 }

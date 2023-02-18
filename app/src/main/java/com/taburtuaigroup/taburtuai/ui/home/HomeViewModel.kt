@@ -1,9 +1,18 @@
 package com.taburtuaigroup.taburtuai.ui.home
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
+import com.taburtuaigroup.taburtuai.core.domain.usecase.AuthUseCase
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel(private val provideRepository: Repository) :ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(authUseCase: AuthUseCase,private val smartFarmingUseCase: SmartFarmingUseCase) :ViewModel() {
+    val userData=authUseCase.getUserData()
 
-    val userData=provideRepository.getUserData()
+    val isConnected=smartFarmingUseCase.isConnected
+
+    fun getControllingKebun(idKebun: String)=smartFarmingUseCase.getControllingKebun(idKebun)
+
+    fun updateDeviceState(idKebun:String,idDevice:String,state:Int)=smartFarmingUseCase.updateDeviceState(idKebun,idDevice,state)
 }

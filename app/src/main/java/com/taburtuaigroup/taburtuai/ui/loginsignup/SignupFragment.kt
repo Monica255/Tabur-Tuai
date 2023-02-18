@@ -13,26 +13,28 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
 import com.taburtuaigroup.taburtuai.databinding.FragmentSignupBinding
-import com.taburtuaigroup.taburtuai.ui.home.HomeActivity
-import com.taburtuaigroup.taburtuai.util.Event
-import com.taburtuaigroup.taburtuai.util.LoadingUtils
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.util.Event
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.ui.home.HomeActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class SignupFragment : Fragment() {
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: LoginSignupViewModel
+    private val viewModel: LoginSignupViewModel by viewModels()
     private var nama = ""
     private var email = ""
     private var telepon = ""
@@ -75,7 +77,26 @@ class SignupFragment : Fragment() {
                 if (task.isSuccessful) {
                     try {
                         val account = task.getResult(ApiException::class.java)
-                        viewModel.firebaseAuthWithGoogle(account.idToken.toString())
+                        lifecycleScope.launch {
+                            viewModel.firebaseAuthWithGoogle(account.idToken.toString()).observe(viewLifecycleOwner){
+                                when (it) {
+                                    is Resource.Loading -> {
+                                        showLoading(true)
+                                    }
+                                    is Resource.Success -> {
+                                        showLoading(false)
+                                        goHome()
+                                    }
+                                    is Resource.Error -> {
+                                        showLoading(false)
+                                        it.data?.let { it1 ->
+                                            errorMsg = Event(it1)
+                                            showToast()
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     } catch (e: ApiException) {
                         errorMsg = Event(e.toString())
                         showToast()
@@ -97,13 +118,6 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory.getInstance(requireActivity().application)
-        )[LoginSignupViewModel::class.java]
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id_2))
             .requestEmail()
@@ -111,19 +125,6 @@ class SignupFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         setAction()
-
-        var goHome=true
-        viewModel.firebaseUser.observe(requireActivity()) {
-            if (it != null&&isAdded&&goHome) {
-                goHome=false
-                startActivity(
-                    Intent(
-                        activity,
-                        HomeActivity::class.java
-                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
-            }
-        }
 
         binding.etDaftarPassword.addTextChangedListener {
             password = binding.etDaftarPassword.text.toString().trim()
@@ -147,12 +148,6 @@ class SignupFragment : Fragment() {
                 isCPassValid = false
             }
         }
-        viewModel.message.observe(requireActivity()) {
-            if(isAdded)ToastUtil.makeToast(requireActivity(),it)
-        }
-
-        viewModel.isLoading.observe(requireActivity(), Observer(this::showLoading))
-
     }
 
     private fun setAction() {
@@ -162,9 +157,28 @@ class SignupFragment : Fragment() {
 
         binding.btDaftar.setOnClickListener {
             if (isDataValid()) {
-                viewModel.register(name = nama, email = email, telepon = telepon, pass = password)
+                lifecycleScope.launch{
+                    viewModel.registerAccount(name = nama, email = email, telepon = telepon, pass = password).observe(requireActivity()){
+                        when (it) {
+                            is Resource.Loading -> {
+                                showLoading(true)
+                            }
+                            is Resource.Success -> {
+                                ToastUtil.makeToast(requireActivity(),it.data.toString())
+                                showLoading(false)
+                                goHome()
+                            }
+                            is Resource.Error -> {
+                                showLoading(false)
+                                it.data?.let { it1 ->
+                                    errorMsg = Event(it1)
+                                    showToast()
+                                }
+                            }
+                        }
+                    }
+                }
             } else if (!isFieldsEmpty()) {
-
                 if (!isCPassValid) {
                     binding.ilDaftarCpassword.error = getString(R.string.password_not_match)
                 }
@@ -188,6 +202,15 @@ class SignupFragment : Fragment() {
         binding.btGoogle.setOnClickListener {
             signIn()
         }
+    }
+
+    private fun goHome(){
+        startActivity(
+            Intent(
+                activity,
+                HomeActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {

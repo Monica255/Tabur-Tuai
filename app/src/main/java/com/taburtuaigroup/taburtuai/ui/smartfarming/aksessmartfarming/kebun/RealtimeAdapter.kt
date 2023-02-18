@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Device
+import com.taburtuaigroup.taburtuai.core.domain.model.Device
 
 class RealtimeAdapter(private val onClick: ((Device) -> Unit)?) :
     RecyclerView.Adapter<RealtimeAdapter.ItemViewHolder>() {

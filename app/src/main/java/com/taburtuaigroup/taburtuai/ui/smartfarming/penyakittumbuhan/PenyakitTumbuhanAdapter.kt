@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
-import com.taburtuaigroup.taburtuai.util.DateConverter
-import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.DateConverter
+import com.taburtuaigroup.taburtuai.core.util.TextFormater
 
 class PenyakitTumbuhanAdapter(
     private val onClick: ((PenyakitTumbuhan) -> Unit),
@@ -23,7 +23,6 @@ class PenyakitTumbuhanAdapter(
 
     var list = mutableListOf<PenyakitTumbuhan>()
     lateinit var ctx: Context
-    private var isFav=false
     private val uid=FirebaseAuth.getInstance().currentUser?.uid
 
     fun submitList(mList: MutableList<PenyakitTumbuhan>) {
@@ -73,7 +72,7 @@ class PenyakitTumbuhanAdapter(
                     cbFav.isChecked=false
                 }
                 cbFav.setOnClickListener {
-                    onCheckChanged?.invoke(penyakit)
+                    onCheckChanged.invoke(penyakit)
                     if(penyakit.favorites!=null&&uid!=null){
                         cbFav.isChecked = !penyakit.favorites!!.contains(uid)
                         if(!penyakit.favorites!!.contains(uid)){

@@ -4,18 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Masukan
-import com.taburtuaigroup.taburtuai.databinding.ActivityFeedbackBinding
-import com.taburtuaigroup.taburtuai.util.*
-import com.google.firebase.auth.FirebaseAuth
 
+import com.taburtuaigroup.taburtuai.core.domain.model.Masukan
+import com.taburtuaigroup.taburtuai.databinding.ActivityFeedbackBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.taburtuaigroup.taburtuai.core.util.Event
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
+@AndroidEntryPoint
 class FeedbackActivity : AppCompatActivity() {
     private lateinit var binding:ActivityFeedbackBinding
-    private lateinit var viewModel:FeedbackViewModel
+    private val viewModel:FeedbackViewModel by viewModels()
     private var isJenisValid=false
     get() {
         checkJenisMasukan()
@@ -29,7 +35,7 @@ class FeedbackActivity : AppCompatActivity() {
 
     private var jenisMasukan=""
     private var masukan=""
-    private var errorMsg:Event<String>?=null
+    private var errorMsg: Event<String>?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,24 +44,38 @@ class FeedbackActivity : AppCompatActivity() {
         setContentView(binding.root)
         setActionBar()
 
-        viewModel=ViewModelProvider(
-            this,ViewModelFactory.getInstance(application)
-        )[FeedbackViewModel::class.java]
-
         binding.btKirim.setOnClickListener {
             if(isDataValid()){
                 if(viewModel.isCanSendFeedBack){
                     val email=if(!binding.cbAnonim.isChecked)FirebaseAuth.getInstance().currentUser?.email else "anonim"
-                    var currentTime=System.currentTimeMillis().toString()
-                    val data=Masukan(
+                    val currentTime=System.currentTimeMillis().toString()
+                    val data= Masukan(
                         jenisMasukan,masukan,
                         email?:"anonim",
                         currentTime
                     )
 
-                    viewModel.kirimMasukan(data)
+                    lifecycleScope.launch {
+                        viewModel.kirimMasukan(data).observe(this@FeedbackActivity){ it ->
+                            when(it){
+                                is Resource.Loading->{
+                                    showLoading(true)
+                                }
+                                is Resource.Success->{
+                                    showLoading(false)
+                                    it.data?.let { ToastUtil.makeToast(baseContext,it) }
+                                    finish()
+                                }
+                                is Resource.Error->{
+                                    showLoading(false)
+                                    it.data?.let { ToastUtil.makeToast(baseContext,it) }
+                                }
+                            }
+                        }
+                    }
+
                 }else{
-                   errorMsg=Event("Ups jangan spam ya\nSilahkan kirim masukan lagi besok")
+                   errorMsg= Event("Ups jangan spam ya\nSilahkan kirim masukan lagi besok")
                     showToast()
                 }
             }else if(!isFieldsEmpty()){
@@ -63,26 +83,8 @@ class FeedbackActivity : AppCompatActivity() {
             }
         }
 
-
-        viewModel.isLoading.observe(this, Observer(this::showLoading))
-
-        viewModel.message.observe(this){
-            makeToast(it)
-        }
     }
 
-    private fun makeToast(pair: Pair<Boolean, Event<String>>) {
-        val msg = pair.second.getContentIfNotHandled()
-        if (msg != null) {
-            if (!pair.first) {
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-                finish()
-            } else {
-                //TODO show error toast
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     private fun isDataValid():Boolean{
         errorMsg=null

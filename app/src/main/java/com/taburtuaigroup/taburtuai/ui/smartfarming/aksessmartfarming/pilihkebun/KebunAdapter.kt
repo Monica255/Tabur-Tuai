@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Kebun
+import com.taburtuaigroup.taburtuai.core.domain.model.Kebun
 
 class KebunAdapter(private val onClick: ((Kebun) -> Unit)) :
     RecyclerView.Adapter<KebunAdapter.KebunViewHolder>() {

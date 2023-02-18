@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Artikel
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
 import com.taburtuaigroup.taburtuai.databinding.FragmentListArtikelBinding
-import com.taburtuaigroup.taburtuai.util.ARTIKEL_ID
-import com.taburtuaigroup.taburtuai.util.KategoriArtikel
+import com.taburtuaigroup.taburtuai.core.util.ARTIKEL_ID
+import com.taburtuaigroup.taburtuai.core.util.KategoriArtikel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 class ListArtikelFragment : Fragment() {
     private var _binding: FragmentListArtikelBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ArtikelViewModel
+    private val viewModel: ArtikelViewModel by activityViewModels()
     private lateinit var adapterArtikel: PagingArtikelAdapter
 
     private val onCLickArtikel: ((Artikel) -> Unit) = { artikel ->
@@ -35,11 +34,6 @@ class ListArtikelFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel =
-            ViewModelProvider(
-                requireActivity(),
-                ViewModelFactory.getInstance(requireActivity().application)
-            )[ArtikelViewModel::class.java]
 
         val layoutManagerArtikel = LinearLayoutManager(requireActivity())
         binding.rvArtikelSemua.layoutManager = layoutManagerArtikel
@@ -49,17 +43,20 @@ class ListArtikelFragment : Fragment() {
         binding.rvArtikelSemua.adapter=adapterArtikel
 
         binding.rbSemua.setOnClickListener {
-            if(viewModel.mKategoriArtikel!=KategoriArtikel.SEMUA)viewModel.getData(KategoriArtikel.SEMUA)
+            if(viewModel.mKategoriArtikel!= KategoriArtikel.SEMUA)viewModel.getData(KategoriArtikel.SEMUA)
         }
         binding.rbInformasi.setOnClickListener {
-            if(viewModel.mKategoriArtikel!=KategoriArtikel.INFORMASI)viewModel.getData(KategoriArtikel.INFORMASI)
+            if(viewModel.mKategoriArtikel!= KategoriArtikel.INFORMASI)viewModel.getData(
+                KategoriArtikel.INFORMASI)
         }
         binding.rbEdukasi.setOnClickListener {
-            if(viewModel.mKategoriArtikel!=KategoriArtikel.EDUKASI)viewModel.getData(KategoriArtikel.EDUKASI)
+            if(viewModel.mKategoriArtikel!= KategoriArtikel.EDUKASI)viewModel.getData(
+                KategoriArtikel.EDUKASI)
 
         }
         binding.rbLainnya.setOnClickListener {
-            if(viewModel.mKategoriArtikel!=KategoriArtikel.LAINNYA)viewModel.getData(KategoriArtikel.LAINNYA)
+            if(viewModel.mKategoriArtikel!= KategoriArtikel.LAINNYA)viewModel.getData(
+                KategoriArtikel.LAINNYA)
         }
         binding.rgKategori.check(
             when(viewModel.mKategoriArtikel){
@@ -77,14 +74,14 @@ class ListArtikelFragment : Fragment() {
         }
 
         viewModel.getData(viewModel.mKategoriArtikel)
-        viewModel.pagingData.observe(requireActivity()){
+        viewModel.pagingData.observe(requireActivity()){ it ->
             if(isAdded){
-                it.observe(requireActivity()){ it ->
+                it.observe(requireActivity()){
                     if(it!=null&& isAdded){
                         if(viewModel.mKeyword!=""){
-                            binding.tvArtikelLainnya.text="Hasil pencarian "+viewModel.mKeyword
+                            binding.tvArtikelLainnya.text=getString(R.string.hasil_pencarian,viewModel.mKeyword)
                         }else{
-                            binding.tvArtikelLainnya.text="Artikel lainnya"
+                            binding.tvArtikelLainnya.text=getString(R.string.artikel_lainnya)
                         }
                         adapterArtikel.submitData(lifecycle, it)
                      }

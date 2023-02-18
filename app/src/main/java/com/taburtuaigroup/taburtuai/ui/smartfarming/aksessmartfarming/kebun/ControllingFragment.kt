@@ -5,27 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.Device
+import com.taburtuaigroup.taburtuai.core.domain.model.Device
 import com.taburtuaigroup.taburtuai.databinding.FragmentControllingBinding
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ControllingFragment : Fragment() {
     private var _binding: FragmentControllingBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: KebunViewModel
+    private val viewModel: KebunViewModel by activityViewModels()
     private lateinit var taskAdapter: RealtimeAdapter
     private var list= mutableListOf<Device>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelFactory.getInstance(requireActivity().application)
-        )[KebunViewModel::class.java]
 
         binding.rvControlling.setHasFixedSize(true)
 

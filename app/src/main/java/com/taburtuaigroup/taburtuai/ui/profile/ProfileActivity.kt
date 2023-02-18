@@ -3,34 +3,28 @@ package com.taburtuaigroup.taburtuai.ui.profile
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.UserData
+import com.taburtuaigroup.taburtuai.core.domain.model.UserData
 import com.taburtuaigroup.taburtuai.databinding.ActivityProfileBinding
 import com.taburtuaigroup.taburtuai.ui.WelcomePageActivity
 import com.taburtuaigroup.taburtuai.ui.feedback.FeedbackActivity
 import com.taburtuaigroup.taburtuai.ui.listpetanikebun.PetaniKebunActivity
-import com.taburtuaigroup.taburtuai.util.IS_ALWAYS_LOGIN_PETANI
-import com.taburtuaigroup.taburtuai.util.ToastUtil
+import com.taburtuaigroup.taburtuai.core.util.IS_ALWAYS_LOGIN_PETANI
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding:ActivityProfileBinding
-    private lateinit var viewModel:ProfileViewModel
+    private val viewModel:ProfileViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setActionBar()
-
-        viewModel=ViewModelProvider(
-            this,ViewModelFactory.getInstance(application)
-        )[ProfileViewModel::class.java]
 
         val prefManager =
             androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
@@ -43,15 +37,6 @@ class ProfileActivity : AppCompatActivity() {
         viewModel.userData.observe(this){
             if(it!=null)setData(it)
         }
-
-        viewModel.firebaseUser.observe(this){
-            if(it==null){
-                val intent = Intent(this, WelcomePageActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }
-        }
-
     }
 
 
@@ -72,7 +57,6 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.swSelaluMasukPetani.setOnCheckedChangeListener { _, isChecked ->
-
             viewModel.setSelaluLoginPetani(isChecked)
         }
 
@@ -103,6 +87,9 @@ class ProfileActivity : AppCompatActivity() {
 
         builder.setPositiveButton(getString(R.string.ya)) { _, _ ->
             viewModel.signOut()
+            val intent = Intent(this, WelcomePageActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
 
         builder.setNegativeButton(getString(R.string.tidak)) { _, _ ->

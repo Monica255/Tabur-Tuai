@@ -1,15 +1,16 @@
 package com.taburtuaigroup.taburtuai.ui.feedback
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Masukan
-import com.taburtuaigroup.taburtuai.data.Repository
+import androidx.lifecycle.asLiveData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.FeedBackUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.Masukan
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class FeedbackViewModel(private val repository: Repository) : ViewModel() {
-    val message=repository.message
-    val isLoading=repository.isLoading
+@HiltViewModel
+class FeedbackViewModel @Inject constructor(private val feedBackUseCase: FeedBackUseCase) : ViewModel() {
+    suspend fun kirimMasukan(data: Masukan)=feedBackUseCase.kirimMasukan(data).asLiveData()
 
-    fun kirimMasukan(data:Masukan)=repository.kirimMasukan(data)
-
-    val isCanSendFeedBack=repository.isCanSendFeedBack()
+    val isCanSendFeedBack=feedBackUseCase.isCanSendFeedBack()
 
 }

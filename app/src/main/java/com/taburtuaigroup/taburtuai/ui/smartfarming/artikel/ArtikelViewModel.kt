@@ -1,31 +1,30 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.artikel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.taburtuaigroup.taburtuai.data.Artikel
-import com.taburtuaigroup.taburtuai.data.Repository
-import com.taburtuaigroup.taburtuai.util.KategoriArtikel
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.util.KategoriArtikel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ArtikelViewModel(private val repository: Repository) : ViewModel() {
-    val listArtikelTerpopuler = repository.listArtikelTerpopuler
-
-    val listArtikel = repository.listArtikel
-
-    val isLoading=repository.isLoading
-
+@HiltViewModel
+class ArtikelViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) : ViewModel() {
     var currentDes = ""
     var mKategoriArtikel = KategoriArtikel.SEMUA
     var mKeyword = ""
 
-    fun setKategoriArtikel(kategoriArtikel: KategoriArtikel) {
-            mKategoriArtikel = kategoriArtikel
-            repository.getListArtikelByKategori(kategoriArtikel)
+    fun getListArtikelByKategori(kategoriArtikel: KategoriArtikel): LiveData<Resource<List<Artikel>>> {
+        mKategoriArtikel=kategoriArtikel
+        return smartFarmingUseCase.getListArtikelByKategori(kategoriArtikel).asLiveData()
     }
 
+    fun getArtikelTerpopuler() = smartFarmingUseCase.getArtikelTerpopuler().asLiveData()
+
+
+    //Paging
     val pagingData = MutableLiveData<LiveData<PagingData<Artikel>>>()
 
     fun getData(kategoriArtikel: KategoriArtikel = mKategoriArtikel, keyword: String = mKeyword) {
@@ -33,10 +32,7 @@ class ArtikelViewModel(private val repository: Repository) : ViewModel() {
         if (mKeyword != keyword) mKeyword = keyword
 
         pagingData.value =
-            repository.getPagingArtikelByKategori(kategoriArtikel, keyword).cachedIn(viewModelScope)
+            smartFarmingUseCase.getPagingArtikelByKategori(kategoriArtikel, keyword).cachedIn(viewModelScope)
 
     }
-
-    fun getArtikelTerpopuler() = repository.getArtikelTerpopuler()
-
 }

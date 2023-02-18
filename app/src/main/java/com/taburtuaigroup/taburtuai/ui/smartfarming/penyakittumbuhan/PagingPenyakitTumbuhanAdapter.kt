@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
-import com.taburtuaigroup.taburtuai.util.DateConverter
-import com.taburtuaigroup.taburtuai.util.TextFormater
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.DateConverter
+import com.taburtuaigroup.taburtuai.core.util.TextFormater
 
-class PagingPenyakitTumbuhanAdapter(private val onClick: ((PenyakitTumbuhan) -> Unit),private val onCheckChanged:((PenyakitTumbuhan)->Unit)?) :
+class PagingPenyakitTumbuhanAdapter(private val onClick: ((PenyakitTumbuhan) -> Unit), private val onCheckChanged:((PenyakitTumbuhan)->Unit)?) :
     PagingDataAdapter<PenyakitTumbuhan, PagingPenyakitTumbuhanAdapter.PenyakitTumbuhanVH>(Companion)  {
 
     lateinit var ctx: Context
@@ -37,6 +37,7 @@ class PagingPenyakitTumbuhanAdapter(private val onClick: ((PenyakitTumbuhan) -> 
         val data=getItem(position)
         if(data!=null){
             holder.bind(data)
+            Log.d("TAG",data.title)
         }
     }
 
@@ -49,7 +50,6 @@ class PagingPenyakitTumbuhanAdapter(private val onClick: ((PenyakitTumbuhan) -> 
         private val cbFav: CheckBox = itemView.findViewById(R.id.cb_fav)
 
         fun bind(penyakit: PenyakitTumbuhan) {
-            Log.d("TAG","bind")
             if (onCheckChanged != null && penyakit.favorites != null && uid != null) {
                 cbFav.visibility = View.VISIBLE
                 if (penyakit.favorites != null && uid != null) {

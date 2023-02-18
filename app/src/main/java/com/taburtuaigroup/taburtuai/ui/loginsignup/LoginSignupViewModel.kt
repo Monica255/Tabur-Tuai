@@ -1,19 +1,22 @@
 package com.taburtuaigroup.taburtuai.ui.loginsignup
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
+import androidx.lifecycle.asLiveData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.AuthUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginSignupViewModel(private val repository: Repository) :ViewModel() {
+@HiltViewModel
+class LoginSignupViewModel @Inject constructor(
+    private val authUseCase: AuthUseCase
+    ) :ViewModel() {
 
-    var firebaseUser=repository.firebaseUser
+    var currentUser=authUseCase.getCurrentUser()
 
-    var message=repository.message
+    suspend fun login(email:String,pass:String)=authUseCase.login(email,pass).asLiveData()
 
-    val isLoading=repository.isLoading
+    suspend fun registerAccount(email:String,pass: String,name:String,telepon:String)=authUseCase.registerAccount(email, pass, name, telepon).asLiveData()
 
-    fun login(email:String,pass:String)=repository.login(email,pass)
+    suspend fun firebaseAuthWithGoogle(idToken:String)=authUseCase.firebaseAuthWithGoogle(idToken).asLiveData()
 
-    fun register(email:String,pass: String,name:String,telepon:String)=repository.registerAccount(email,pass,name,telepon)
-
-    fun firebaseAuthWithGoogle(idToken:String)=repository.firebaseAuthWithGoogle(idToken)
 }

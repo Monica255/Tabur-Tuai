@@ -1,16 +1,13 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.loginsmartfarming
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginSmartFarmingViewModel(private val repository: Repository) :ViewModel() {
+@HiltViewModel
+class LoginSmartFarmingViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) :ViewModel() {
 
-    fun loginPetani(idPetani:String,passPetani:String)=repository.loginPetani(idPetani,passPetani)
-
-    val petani=repository.petani
-
-    val isLoading=repository.isLoading
-
-    val message=repository.message
+    fun loginPetani(idPetani:String,passPetani:String)=smartFarmingUseCase.loginPetani(idPetani,passPetani)
 
 }

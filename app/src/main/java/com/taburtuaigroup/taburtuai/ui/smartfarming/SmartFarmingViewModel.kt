@@ -1,26 +1,18 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming
 
 import androidx.lifecycle.ViewModel
-import com.taburtuaigroup.taburtuai.data.Repository
-import com.taburtuaigroup.taburtuai.util.KategoriArtikel
+import androidx.lifecycle.asLiveData
+import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
+import com.taburtuaigroup.taburtuai.core.util.KategoriArtikel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SmartFarmingViewModel(private val provideRepository: Repository) : ViewModel() {
-    fun autoLoginPetani(idPetani:String)=provideRepository.autoLoginPetani(idPetani)
+@HiltViewModel
+class SmartFarmingViewModel@Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) : ViewModel() {
+    fun loginPetani(idPetani:String,passPetani:String?)=smartFarmingUseCase.loginPetani(idPetani,passPetani)
 
-    val artikel=provideRepository.listArtikel
+    fun getListPenyakitTumbuhan() = smartFarmingUseCase.getListPenyakit().asLiveData()
 
-    val penyakit=provideRepository.listPenyakit
+    fun getListArtikelByKategory(kategoriArtikel: KategoriArtikel) = smartFarmingUseCase.getListArtikelByKategori(kategoriArtikel).asLiveData()
 
-    val message=provideRepository.message
-
-    val isLoading=provideRepository.isLoading
-
-    fun getData(){
-        provideRepository.getListArtikelByKategori(KategoriArtikel.SEMUA)
-        provideRepository.getListPenyakit()
-    }
-
-    init {
-        getData()
-    }
 }

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.data.Petani
+import com.taburtuaigroup.taburtuai.core.domain.model.Petani
 
 class AllPetaniAdapter : RecyclerView.Adapter<AllPetaniAdapter.ItemViewHolder>() {
 

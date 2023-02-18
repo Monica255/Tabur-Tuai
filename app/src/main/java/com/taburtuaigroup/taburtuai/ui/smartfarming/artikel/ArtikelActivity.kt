@@ -5,31 +5,30 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
 import com.taburtuaigroup.taburtuai.databinding.ActivityArtikelBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ArtikelActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityArtikelBinding
-    private lateinit var viewModel:ArtikelViewModel
-    private lateinit var navController:NavController
+    private lateinit var binding: ActivityArtikelBinding
+    private val viewModel: ArtikelViewModel by viewModels()
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityArtikelBinding.inflate(layoutInflater)
+        binding = ActivityArtikelBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setActionBar()
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory.getInstance(this.application))[ArtikelViewModel::class.java]
         navController = findNavController(R.id.frame_container)
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
         val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -49,8 +48,8 @@ class ArtikelActivity : AppCompatActivity() {
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if(query!=null){
-                    if(viewModel.currentDes=="fragment_artikel"){
+                if (query != null) {
+                    if (viewModel.currentDes == "fragment_artikel") {
                         navController.navigate(R.id.action_artikelFragment_to_listArtikelFragment)
                     }
                     viewModel.getData(keyword = query)
@@ -59,9 +58,9 @@ class ArtikelActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if(newText!=null){
-                    if(newText.trim().isEmpty()){
-                        if(viewModel.mKeyword!=""){
+                if (newText != null) {
+                    if (newText.trim().isEmpty()) {
+                        if (viewModel.mKeyword != "") {
                             viewModel.getData(keyword = "")
                         }
                     }

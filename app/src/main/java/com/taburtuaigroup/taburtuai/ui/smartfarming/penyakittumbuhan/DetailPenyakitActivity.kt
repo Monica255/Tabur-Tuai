@@ -2,21 +2,23 @@ package com.taburtuaigroup.taburtuai.ui.smartfarming.penyakittumbuhan
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.ViewModelFactory
-import com.taburtuaigroup.taburtuai.data.PenyakitTumbuhan
+import com.taburtuaigroup.taburtuai.core.util.*
+import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
 import com.taburtuaigroup.taburtuai.databinding.ActivityDetailPenyakitBinding
-import com.taburtuaigroup.taburtuai.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailPenyakitActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDetailPenyakitBinding
-    private lateinit var viewModel:DetailPenyakitViewModel
+    private val viewModel:DetailPenyakitViewModel by viewModels()
     private var penyakitId=""
-    private var data=PenyakitTumbuhan()
+    private var data= PenyakitTumbuhan()
     private val uid=FirebaseAuth.getInstance().currentUser?.uid
     private var sendReslt=false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,34 +27,43 @@ class DetailPenyakitActivity : AppCompatActivity() {
         setContentView(binding.root)
         setActionBar()
 
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory.getInstance(application))[DetailPenyakitViewModel::class.java]
-
-
         penyakitId = intent.getStringExtra(PENYAKIT_ID) ?: ""
-        viewModel.penyakitId = penyakitId
 
-        viewModel.penyakit.observe(this){itt->
-            data=itt
-            setData(data)
-            binding.cbFav.setOnClickListener {
-                viewModel.favoritePenyakit(data)
+        viewModel.getPenyakit(penyakitId).observe(this){ it ->
+            when (it) {
+                is Resource.Loading -> {}
+                is Resource.Success -> {
+                    it.data?.let { it ->
+                        data = it
+                        setData(data)
+                        binding.cbFav.setOnClickListener {
+                            viewModel.favoritePenyakit(data).observe(this){ it ->
+                                when(it){
+                                    is Resource.Loading->{}
+                                    is Resource.Success->{
+                                        sendReslt = true
+                                        it.data?.let {
+                                            val msg=if (it.first) "Penyakit tumbuhan disimpan di list disukai" else "Penyakit tumbuhan dihapus dari list disukai"
+                                            ToastUtil.makeSnackbar(binding.root, msg)
+                                            if (it.first) {
+                                                it.second?.let { it1 -> data.favorites?.add(it1) }
+                                            } else {
+                                                data.favorites?.remove(it.second)
+                                            }
+                                        }
+                                    }
+                                    is Resource.Error->{
+                                        sendReslt = false
+                                        ToastUtil.makeSnackbar(binding.root, it.message.toString())
+                                        binding.cbFav.isChecked = isFavorite(data.favorites)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                is Resource.Error -> ToastUtil.makeToast(this, it.message.toString())
             }
-        }
-
-        viewModel.isFav.observe(this){
-            val x=it.getContentIfNotHandled()
-            if (x==true){
-                uid?.let { it1 -> data.favorites?.add(it1) }
-            }else if(x==false){
-                data.favorites?.remove(uid)
-            }
-        }
-
-        viewModel.message.observe(this){
-            ToastUtil.showSnackbar(binding.root,it)
-            if(it.first)binding.cbFav.isChecked=isFavorite(data.favorites)
-            sendReslt = !it.first
         }
     }
 
@@ -74,7 +85,7 @@ class DetailPenyakitActivity : AppCompatActivity() {
         binding.apply {
             tvTitlePenyakit.text=penyakit.title
             tvDate.text=getString(R.string.dipublikasikan_pada, DateConverter.convertMillisToDate(penyakit.timestamp,this@DetailPenyakitActivity))
-            tvAuthor.text=if(penyakit.author.trim()!="")getString(R.string.oleh,TextFormater.toTitleCase(penyakit.author)) else ""
+            tvAuthor.text=if(penyakit.author.trim()!="")getString(R.string.oleh, TextFormater.toTitleCase(penyakit.author)) else ""
             tvDeskripsi.text=penyakit.deskripsi.replace("\\n","\n")
             tvSolusi.text=penyakit.solusi.replace("\\n","\n")
             cbFav.isChecked=isFavorite(penyakit.favorites)
