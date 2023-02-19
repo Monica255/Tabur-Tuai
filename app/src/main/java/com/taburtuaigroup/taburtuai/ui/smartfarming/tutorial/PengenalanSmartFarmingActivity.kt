@@ -1,5 +1,6 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.tutorial
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import com.taburtuaigroup.taburtuai.databinding.ActivityPengenalanSmartFarmingBi
 class PengenalanSmartFarmingActivity : AppCompatActivity() {
     private lateinit var binding:ActivityPengenalanSmartFarmingBinding
     var isLoading= MutableLiveData<Boolean>()
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityPengenalanSmartFarmingBinding.inflate(layoutInflater)

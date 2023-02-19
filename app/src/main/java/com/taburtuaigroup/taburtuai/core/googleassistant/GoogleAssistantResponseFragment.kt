@@ -72,7 +72,7 @@ class GoogleAssistantResponseFragment : DialogFragment() {
                                                             )
                                                         }
                                                         0 -> {
-                                                            binding.tvCommand.text=getString(R.string.device_dinyalakan,idDevice,idKebun)
+                                                            binding.tvCommand.text=getString(R.string.device_dimatikan,idDevice,idKebun)
                                                             showStatus(SUCESS)
                                                         }
                                                     }
@@ -80,7 +80,7 @@ class GoogleAssistantResponseFragment : DialogFragment() {
                                                 1 -> {
                                                     when (dv.state) {
                                                         1 -> {
-                                                            binding.tvCommand.text=getString(R.string.device_dimatikan,idDevice,idKebun)
+                                                            binding.tvCommand.text=getString(R.string.device_dinyalakan,idDevice,idKebun)
                                                             showStatus(SUCESS)
                                                         }
                                                         0 -> {
