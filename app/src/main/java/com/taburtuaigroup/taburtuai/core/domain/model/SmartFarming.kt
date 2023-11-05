@@ -10,15 +10,6 @@ data class Device(
     var type: String = ""
 )
 
-data class UserData(
-    var email: String = "",
-    var name: String = "",
-    var phone_number: String = "",
-    var uid: String = "",
-    var img_profile: String = ""
-
-)
-
 data class MonitoringKebun(
     var temperatur: Int? = null,
     var kelembaban_tanah: Int? = null,
@@ -46,66 +37,9 @@ data class Petani(
     var password_petani: String = "",
 ):Parcelable
 
-data class Masukan(
-    var jenis_masukan: String = "",
-    var masukan: String = "",
-    var email: String = "anonim",
-    var time: String = ""
-)
-
-@Parcelize
-data class Artikel(
-    var id_artikel: String = "",
-    var img_header: String = "",
-    var title: String = "",
-    var artikel_text: String = "",
-    var author: String = "",
-    var kategori: String = "",
-    var timestamp: Long = 0,
-    var favorites: MutableList<String>?=null,
-    var fav_count: Int = 0
-) : Parcelable
-
-@Parcelize
-data class PenyakitTumbuhan(
-    var id_penyakit: String = "",
-    var img_header: String = "",
-    var title: String = "",
-    var deskripsi: String = "",
-    var solusi: String = "",
-    var author: String = "",
-    var timestamp: Long = 0,
-    var favorites:  MutableList<String>?=null,
-    var fav_count: Int = 0
-) : Parcelable
 
 
-data class WeatherTime(
-    var humidity:String="",
-    var temperature:String="",
-    var windSpeed:String="",
-    var windDirection:String="",
-    var weatherCode:Int=-1,
-    var weatherName:String=""
-)
 
-data class DailyWeather(
-    var date: Mdate,
-    var diniHari: WeatherTime,
-    var pagiHari: WeatherTime,
-    var siangHari: WeatherTime,
-    var malamHari: WeatherTime
-)
 
-data class WeatherForcast(
-    val city:String="",
-    val province:String="",
-    val dailyWeather:List<DailyWeather>?=null
-)
 
-data class Mdate(
-    var year:Int,
-    var month:Int,
-    var date:Int,
-    var hour:Int?=null
-)
+

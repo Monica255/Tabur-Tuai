@@ -4,13 +4,13 @@ import android.util.Log
 import com.taburtuaigroup.taburtuai.core.data.source.remote.model.ResponseWeather
 import com.taburtuaigroup.taburtuai.core.data.source.remote.model.WeatherEntity
 import com.taburtuaigroup.taburtuai.core.domain.model.DailyWeather
-import com.taburtuaigroup.taburtuai.core.domain.model.WeatherForcast
+import com.taburtuaigroup.taburtuai.core.domain.model.WeatherForecast
 import com.taburtuaigroup.taburtuai.core.domain.model.WeatherTime
 
 class DataMapper {
     companion object {
-        fun responseWeatherToWeatherForecast(data: ResponseWeather): WeatherForcast? {
-            var returnData: WeatherForcast?
+        fun responseWeatherToWeatherForecast(data: ResponseWeather): WeatherForecast? {
+            var returnData: WeatherForecast?
             try {
                 var x=0
                 val kota = data.data.description
@@ -71,7 +71,7 @@ class DataMapper {
                     dailyWeather.add(daily)
                     x += 4
                 }
-                returnData = WeatherForcast(kota, provinsi, dailyWeather)
+                returnData = WeatherForecast(kota, provinsi, dailyWeather)
             } catch (e: Exception) {
                 returnData = null
                 Log.d("TAG", e.message.toString())

@@ -33,6 +33,5 @@ class ArtikelViewModel @Inject constructor(private val smartFarmingUseCase: Smar
 
         pagingData.value =
             smartFarmingUseCase.getPagingArtikelByKategori(kategoriArtikel, keyword).cachedIn(viewModelScope)
-
     }
 }

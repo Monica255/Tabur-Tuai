@@ -1,6 +1,6 @@
 package com.taburtuaigroup.taburtuai.core.data.source.remote.network
 
-import com.taburtuaigroup.taburtuai.core.domain.model.WeatherForcast
+import com.taburtuaigroup.taburtuai.core.domain.model.WeatherForecast
 import com.taburtuaigroup.taburtuai.core.util.DataMapper
 import com.taburtuaigroup.taburtuai.core.data.Resource
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
-    suspend fun getWeatherForecast(province: String, city: String): Flow<Resource<WeatherForcast>> {
+    suspend fun getWeatherForecast(province: String, city: String): Flow<Resource<WeatherForecast>> {
         //get data from remote api
         return flow {
             emit(Resource.Loading())

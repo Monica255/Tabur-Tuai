@@ -1,5 +1,6 @@
 package com.taburtuaigroup.taburtuai.core.data.source.remote.firebase
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.firestore.DocumentSnapshot
@@ -30,6 +31,7 @@ class ArtikelFirestorePagingSource (
 
             //list= mutableListOf()
             list=currentPage.toObjects(Artikel::class.java)
+            Log.d("TAG",list.toString())
             LoadResult.Page(
                 data = list,
                 prevKey = null,

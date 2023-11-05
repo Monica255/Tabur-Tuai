@@ -33,7 +33,6 @@ class FavActivity : AppCompatActivity() {
     private lateinit var adapterArtikel: PagingArtikelAdapter
     private lateinit var adapterPenyakit: PagingPenyakitTumbuhanAdapter
     private val viewModel: FavViewModel by viewModels()
-    private val uid=FirebaseAuth.getInstance().currentUser?.uid
     private var tempArtikel: Artikel?=null
     private var tempPenyakit: PenyakitTumbuhan?=null
 
@@ -115,7 +114,7 @@ class FavActivity : AppCompatActivity() {
     private fun isFavorite(list:List<String>?):Boolean{
         var isfav=false
         if(list!=null){
-            isfav=list.contains(uid)
+            isfav=list.contains(viewModel.currentUser?.uid)
         }
         return isfav
     }

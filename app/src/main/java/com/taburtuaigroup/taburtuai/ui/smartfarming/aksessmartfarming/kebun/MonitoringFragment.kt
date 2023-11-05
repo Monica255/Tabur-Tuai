@@ -125,6 +125,11 @@ class MonitoringFragment : Fragment() {
             tvKelembaban.text = (data.kelembaban_tanah ?: "-").toString() + " RH"
             tvPhTanah.text = "pH " + (data.ph_tanah ?: "-").toString()
             tvKelembabanUdara.text = (data.humidity ?: "-").toString() + " g/" + "\u33A5"
+
+            cvTemperature.visibility= if(data.temperatur==null) View.GONE else View.VISIBLE
+            cvKelembaban.visibility= if(data.kelembaban_tanah==null) View.GONE else View.VISIBLE
+            cvPhTanah.visibility= if(data.ph_tanah==null) View.GONE else View.VISIBLE
+            cvKelembabanUdara.visibility= if(data.humidity==null) View.GONE else View.VISIBLE
         }
     }
 

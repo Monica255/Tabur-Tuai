@@ -134,7 +134,7 @@
                             android:button="@android:color/transparent"
                             android:paddingStart="@dimen/margin_start_end"
                             android:paddingEnd="@dimen/margin_start_end"
-                            android:text="Lainnya"
+                            android:text="@string/lainnya"
                             android:textColor="@drawable/kategori_text_selector" />
 
                     </RadioGroup>

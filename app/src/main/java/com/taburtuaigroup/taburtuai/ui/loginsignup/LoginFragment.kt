@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -16,16 +15,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.databinding.FragmentLoginBinding
-import com.taburtuaigroup.taburtuai.ui.home.HomeActivity
-import com.taburtuaigroup.taburtuai.core.util.Event
-import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.features.scheduler.Scheduler
+import com.taburtuaigroup.taburtuai.core.util.Event
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
+import com.taburtuaigroup.taburtuai.databinding.FragmentLoginBinding
+import com.taburtuaigroup.taburtuai.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -64,8 +64,7 @@ class LoginFragment : Fragment() {
                                         showLoading(true)
                                     }
                                     is Resource.Success -> {
-                                        showLoading(false)
-                                        goHome()
+                                        login()
                                     }
                                     is Resource.Error -> {
                                         showLoading(false)
@@ -88,6 +87,26 @@ class LoginFragment : Fragment() {
             }
         }
 
+    fun login(){
+        viewModel.getAllActiveScheduler().observe(requireActivity()){
+            when(it){
+                is Resource.Loading->{
+                    showLoading(true)
+                }
+                is Resource.Error->{
+                    showLoading(false)
+                }
+                is Resource.Success->{
+                    it.data?.let{
+                        val sche = Scheduler()
+                        sche.setScheduler(it)
+                    }
+                    showLoading(false)
+                    goHome()
+                }
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,17 +139,13 @@ class LoginFragment : Fragment() {
                     viewModel.login(email, pass).observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Loading -> {
-                                Log.d("TAG", "loading")
                                 showLoading(true)
                             }
                             is Resource.Success -> {
-                                Log.d("TAG", "success")
-                                showLoading(false)
-                                goHome()
+                                login()
                             }
                             is Resource.Error -> {
                                 it.data?.let { it1 ->
-                                    Log.d("TAG", it1)
                                     errorMsg = Event(it1)
                                     showToast()
                                 }

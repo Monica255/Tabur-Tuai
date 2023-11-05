@@ -13,7 +13,7 @@ import javax.inject.Inject
 class EditProfileViewModel @Inject constructor(private val authUseCase: AuthUseCase) :ViewModel() {
     suspend fun uploadProfilePic(uri: Uri)=authUseCase.uploadProfilePicture(uri).asLiveData()
 
-    val userData=authUseCase.getUserData()
+    val userData=authUseCase.getUserData(null)
 
     val currentUser=authUseCase.getCurrentUser()
 

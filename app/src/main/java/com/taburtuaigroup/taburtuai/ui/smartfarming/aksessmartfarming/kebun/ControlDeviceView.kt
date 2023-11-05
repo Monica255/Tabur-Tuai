@@ -106,7 +106,7 @@ class ControlDeviceView : RelativeLayout {
         bg.setBackgroundColor(context.getColor(R.color.green))
         cv.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.white))
         DrawableCompat.setTint(
-            DrawableCompat.wrap(drawable.drawable),
+            DrawableCompat.wrap(drawable.drawable).mutate(),
             ContextCompat.getColor(context, R.color.white)
         )
     }
@@ -119,7 +119,7 @@ class ControlDeviceView : RelativeLayout {
         bg.setBackgroundColor(context.getColor(R.color.white))
         cv.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.green))
         DrawableCompat.setTint(
-            DrawableCompat.wrap(drawable.drawable),
+            DrawableCompat.wrap(drawable.drawable).mutate(),
             ContextCompat.getColor(context, R.color.green)
         )
     }

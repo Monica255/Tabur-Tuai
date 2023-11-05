@@ -1,7 +1,9 @@
 package com.taburtuaigroup.taburtuai.core.util
 
 import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
+import com.taburtuaigroup.taburtuai.core.domain.model.ForumPost
 import com.taburtuaigroup.taburtuai.core.domain.model.PenyakitTumbuhan
+import java.util.function.BiPredicate
 
 const val KEBUN_ID="kebunId"
 const val LAST_UPDATE="last_update"
@@ -20,13 +22,22 @@ const val EXTRA_PETANI="extra_petani"
 const val STATUS="status"
 const val DEVICE_NAME="device_name"
 const val FARM_NAME="farm_name"
+const val FORUM_POST_ID="forum_post_id"
 
 enum class Kategori {
     ARTIKEL, PENYAKIT
 }
 
+enum class KategoriTopik(val printable:String) {
+    SEMUA(""),COMMON("common topics"), COMMODITY("commodity")
+}
+
 enum class KategoriArtikel(val printable:String) {
     SEMUA(""),INFORMASI("informasi"), EDUKASI("edukasi"), LAINNYA("lainnya")
+}
+
+enum class KategoriForum(val printable: String){
+    SEMUA(""),INFORMASI("informasi"),PERTANYAAN("pertanyaan"),LAINNYA("lainnya")
 }
 
 sealed class ViewEventsArtikel {
@@ -39,4 +50,10 @@ sealed class ViewEventsPenyakit {
     data class Edit(val entity: PenyakitTumbuhan) : ViewEventsPenyakit()
     data class Remove(val entity: PenyakitTumbuhan) : ViewEventsPenyakit()
     data class Rebind(val entity: PenyakitTumbuhan) : ViewEventsPenyakit()
+}
+
+sealed class ViewEventsForumPost {
+    data class Edit(val entity: ForumPost,val isLiked:Boolean) : ViewEventsForumPost()
+    data class Remove(val entity: ForumPost) : ViewEventsForumPost()
+    data class Rebind(val entity: ForumPost) : ViewEventsForumPost()
 }

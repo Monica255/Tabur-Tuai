@@ -105,18 +105,18 @@ class FeedbackActivity : AppCompatActivity() {
     }
 
     private fun checkJenisMasukan(){
-        val selectedBloodType = binding.rgJenisMasukan.checkedRadioButtonId
-        if (selectedBloodType == -1) {
-            jenisMasukan=""
+        val jenisMasukan = binding.rgJenisMasukan.checkedRadioButtonId
+        if (jenisMasukan == -1) {
+            this.jenisMasukan =""
             isJenisValid = false
             errorMsg= Event(getString(R.string.error_msg_pilih_jenis_masukan))
         } else {
-            val radio: RadioButton = findViewById(selectedBloodType)
+            val radio: RadioButton = findViewById(jenisMasukan)
             isJenisValid = true
             if(radio.id== R.id.rb_gangguan){
-                jenisMasukan="gangguan teknis"
+                this.jenisMasukan ="gangguan teknis"
             }else if (radio.id==R.id.rb_ide){
-                jenisMasukan="ide"
+                this.jenisMasukan ="ide"
             }
         }
     }

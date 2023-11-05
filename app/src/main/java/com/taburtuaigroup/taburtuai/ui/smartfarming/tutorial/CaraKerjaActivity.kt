@@ -8,6 +8,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.taburtuaigroup.taburtuai.R
@@ -26,6 +27,9 @@ class CaraKerjaActivity : AppCompatActivity() {
         isLoading.value=true
         val webSettings = binding.webview.settings
         webSettings.javaScriptEnabled = true
+        webSettings.loadWithOverviewMode = true
+        webSettings.useWideViewPort = true
+        webSettings.domStorageEnabled=true
 
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
@@ -33,18 +37,41 @@ class CaraKerjaActivity : AppCompatActivity() {
                 Toast.makeText(this@CaraKerjaActivity, getString(R.string.load_web_success), Toast.LENGTH_LONG).show()
             }
 
-            override fun onReceivedSslError(
-                view: WebView?,
-                handler: SslErrorHandler?,
-                error: SslError?
-            ) {
-                if (handler != null){
-                    handler.proceed()
-                } else {
-                    super.onReceivedSslError(view, null, error)
-                }
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
+                view?.loadUrl(url)
+                return true
             }
+
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError) {
+                val builder = AlertDialog.Builder(this@CaraKerjaActivity)
+                var message = "SSL Certificate error."
+
+                when (error.primaryError) {
+                    SslError.SSL_UNTRUSTED -> message = "The certificate authority is not trusted."
+                    SslError.SSL_EXPIRED -> message = "The certificate has expired."
+                    SslError.SSL_IDMISMATCH -> message = "The certificate Hostname mismatch."
+                    SslError.SSL_NOTYETVALID -> message = "The certificate is not yet valid."
+                }
+
+                message += " Do you want to continue anyway?"
+
+                builder.setTitle("SSL Certificate Error")
+                builder.setMessage(message)
+
+                builder.setPositiveButton("continue") { dialog, which ->
+                    handler.proceed()
+                }
+
+                builder.setNegativeButton("cancel") { dialog, which ->
+                    handler.cancel()
+                }
+
+                val alertDialog = builder.create()
+                alertDialog.show()
+            }
+
         }
+
         binding.webview.loadUrl(getString(R.string.web_url_cara_kerja_smartfarming))
 
         isLoading.observe(this){

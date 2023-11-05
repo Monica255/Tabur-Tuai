@@ -18,12 +18,7 @@
         android:id="@+id/rv_controlling"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_controlling"
-        />
-
+        tools:listitem="@layout/item_controlling"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

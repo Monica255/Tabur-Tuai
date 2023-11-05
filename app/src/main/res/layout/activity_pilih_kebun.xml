@@ -60,7 +60,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/margin_layout_with_ds"
                 android:layout_marginBottom="@dimen/margin_buttom"
-
+                tools:listitem="@layout/item_kebun"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

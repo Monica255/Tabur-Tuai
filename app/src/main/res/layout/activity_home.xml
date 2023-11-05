@@ -8,7 +8,6 @@
     tools:context=".ui.home.HomeActivity">
 
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -25,16 +24,26 @@
             android:text="@string/home"
             android:textColor="@color/white"
             android:textSize="20sp" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_profile"
-            android:scaleType="centerCrop"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/icon_person"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/margin_start_end"
-            />
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_person" />
     </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/img_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/home"
+        android:scaleType="fitEnd"
+        android:src="@drawable/img_home"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -92,15 +101,43 @@
 
             />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:visibility="visible"
+            android:id="@+id/bt_komunitas"
+            style="@style/SubSubHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/smart_farming_btn_selector"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/komunitas"
+            android:textAllCaps="false"
+            android:textColor="@color/green"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bt_smart_farming" />
+
         <ImageView
-            android:id="@+id/img_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/home"
-            android:scaleType="fitEnd"
-            android:src="@drawable/img_home"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:id="@+id/img_logo_taburtuai"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="@dimen/margin_start_end"
+            android:src="@drawable/logo_taburtuai_home"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bt_komunitas" />
+
+        <ImageView
+            android:id="@+id/img_logo_yess"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="@dimen/margin_start_end"
+            android:layout_marginTop="@dimen/margin_start_end"
+            android:src="@drawable/logo_yess_home"
+            app:layout_constraintStart_toEndOf="@id/img_logo_taburtuai"
+            app:layout_constraintTop_toBottomOf="@id/bt_komunitas" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

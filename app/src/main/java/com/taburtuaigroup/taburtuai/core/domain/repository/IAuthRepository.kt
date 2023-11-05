@@ -20,11 +20,12 @@ interface IAuthRepository {
 
     suspend fun login(email: String, pass: String): Flow<Resource<String>>
 
-    fun getUserData(): MutableLiveData<UserData?>
+    fun getUserData(uid:String?): MutableLiveData<UserData?>
 
     fun signOut()
 
     suspend fun uploadProfilePicture(filePath: Uri): Flow<Resource<String>>
 
     suspend fun updateUserData(data: UserData):Flow<Resource<String>>
+
 }

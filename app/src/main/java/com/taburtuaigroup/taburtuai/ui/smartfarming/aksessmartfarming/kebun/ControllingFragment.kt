@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.taburtuaigroup.taburtuai.core.data.Resource
 import com.taburtuaigroup.taburtuai.core.domain.model.Device
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
 import com.taburtuaigroup.taburtuai.databinding.FragmentControllingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +33,18 @@ class ControllingFragment : Fragment() {
             viewModel.updateDeviceState(
                 viewModel.kebunId, device.id_device,
                 if (device.state == 1) 0 else 1
-            )
+            ).observe(requireActivity()){
+                when(it){
+                    is Resource.Error->{
+                        it?.data?.let{
+                            ToastUtil.makeToast(requireActivity(),it)
+                        }
+                    }
+                    is Resource.Success->{
+
+                    }
+                }
+            }
         }
         binding.rvControlling.adapter = taskAdapter
 

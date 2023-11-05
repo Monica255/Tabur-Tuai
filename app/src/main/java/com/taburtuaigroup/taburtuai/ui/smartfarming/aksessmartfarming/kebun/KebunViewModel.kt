@@ -31,7 +31,7 @@ class KebunViewModel @Inject constructor(
 
     val controlling=MutableLiveData<List<Device>>()
 
-    fun updateDeviceState(idKebun:String,idDevice:String,value:Int)=smartFarmingUseCase.updateDeviceState(idKebun,idDevice,value)
+    fun updateDeviceState(idKebun:String,idDevice:String,value:Int)=smartFarmingUseCase.updateDeviceState(idKebun,idDevice,value).asLiveData()
 
     val weatherForcastData= MutableLiveData<List<DailyWeather>>()
 

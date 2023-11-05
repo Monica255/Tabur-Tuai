@@ -31,7 +31,7 @@ class AuthRepository @Inject constructor(
 
     override suspend fun login(email: String, pass: String): Flow<Resource<String>> = firebaseDataSource.login(email, pass)
 
-    override fun getUserData(): MutableLiveData<UserData?> =firebaseDataSource.getUserData()
+    override fun getUserData(uid:String?): MutableLiveData<UserData?> =firebaseDataSource.getUserData(uid)
 
     override fun signOut() {
         firebaseDataSource.signOut()

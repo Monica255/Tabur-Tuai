@@ -33,27 +33,34 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
         setActionBar()
         setAction()
 
+
         binding.btMasuk.setOnClickListener {
             if (!isFieldEmpty()) {
                 lifecycleScope.launch {
-                    viewModel.loginPetani(id, pass).observe(this@LoginSmartFarmingActivity){
-                        when(it){
-                            is Resource.Loading->{
+                    viewModel.loginPetani(id, pass).observe(this@LoginSmartFarmingActivity) {
+                        when (it) {
+                            is Resource.Loading -> {
                                 showLoading(true)
                             }
-                            is Resource.Success->{
+                            is Resource.Success -> {
                                 showLoading(false)
-                                it.data?.let{
+                                it.data?.let {
                                     val prefManager =
-                                        androidx.preference.PreferenceManager.getDefaultSharedPreferences(this@LoginSmartFarmingActivity)
-                                    prefManager.edit().putString(SESI_PETANI_ID, it?.id_petani).apply()
+                                        androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+                                            this@LoginSmartFarmingActivity
+                                        )
+                                    prefManager.edit().putString(SESI_PETANI_ID, it?.id_petani)
+                                        .apply()
                                     goToPetaniProfile(it)
                                     finish()
                                 }
 
                             }
-                            is Resource.Error->{
-                                ToastUtil.makeToast(this@LoginSmartFarmingActivity,it.message.toString())
+                            is Resource.Error -> {
+                                ToastUtil.makeToast(
+                                    this@LoginSmartFarmingActivity,
+                                    it.message.toString()
+                                )
                                 showLoading(false)
                             }
                         }
@@ -65,12 +72,13 @@ class LoginSmartFarmingActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToPetaniProfile(petani: Petani){
+    private fun goToPetaniProfile(petani: Petani) {
         startActivity(
             Intent(
                 this,
                 PilihKebunActivity::class.java
-            ).putExtra(EXTRA_PETANI,petani).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+            ).putExtra(EXTRA_PETANI, petani)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
         )
     }
 

@@ -13,5 +13,7 @@ class ProfileViewModel @Inject constructor(private val authUseCase: AuthUseCase,
 
     fun signOut()=authUseCase.signOut()
 
-    val userData=authUseCase.getUserData()
+    val userData=authUseCase.getUserData(null)
+
+    fun getAllActiveScheduler() = smartFarmingUseCase.getScheduler("", true)
 }

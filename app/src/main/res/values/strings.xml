@@ -201,7 +201,7 @@
     <string name="berubah_ubah">Berubah - ubah</string>
     <string name="load_web">Memuat halaman web</string>
     <string name="load_web_success">Berhasil memuat website</string>
-    <string name="web_url_cara_kerja_smartfarming">https://dinpertanpangan.demakkab.go.id/?p=4089#:~:text=Smart%20farming%20(pertanian%20pintar)%20merupakan,dari%20lapang%20dari%20perangkat%20yang</string>
+    <string name="web_url_cara_kerja_smartfarming">https://faperta.umsu.ac.id/2023/04/13/pengertian-pentingnya-dan-cara-kerja-smart-farming/</string>
     <string name="pengenalan_smart_farming">Pengenalan\nSmart Farming</string>
     <string name="pengenalan_smart_farming2">Pengenalan Smart Farming</string>
     <string name="web_url_pengenalan_smart_farming">https://youtu.be/2gfJost-yhw</string>
@@ -228,5 +228,30 @@
         <item>$status $device_name pada $farm_name</item>
         <item>$status $device_name $farm_name</item>
     </string-array>
+    <string name="asset_statements" translatable="false">[{ \"include\": \"https://taburtuaigroup.page.link/.well-known/assetlinks.json\" }]</string>
+    <string name="komentar">%1$d Komentar</string>
+    <string name="komunitas">Komunitas</string>
+    <string name="forum">Forum</string>
+    <string name="pertanyaan">Pertanyaan</string>
+    <string name="topik">Topik</string>
+
+    <string name="posted_days_ago">%1$s hari lalu pukul %2$s </string>
+    <string name="posted">%1$s pukul %2$s</string>
+    <string name="date_format">%1$s/%2$s/%3$s</string>
+    <string name="today">Hari ini</string>
+    <string name="yesterday">Kemarin</string>
+    <string name="pilih_topik">Pilih Topik</string>
+    <string name="topik_umum">Topik Umum</string>
+    <string name="topik_komoditas">Topik Komoditas</string>
+    <string name="unknown_name">Unknown</string>
+    <string name="icon_like">Icon like</string>
+    <string name="image_header">Image Header</string>
+    <string name="icon_comment">Icon comment</string>
+    <string name="label_komentar">Komentar</string>
+
+    <string name="notification_message_format">(%1$s) %2$s %3$s pada %4$s milik %5$s</string>
+    <string name="notification_message_format_failed">Gagal %2$s %3$s pada %4$s %5$s</string>
+    <string name="penjadwalan">Penjadwalan</string>
+    <string name="hapus_penjadwalan">Hapus penjadwalan?</string>
 </resources>
 

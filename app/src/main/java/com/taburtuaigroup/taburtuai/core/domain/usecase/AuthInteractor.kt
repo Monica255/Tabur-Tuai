@@ -23,7 +23,7 @@ class AuthInteractor@Inject constructor(private val repo: IAuthRepository):AuthU
 
     override suspend fun login(email: String, pass: String): Flow<Resource<String>> = repo.login(email, pass)
 
-    override fun getUserData(): MutableLiveData<UserData?> = repo.getUserData()
+    override fun getUserData(uid:String?): MutableLiveData<UserData?> = repo.getUserData(uid)
 
     override fun signOut() {
         repo.signOut()

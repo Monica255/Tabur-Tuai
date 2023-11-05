@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:name=".MyApplication"
@@ -14,13 +17,39 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TaburTuai.NoActionBar">
-        <!--<meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/actions" />-->
+        <activity
+            android:name=".ui.smartfarming.aksessmartfarming.penjadwalan.CreateSchedulerActivity"
+            android:exported="false"/>
 
-        <!--<meta-data
+        <activity
+            android:name=".ui.komunitas.forum.DetailForumPostActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.komunitas.forum.ForumActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <!--
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/actions" />
+        -->
+        <!--
+<meta-data
             android:name="android.app.shortcuts"
-            android:resource="@xml/shortcuts" />-->
+            android:resource="@xml/shortcuts" />
+        -->
+        <meta-data
+            android:name="asset_statements"
+            android:resource="@string/asset_statements" />
+
         <activity
             android:name=".ui.smartfarming.tutorial.CaraDaftarActivity"
             android:exported="false"
@@ -80,11 +109,13 @@
             <intent-filter
                 android:autoVerify="true"
                 tools:targetAPI="m">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="taburtuaigroup.page.link"/>
-                <data android:scheme="https"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="taburtuaigroup.page.link" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -102,11 +133,12 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-            <intent-filter>
+
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".ui.smartfarming.aksessmartfarming.kebun.KebunActivity"
@@ -120,6 +152,20 @@
             android:name=".ui.smartfarming.aksessmartfarming.loginsmartfarming.LoginSmartFarmingActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.smartfarming.aksessmartfarming.penjadwalan.SchedulerActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".core.features.scheduler.Scheduler"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.me.intent.finishlog" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

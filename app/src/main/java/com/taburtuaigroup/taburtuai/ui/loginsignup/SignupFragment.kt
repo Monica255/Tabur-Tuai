@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,19 +12,21 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.taburtuaigroup.taburtuai.R
-import com.taburtuaigroup.taburtuai.databinding.FragmentSignupBinding
-import com.taburtuaigroup.taburtuai.core.util.Event
-import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
-import com.taburtuaigroup.taburtuai.core.util.ToastUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.core.data.Resource
+import com.taburtuaigroup.taburtuai.core.features.scheduler.Scheduler
+import com.taburtuaigroup.taburtuai.core.util.Event
+import com.taburtuaigroup.taburtuai.core.util.LoadingUtils
+import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import com.taburtuaigroup.taburtuai.databinding.FragmentSignupBinding
 import com.taburtuaigroup.taburtuai.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -84,8 +85,7 @@ class SignupFragment : Fragment() {
                                         showLoading(true)
                                     }
                                     is Resource.Success -> {
-                                        showLoading(false)
-                                        goHome()
+                                        login()
                                     }
                                     is Resource.Error -> {
                                         showLoading(false)
@@ -115,6 +115,27 @@ class SignupFragment : Fragment() {
         val signInIntent = googleSignInClient.signInIntent
         resultCOntract.launch(signInIntent)
     }
+    private fun login(){
+        viewModel.getAllActiveScheduler().observe(requireActivity()){
+            when(it){
+                is Resource.Loading->{
+                    showLoading(true)
+                }
+                is Resource.Error->{
+                    showLoading(false)
+                }
+                is Resource.Success->{
+                    it.data?.let{
+                        val sche = Scheduler()
+                        sche.setScheduler(it)
+                        showLoading(false)
+                        goHome()
+                    }
+                }
+            }
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -165,8 +186,7 @@ class SignupFragment : Fragment() {
                             }
                             is Resource.Success -> {
                                 ToastUtil.makeToast(requireActivity(),it.data.toString())
-                                showLoading(false)
-                                goHome()
+                                login()
                             }
                             is Resource.Error -> {
                                 showLoading(false)

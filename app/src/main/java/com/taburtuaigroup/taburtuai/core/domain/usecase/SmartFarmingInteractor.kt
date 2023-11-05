@@ -1,8 +1,11 @@
 package com.taburtuaigroup.taburtuai.core.domain.usecase
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.taburtuaigroup.taburtuai.core.data.Resource
 import com.taburtuaigroup.taburtuai.core.domain.repository.ISmartFarmingRepository
 import com.taburtuaigroup.taburtuai.core.util.KategoriArtikel
@@ -13,7 +16,7 @@ import javax.inject.Inject
 class SmartFarmingInteractor @Inject constructor(
     private val repo: ISmartFarmingRepository
 ) : SmartFarmingUseCase {
-
+    override val currentUser: FirebaseUser?=repo.currentUser
     override val isConnected: LiveData<Boolean> = repo.isConnected
     override fun getListPenyakit(): Flow<Resource<List<PenyakitTumbuhan>>> = repo.getListPenyakit()
     override fun getPenyakitTerpopuler(): Flow<Resource<List<PenyakitTumbuhan>>> =
@@ -47,6 +50,21 @@ class SmartFarmingInteractor @Inject constructor(
     override fun favoriteArtikel(artike: Artikel): Flow<Resource<Pair<Boolean, String?>>> =
         repo.favoriteArtikel(artike)
 
+    override fun getScheduler(
+        idPetani: String,
+        onlyActive: Boolean
+    ): MutableLiveData<Resource<List<Mscheduler>>> =repo.getScheduler(idPetani, onlyActive)
+
+    override fun updateScheduleData(
+        mScheduler: Mscheduler,
+        status: Boolean,
+        context: Context
+    ): Flow<Resource<Boolean>> = repo.updateScheduleData(mScheduler,status, context)
+
+    override fun deleteScheduler(mScheduler: Mscheduler): Flow<Resource<String>> = repo.deleteScheduler(mScheduler)
+    override fun addScheduler(mScheduler: Mscheduler): Flow<Resource<String>> = repo.addScheduler(mScheduler)
+
+
     override fun setSelaluLoginPetani(isAlwaysLogin: Boolean) {
         repo.setSelaluLoginPetani(isAlwaysLogin)
     }
@@ -76,7 +94,7 @@ class SmartFarmingInteractor @Inject constructor(
     override fun getControllingKebun(idKebun: String): MutableLiveData<Resource<List<Device>>> =
         repo.getControllingKebun(idKebun)
 
-    override fun updateDeviceState(idKebun: String, idDevice: String, value: Int) =
+    override fun updateDeviceState(idKebun: String, idDevice: String, value: Int) : Flow<Resource<String>> =
         repo.updateDeviceState(idKebun, idDevice, value)
 
 }

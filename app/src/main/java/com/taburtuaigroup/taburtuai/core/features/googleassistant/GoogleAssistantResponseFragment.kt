@@ -1,6 +1,6 @@
 @file:Suppress("NAME_SHADOWING")
 
-package com.taburtuaigroup.taburtuai.core.googleassistant
+package com.taburtuaigroup.taburtuai.core.features.googleassistant
 
 
 import android.os.Bundle
@@ -15,7 +15,7 @@ import com.taburtuaigroup.taburtuai.core.util.FARM_NAME
 import com.taburtuaigroup.taburtuai.core.util.STATUS
 import com.taburtuaigroup.taburtuai.core.util.ToastUtil
 import com.taburtuaigroup.taburtuai.core.data.Resource
-import com.taburtuaigroup.taburtuai.core.googleassistant.GoogleAssistantResponseFragment.STATUS.*
+import com.taburtuaigroup.taburtuai.core.features.googleassistant.GoogleAssistantResponseFragment.STATUS.*
 import com.taburtuaigroup.taburtuai.databinding.FragmentGoogleAssistantResponseBinding
 import com.taburtuaigroup.taburtuai.core.domain.model.Device
 import com.taburtuaigroup.taburtuai.ui.home.HomeViewModel
@@ -31,6 +31,7 @@ class GoogleAssistantResponseFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.DialogStyle)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val status = arguments?.getString(STATUS)
@@ -49,14 +50,19 @@ class GoogleAssistantResponseFragment : DialogFragment() {
                     val idKebun = farmName.replace(" ", "_")
                     val idDevice = deviceName.replace(" ", "_")
 
-                    binding.tvCommand.text=getString(R.string.command,if(state==1)"Menyalakan" else "Mematikan",idDevice,idKebun)
-                    viewModel.getControllingKebun(idKebun).observe(requireActivity()) { it->
+                    binding.tvCommand.text = getString(
+                        R.string.command,
+                        if (state == 1) "Menyalakan" else "Mematikan",
+                        idDevice,
+                        idKebun
+                    )
+                    viewModel.getControllingKebun(idKebun).observe(requireActivity()) { it ->
                         when (it) {
                             is Resource.Loading -> {
                                 showStatus(LOADING)
                             }
                             is Resource.Success -> {
-                                it.data?.let {it->
+                                it.data?.let { it ->
                                     var device: Device? = null
                                     it.forEach { dv ->
                                         if (dv.id_device == idDevice) {
@@ -72,7 +78,11 @@ class GoogleAssistantResponseFragment : DialogFragment() {
                                                             )
                                                         }
                                                         0 -> {
-                                                            binding.tvCommand.text=getString(R.string.device_dimatikan,idDevice,idKebun)
+                                                            binding.tvCommand.text = getString(
+                                                                R.string.device_dimatikan,
+                                                                idDevice,
+                                                                idKebun
+                                                            )
                                                             showStatus(SUCESS)
                                                         }
                                                     }
@@ -80,7 +90,11 @@ class GoogleAssistantResponseFragment : DialogFragment() {
                                                 1 -> {
                                                     when (dv.state) {
                                                         1 -> {
-                                                            binding.tvCommand.text=getString(R.string.device_dinyalakan,idDevice,idKebun)
+                                                            binding.tvCommand.text = getString(
+                                                                R.string.device_dinyalakan,
+                                                                idDevice,
+                                                                idKebun
+                                                            )
                                                             showStatus(SUCESS)
                                                         }
                                                         0 -> {
@@ -97,13 +111,14 @@ class GoogleAssistantResponseFragment : DialogFragment() {
                                         }
                                     }
                                     if (device == null) {
-                                        binding.tvCommand.text=getString(R.string.alat_tidak_ditemukan)
+                                        binding.tvCommand.text =
+                                            getString(R.string.alat_tidak_ditemukan)
                                         showStatus(FAILED)
                                     }
                                 }
                             }
                             is Resource.Error -> {
-                                binding.tvCommand.text=getString(R.string.kebun_tidak_ditemukan)
+                                binding.tvCommand.text = getString(R.string.kebun_tidak_ditemukan)
                                 showStatus(FAILED)
                             }
                         }
@@ -117,28 +132,28 @@ class GoogleAssistantResponseFragment : DialogFragment() {
         }
     }
 
-    private fun showStatus(status:STATUS) {
-        when(status){
-            LOADING->{
-                binding.progressBar.visibility=View.VISIBLE
-                binding.ltJavrvisFailed.visibility=View.GONE
-                binding.ltJavrvisSuccess.visibility=View.GONE
+    private fun showStatus(status: STATUS) {
+        when (status) {
+            LOADING -> {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.ltJavrvisFailed.visibility = View.GONE
+                binding.ltJavrvisSuccess.visibility = View.GONE
             }
-            SUCESS->{
-                binding.progressBar.visibility=View.GONE
-                binding.ltJavrvisFailed.visibility=View.GONE
-                binding.ltJavrvisSuccess.visibility=View.VISIBLE
+            SUCESS -> {
+                binding.progressBar.visibility = View.GONE
+                binding.ltJavrvisFailed.visibility = View.GONE
+                binding.ltJavrvisSuccess.visibility = View.VISIBLE
             }
-            FAILED->{
-                binding.progressBar.visibility=View.GONE
-                binding.ltJavrvisFailed.visibility=View.VISIBLE
-                binding.ltJavrvisSuccess.visibility=View.GONE
+            FAILED -> {
+                binding.progressBar.visibility = View.GONE
+                binding.ltJavrvisFailed.visibility = View.VISIBLE
+                binding.ltJavrvisSuccess.visibility = View.GONE
             }
         }
     }
 
-    enum class STATUS{
-        LOADING,SUCESS,FAILED
+    enum class STATUS {
+        LOADING, SUCESS, FAILED
     }
 
     override fun onCreateView(

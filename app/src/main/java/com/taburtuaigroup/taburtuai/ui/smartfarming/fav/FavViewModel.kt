@@ -1,5 +1,6 @@
 package com.taburtuaigroup.taburtuai.ui.smartfarming.fav
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.*
 import com.taburtuaigroup.taburtuai.core.domain.usecase.SmartFarmingUseCase
@@ -15,6 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FavViewModel @Inject constructor(private val smartFarmingUseCase: SmartFarmingUseCase) : ViewModel() {
 
+    val currentUser=smartFarmingUseCase.currentUser
+
     fun favoriteArtikel(artikel: Artikel) =
         smartFarmingUseCase.favoriteArtikel(artikel).asLiveData()
 
@@ -28,7 +31,7 @@ class FavViewModel @Inject constructor(private val smartFarmingUseCase: SmartFar
     private val combinedArtikel =smartFarmingUseCase.getPagingArtikel(true)
             .cachedIn(viewModelScope)
             .combine(modificationEventsArtikel) { pagingData, modifications ->
-                modifications.fold(pagingData) { acc, event ->
+                modifications.fold(pagingData) { acc, event->
                     applyEventsArtikel(acc, event)
                 }
             }

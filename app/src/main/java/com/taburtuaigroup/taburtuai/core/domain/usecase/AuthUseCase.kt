@@ -20,7 +20,7 @@ interface AuthUseCase {
 
     suspend fun login(email: String, pass: String): Flow<Resource<String>>
 
-    fun getUserData(): MutableLiveData<UserData?>
+    fun getUserData(uid:String?): MutableLiveData<UserData?>
 
     fun signOut()
 

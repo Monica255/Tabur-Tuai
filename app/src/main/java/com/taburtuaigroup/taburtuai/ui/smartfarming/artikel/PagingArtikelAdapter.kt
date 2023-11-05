@@ -16,6 +16,7 @@ import com.taburtuaigroup.taburtuai.R
 import com.taburtuaigroup.taburtuai.core.domain.model.Artikel
 import com.taburtuaigroup.taburtuai.core.util.DateConverter
 import com.taburtuaigroup.taburtuai.core.util.TextFormater
+import com.taburtuaigroup.taburtuai.databinding.ItemArtikelBinding
 
 class PagingArtikelAdapter(
     private val onClick: ((Artikel) -> Unit),
@@ -23,43 +24,36 @@ class PagingArtikelAdapter(
 ) : PagingDataAdapter<Artikel, PagingArtikelAdapter.ArtikelVH>(
     Companion
 ) {
-    lateinit var ctx: Context
     private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-    inner class ArtikelVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_artikel)
-        private val imgKebun: ImageView = itemView.findViewById(R.id.img_header_artikel)
-        private val tvDes: TextView = itemView.findViewById(R.id.tv_artikel)
-        private val tvDate: TextView = itemView.findViewById(R.id.tv_date)
-        private val cbFav: CheckBox = itemView.findViewById(R.id.cb_fav)
-        private val tvKategori: TextView = itemView.findViewById(R.id.tv_kategori_artikel)
+    inner class ArtikelVH(private val binding: ItemArtikelBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(artikel: Artikel) {
             if (onCheckChanged != null && artikel.favorites != null && uid != null) {
-                cbFav.visibility = View.VISIBLE
+                binding.cbFav.visibility = View.VISIBLE
                 if (artikel.favorites != null && uid != null) {
-                    cbFav.isChecked = artikel.favorites!!.contains(uid)
+                    binding.cbFav.isChecked = artikel.favorites!!.contains(uid)
                 } else {
-                    cbFav.isChecked = false
+                    binding.cbFav.isChecked = false
                 }
-                cbFav.setOnClickListener {
+                binding.cbFav.setOnClickListener {
                     onCheckChanged.invoke(artikel)
                 }
 
             } else {
-                cbFav.isChecked = false
-                cbFav.visibility = View.GONE
+                binding.cbFav.isChecked = false
+                binding.cbFav.visibility = View.GONE
             }
 
-            tvTitle.text = TextFormater.toTitleCase(artikel.title)
-            tvDes.text = artikel.artikel_text
-            tvDate.text = DateConverter.convertMillisToDate(artikel.timestamp, ctx)
-            tvKategori.text = TextFormater.toTitleCase(artikel.kategori)
+            binding.tvTitleArtikel.text = TextFormater.toTitleCase(artikel.title)
+            binding.tvArtikel.text = artikel.artikel_text
+            binding.tvDate.text = DateConverter.convertMillisToDate(artikel.timestamp, binding.root.context)
+            binding.tvKategoriArtikel.text = TextFormater.toTitleCase(artikel.kategori)
 
             Glide.with(itemView)
                 .load(artikel.img_header)
                 .placeholder(R.drawable.placeholder_kebun_square)
-                .into(imgKebun)
+                .into(binding.imgHeaderArtikel)
 
             itemView.setOnClickListener {
                 onClick(artikel)
@@ -76,10 +70,9 @@ class PagingArtikelAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtikelVH {
-        ctx = parent.context
-        val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_artikel, parent, false)
-        return ArtikelVH(view)
+        val binding =
+            ItemArtikelBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ArtikelVH(binding)
     }
 
     companion object : DiffUtil.ItemCallback<Artikel>() {

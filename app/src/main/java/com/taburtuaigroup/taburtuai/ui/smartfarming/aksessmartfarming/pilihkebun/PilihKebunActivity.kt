@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,8 @@ import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.kebun.Kebu
 import com.taburtuaigroup.taburtuai.core.util.EXTRA_PETANI
 import com.taburtuaigroup.taburtuai.core.util.KEBUN_ID
 import com.taburtuaigroup.taburtuai.core.util.ToastUtil
+import com.taburtuaigroup.taburtuai.ui.smartfarming.aksessmartfarming.penjadwalan.SchedulerActivity
+import com.taburtuaigroup.taburtuai.ui.smartfarming.fav.FavActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,28 +48,29 @@ class PilihKebunActivity : AppCompatActivity() {
         }
         binding.rvKebun.adapter = kebunAdapter
 
-        viewModel.petani=intent.getParcelableExtra<Petani>(EXTRA_PETANI)
-        val x= viewModel.petani
+        viewModel.petani = intent.getParcelableExtra<Petani>(EXTRA_PETANI)
+        val x = viewModel.petani
         if (x != null) {
             binding.toolbarTitle.text = getString(R.string.kebun_petani, x.nama_petani)
             idPetani = x.id_petani
-            viewModel.getAllKebun(idPetani = x.id_petani).observe(this){
+            viewModel.getAllKebun(idPetani = x.id_petani).observe(this) {
                 handleDataKebun(it)
             }
+
         } else {
             finish()
         }
     }
 
-    private fun handleDataKebun(data:Resource<List<Kebun>>){
-        when(data){
-            is Resource.Loading-> showLoading(true)
-            is Resource.Success->{
+    private fun handleDataKebun(data: Resource<List<Kebun>>) {
+        when (data) {
+            is Resource.Loading -> showLoading(true)
+            is Resource.Success -> {
                 showLoading(false)
-                val list= data.data
-                list?.let {showRecyclerView(it) }
+                val list = data.data
+                list?.let { showRecyclerView(it) }
             }
-            is Resource.Error->{
+            is Resource.Error -> {
                 showLoading(false)
                 data.message?.let { ToastUtil.makeToast(baseContext, it) }
             }
@@ -101,15 +105,28 @@ class PilihKebunActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 idPetani?.let {
-                    viewModel.getAllKebun(it,newText?.trim() ?: "").observe(this@PilihKebunActivity){
-                        handleDataKebun(it)
-                    }
+                    viewModel.getAllKebun(it, newText?.trim() ?: "")
+                        .observe(this@PilihKebunActivity) {
+                            handleDataKebun(it)
+                        }
                 }
                 return true
             }
         })
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.item_scheduler -> {
+                val intent = Intent(this, SchedulerActivity::class.java)
+                intent.putExtra(EXTRA_PETANI,viewModel.petani)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showRecyclerView(kebun: List<Kebun>) {

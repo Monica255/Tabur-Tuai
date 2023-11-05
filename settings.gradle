@@ -4,6 +4,7 @@ pluginManagement {
         google()
         jcenter()
         mavenCentral()
+
     }
 }
 dependencyResolutionManagement {
@@ -12,6 +13,8 @@ dependencyResolutionManagement {
         google()
         jcenter()
         mavenCentral()
+        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+        maven { url "https://jitpack.io" }
     }
 }
 rootProject.name = "Tabur Tuai"

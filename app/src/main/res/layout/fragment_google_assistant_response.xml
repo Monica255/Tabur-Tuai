@@ -8,7 +8,7 @@
     app:cardCornerRadius="10dp"
     android:elevation="8dp"
     android:backgroundTint="@color/white"
-    tools:context=".core.googleassistant.GoogleAssistantResponseFragment">
+    tools:context=".core.features.googleassistant.GoogleAssistantResponseFragment">
 
     <LinearLayout
         android:paddingTop="20dp"

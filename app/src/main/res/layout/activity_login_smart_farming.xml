@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -23,19 +22,18 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                style="@style/Header"
+                tools:srcstyle="@style/Header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/smart_farming"
                 android:textColor="@color/white"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@id/cv_login" />
         </androidx.appcompat.widget.Toolbar>
 
-
         <androidx.cardview.widget.CardView
 
-            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/cv_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,12 +41,15 @@
             android:layout_marginTop="125dp"
             android:layout_marginEnd="@dimen/margin_start_end"
             android:backgroundTint="@android:color/transparent"
-            app:cardElevation="5dp">
+            app:cardElevation="5dp"
+            app:layout_constraintTop_toTopOf="parent">
+
             <LinearLayout
-                android:background="@drawable/login_bg"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/login_bg"
+                android:orientation="vertical">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -105,53 +106,49 @@
                         app:layout_constraintTop_toBottomOf="@id/il_sf_password" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginBottom="10dp"
                         android:id="@+id/bt_masuk"
-                        android:layout_marginStart="@dimen/margin_start_end"
-                        android:layout_marginEnd="@dimen/margin_start_end"
                         style="@style/SubSubHeader"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_end"
                         android:layout_marginTop="70dp"
+                        android:layout_marginEnd="@dimen/margin_start_end"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/login_btn_selector"
                         android:text="@string/masuk"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/il_sf_password" />
-
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <Space
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="0dp" />
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <LinearLayout
-                    android:layout_marginBottom="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/bt_masuk"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginTop="40dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dipersembahkan_oleh"
-                        />
-                    <ImageView
+                        android:text="@string/dipersembahkan_oleh" />
 
+                    <ImageView
                         android:layout_width="120dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/logo_vertical"
-                        android:contentDescription="@string/logo" />
+                        android:contentDescription="@string/logo"
+                        android:src="@drawable/logo_vertical" />
                 </LinearLayout>
             </LinearLayout>
-
-
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -7,11 +7,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.taburtuaigroup.taburtuai.ui.komunitas.forum.ForumActivity
 import com.taburtuaigroup.taburtuai.R
+import com.taburtuaigroup.taburtuai.core.domain.model.Mscheduler
 import com.taburtuaigroup.taburtuai.core.util.*
-import com.taburtuaigroup.taburtuai.core.googleassistant.GoogleAssistantResponseFragment
+import com.taburtuaigroup.taburtuai.core.features.googleassistant.GoogleAssistantResponseFragment
 import com.taburtuaigroup.taburtuai.databinding.ActivityHomeBinding
 import com.taburtuaigroup.taburtuai.core.domain.model.UserData
+import com.taburtuaigroup.taburtuai.core.features.scheduler.Scheduler
 import com.taburtuaigroup.taburtuai.ui.feedback.FeedbackActivity
 import com.taburtuaigroup.taburtuai.ui.profile.ProfileActivity
 import com.taburtuaigroup.taburtuai.ui.smartfarming.SmartFarmingActivity
@@ -32,6 +35,13 @@ class HomeActivity : AppCompatActivity() {
         binding.btSmartFarming.setOnClickListener {
             startActivity(Intent(this, SmartFarmingActivity::class.java))
         }
+        binding.btKomunitas.setOnClickListener {
+            //startActivity(Intent(this, ForumActivity::class.java))
+            val sche=Scheduler()
+            val mSche=Mscheduler()
+            sche.showNotification(this,mSche,true)
+        }
+
 
         viewModel.userData.observe(this) {
             if (it != null) setData(it)

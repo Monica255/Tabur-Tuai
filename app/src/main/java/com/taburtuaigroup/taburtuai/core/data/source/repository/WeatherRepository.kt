@@ -4,7 +4,7 @@ import com.taburtuaigroup.taburtuai.core.util.AppExecutors
 import com.taburtuaigroup.taburtuai.core.data.Resource
 import com.taburtuaigroup.taburtuai.core.data.source.remote.network.RemoteDataSource
 import com.taburtuaigroup.taburtuai.core.domain.repository.IWeatherRepository
-import com.taburtuaigroup.taburtuai.core.domain.model.WeatherForcast
+import com.taburtuaigroup.taburtuai.core.domain.model.WeatherForecast
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +18,7 @@ class WeatherRepository@Inject constructor(
     override suspend fun getWeatherForecast(
         province: String,
         city: String
-    ): Flow<Resource<WeatherForcast>> = remoteDataSource.getWeatherForecast(province, city)
+    ): Flow<Resource<WeatherForecast>> = remoteDataSource.getWeatherForecast(province, city)
     /*override fun getWeatherForecast(
         province: String,
         city: String
