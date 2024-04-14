@@ -7,7 +7,7 @@ TaburTuai is a startup aiming to bring smart farming to local farmers in South S
 - **Remote Control**: Easily switch devices on and off from anywhere, making farm management a breeze.
 - **Live Monitoring**: Get real-time updates on important farm conditions like humidity and temperature.
 - **BMKG Integration**: Access weather forecasts and other data from BMKG to plan farming activities effectively.
-- **Agricultural Articles**: Read articles about agriculture to stay updated with the latest farming techniques and practices.
+- **Agricultural Articles**: Read articles about agriculture, including information on pests and plant diseases, to stay updated with the latest farming techniques and practices.
 - **Community Discussion (In Development)**: Soon, farmers will be able to share tips, ask questions, and discuss farming techniques with each other right in the app.
 
 ## Screenshots
